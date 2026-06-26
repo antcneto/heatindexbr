@@ -1,0 +1,107 @@
+---
+title: "Getting Started with heatindexbr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with heatindexbr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
+```
+
+## Introduction
+
+`heatindexbr` provides pre-computed Heat Index (HI) rasters for the
+**Brazilian Semiarid region** (1,477 municipalities, Res. CONDEL/SUDENE
+176/2024) at four synoptic hours and tools for spatial extraction.
+
+The Heat Index follows the Rothfusz (1990) formulation adopted by the
+US National Weather Service and combines air temperature and relative
+humidity into a single thermal stress metric.
+
+## Installation
+
+```{r install}
+# From GitHub (development version)
+# install.packages("remotes")
+remotes::install_github("antcamposneto/heatindexbr")
+```
+
+## Basic usage
+
+### Search for a municipality
+
+```{r search}
+library(heatindexbr)
+
+# Find municipalities named "Mossoró"
+hi_search("Mossoro")
+#>   code_muni   name_muni abbrev_state
+#> 1   2408102     MOSSORO           RN
+```
+
+### Extract Heat Index for a municipality
+
+```{r extract}
+# Heat Index at 15h local time (peak heat stress)
+result <- hi_municipality("Mossoro", state = "RN", hour = "15h")
+print(result)
+#>   code_muni name_muni abbrev_state     mean    noaa_class hour year
+#> 1   2408102   MOSSORO           RN 33.47814 Extreme caution  15h 2025
+```
+
+### Extract for multiple municipalities
+
+```{r multiple}
+nordeste_capitals <- c(2408102, 2304400, 2611606, 2507507)
+hi_municipality(nordeste_capitals, hour = "15h",
+                stat = c("mean","min","max"))
+```
+
+### Extract for a custom shapefile
+
+```{r shape}
+library(sf)
+my_area <- st_read("minha_area_de_estudo.shp")
+result  <- hi_shape(my_area, hour = "15h", return_raster = TRUE)
+
+# Plot the clipped raster
+hi_plot(result$raster, title = "Heat Index — Study Area")
+```
+
+### All four synoptic hours
+
+```{r cycle}
+# Download all hours
+paths <- hi_download(year = 2025, hours = c("00h","09h","15h","21h"))
+
+# Extract for one municipality across all hours
+hours <- c("00h","09h","15h","21h")
+ciclo <- lapply(hours, function(h) {
+  hi_municipality("Cabrobo", state="PE", hour=h)
+}) |> do.call(rbind, args=_)
+
+print(ciclo[, c("name_muni","hour","mean","noaa_class")])
+```
+
+## NOAA Classification
+
+| Class | IC range |
+|-------|----------|
+| No caution | < 27°C |
+| Caution | 27–32°C |
+| Extreme caution | 32–41°C |
+| Danger | 41–54°C |
+| Extreme danger | > 54°C |
+
+## Citation
+
+```{r citation}
+citation("heatindexbr")
+```
+
+Campos Neto, A. et al. (2026). Heat Index mapping for the Brazilian Semiarid:
+spatial interpolation under sparse monitoring networks.
+*International Journal of Climatology*. [In review]
