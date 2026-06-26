@@ -6,44 +6,48 @@
 \usage{
 hi_download(
   year = 2025,
-  hours = "15h",
+  hour = "15h",
+  resolution = "annual",
+  month = NULL,
+  day = NULL,
   cache_dir = NULL,
   overwrite = FALSE,
   quiet = FALSE
 )
 }
 \arguments{
-\item{year}{Integer. Reference year. Currently only 2025 is available.
-Additional years will be added as data are processed.}
+\item{year}{Integer. Reference year. Currently only \code{2025}.}
 
-\item{hours}{Character vector. Synoptic hours to download. One or more of
-\code{"00h"}, \code{"09h"}, \code{"15h"}, \code{"21h"}.
-Default is \code{"15h"} (peak heat stress hour).}
+\item{hour}{Character or NULL. Local synoptic hour: \code{"00h"},
+\code{"09h"}, \code{"15h"} (default), \code{"21h"}, or \code{NULL}
+to load all four hours as a multi-band SpatRaster.}
 
-\item{cache_dir}{Character. Path to local cache directory.
-Defaults to a persistent user cache via \code{tools::R_user_dir()}.}
+\item{resolution}{Character. Temporal resolution. Currently only
+\code{"annual"} is available.}
 
-\item{overwrite}{Logical. If \code{TRUE}, re-downloads files even if
-already cached. Default is \code{FALSE}.}
+\item{month}{Integer (1-12). Required when \code{resolution = "monthly"}.}
 
-\item{quiet}{Logical. If \code{FALSE} (default), prints download progress.}
+\item{day}{Integer (1-365). Required when \code{resolution = "daily"}.}
+
+\item{cache_dir}{Character. Local cache directory.}
+
+\item{overwrite}{Logical. Re-download even if cached? Default \code{FALSE}.}
+
+\item{quiet}{Logical. Suppress messages? Default \code{FALSE}.}
 }
 \value{
-Invisibly returns a named character vector of local file paths,
-one per requested hour.
+A loaded \code{SpatRaster} object.
 }
 \description{
-Downloads pre-computed Heat Index rasters from the package repository
-(Zenodo) to a local cache directory. Only downloads files not already
-present in the cache.
+Downloads pre-computed Heat Index rasters from Zenodo
+(DOI: 10.5281/zenodo.20942619) to a local cache directory.
 }
 \examples{
-\dontrun{
-# Download only the 15h raster (default)
-paths <- hi_download(year = 2025)
-
-# Download all four synoptic hours
-paths <- hi_download(year = 2025, hours = c("00h","09h","15h","21h"))
+\donttest{
+r <- hi_download(year = 2025, hour = "15h")
 }
 
+}
+\references{
+Dataset: \doi{10.5281/zenodo.20942619}
 }
