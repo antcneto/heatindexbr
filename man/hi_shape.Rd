@@ -2,43 +2,49 @@
 % Please edit documentation in R/extract_shape.R
 \name{hi_shape}
 \alias{hi_shape}
-\title{Extract Heat Index for a custom area}
+\title{Extract Heat Index for a custom spatial area}
 \usage{
 hi_shape(
   shape,
   hour = "15h",
   year = 2025,
+  resolution = "annual",
+  month = NULL,
+  day = NULL,
   stat = "mean",
-  return_raster = FALSE,
+  return_raster = TRUE,
   cache_dir = NULL
 )
 }
 \arguments{
-\item{shape}{An \code{sf} object or a path to a shapefile (.shp).}
+\item{shape}{An \code{sf} object or path to a shapefile.}
 
-\item{hour}{Character. Synoptic hour. Default \code{"15h"}.}
+\item{hour}{Character or NULL. Local hour (default \code{"15h"}).}
 
-\item{year}{Integer. Reference year. Default \code{2025}.}
+\item{year}{Integer. Year (default \code{2025}).}
 
-\item{stat}{Character vector. Statistics to compute. Default \code{"mean"}.}
+\item{resolution}{Character. Temporal resolution (default \code{"annual"}).}
 
-\item{return_raster}{Logical. If \code{TRUE}, also returns the clipped raster.}
+\item{month}{Integer. Month if \code{resolution = "monthly"}.}
+
+\item{day}{Integer. Day if \code{resolution = "daily"}.}
+
+\item{stat}{Character vector. Statistics (default \code{"mean"}).}
+
+\item{return_raster}{Logical. Return clipped SpatRaster? Default \code{TRUE}.}
 
 \item{cache_dir}{Character. Cache directory.}
 }
 \value{
-A list with elements \code{stats} (data frame with statistics per
-feature) and, if \code{return_raster = TRUE}, \code{raster} (SpatRaster).
+A list with \code{stats} and optionally \code{raster}.
 }
 \description{
-Clips and extracts Heat Index statistics for any area defined by a
-user-supplied shapefile or \code{sf} object.
+Extract Heat Index for a custom spatial area
 }
 \examples{
-\dontrun{
-# Extract for a custom region
-my_area <- sf::st_read("minha_area.shp")
-result  <- hi_shape(my_area, hour = "15h")
+\donttest{
+# area <- sf::st_read("my_area.shp")
+# res  <- hi_shape(area, hour = "15h")
 }
 
 }

@@ -1,0 +1,140 @@
+---
+title: "Primeiros passos com o heatindexbr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Primeiros passos com o heatindexbr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+O `heatindexbr` disponibiliza rasters do Índice de Calor (Rothfusz 1990) com
+resolução de ~1 km para os 1.477 municípios do Semiárido Brasileiro oficial
+(Res. CONDEL/SUDENE 176/2024). Esta vignette apresenta o fluxo de uso principal:
+busca → download → extração → visualização.
+
+## Instalação
+
+```{r install, eval=FALSE}
+# Instale pelo GitHub
+remotes::install_github("antcneto/heatindexbr")
+```
+
+```{r setup}
+library(heatindexbr)
+```
+
+## Quais dados estão disponíveis?
+
+Use `hi_available()` para ver os anos, resoluções e horários sinóticos
+disponíveis:
+
+```{r available}
+hi_available()
+```
+
+## Busca de municípios
+
+Os nomes de municípios no `heatindexbr` seguem o padrão IBGE: **maiúsculas
+sem acentos**. Use `hi_search()` para encontrar o nome correto:
+
+```{r search}
+# Busca parcial, sem distinção de maiúsculas
+hi_search("Mossoro", state = "RN")
+hi_search("Campina Grande", state = "PB")
+```
+
+> **Atenção:** sempre utilize o valor da coluna `name_muni` retornado por
+> `hi_search()` ao chamar `hi_municipality()`. Por exemplo, `"MOSSORO"` e
+> não `"Mossoró"`. Esta é uma limitação do padrão de nomenclatura do IBGE;
+> a função `hi_search()` existe exatamente para facilitar essa conversão.
+
+## Extração do Índice de Calor para um município
+
+`hi_municipality()` baixa o raster (armazenado em cache na primeira vez),
+recorta para o limite municipal e retorna estatísticas resumidas com
+classificação NOAA:
+
+```{r municipality}
+resultado <- hi_municipality("MOSSORO", state = "RN", hour = "15h")
+resultado
+```
+
+A coluna `noaa_class` utiliza os limites oficiais da escala NOAA:
+
+| Classe | IC | Risco |
+|---|---|---|
+| Sem cautela | < 27°C | Baixo |
+| Cautela | 27–32°C | Fadiga com exposição prolongada |
+| Cautela extrema | 32–41°C | Cãibras ou exaustão por calor possíveis |
+| Perigo | 41–54°C | Exaustão por calor provável |
+| Perigo extremo | > 54°C | Insolação iminente |
+
+Para obter todos os quatro horários sinóticos de uma vez, use `hour = NULL`:
+
+```{r all-hours, eval=FALSE}
+hi_municipality("MOSSORO", state = "RN", hour = NULL)
+```
+
+## Download e visualização do raster completo
+
+`hi_download()` retorna um `SpatRaster` (pacote terra). O raster é baixado
+uma única vez e reutilizado do cache nas chamadas seguintes:
+
+```{r download}
+r <- hi_download(year = 2025, hour = "15h")
+r
+```
+
+Passe o raster diretamente para `hi_plot()` para gerar o mapa:
+
+```{r plot}
+hi_plot(r,
+        title = "IC médio anual — 15h (2025)",
+        hour  = "15h",
+        year  = 2025)
+```
+
+## Extração para polígono personalizado
+
+Se você tiver um objeto `sf` próprio (bacia hidrográfica, limite estadual,
+área de estudo), use `hi_shape()`:
+
+```{r shape, eval=FALSE}
+library(sf)
+
+minha_area <- st_read("minha_area.gpkg")
+
+resultado <- hi_shape(minha_area, hour = "15h")
+resultado$stats   # data.frame com mean, min, max, noaa_class
+resultado$raster  # SpatRaster recortado
+```
+
+## Nota técnica sobre o raster
+
+O raster base (`IC_2025_annual_all.tif`) está em **EPSG:5880** (SIRGAS 2000 /
+Brazil Polyconic) — o SRC projetado adequado para o Brasil. A versão em WGS84
+possui um artefato de recorte na borda leste e não deve ser utilizada. Consulte
+`vignette("methodology")` para detalhes completos sobre o método de interpolação.
+
+## Como citar
+
+Se você utilizar o `heatindexbr` em sua pesquisa, por favor cite:
+
+```{r citation, eval=FALSE}
+citation("heatindexbr")
+```
+
+Ou cite diretamente o conjunto de dados no Zenodo:
+
+> Campos Neto, A. (2025). *heatindexbr: rasters de Índice de Calor para o
+> Semiárido Brasileiro* (v0.1.0). Zenodo.
+> https://doi.org/10.5281/zenodo.20942619

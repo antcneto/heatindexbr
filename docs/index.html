@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>heatindexbr — Heat Index for Brazil's Semiarid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --night: #1A1A2E;
+  --heat: #C94B2C;
+  --sand: #F5F0E8;
+  --caatinga: #2D6A4F;
+  --sun: #E8C547;
+  --text: #1A1A2E;
+  --muted: #6B6B6B;
+  --border: #E2DDD6;
+  --bg: #FAFAF8;
+  --card: #FFFFFF;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+body { font-family: var(--sans); color: var(--text); background: var(--bg); line-height: 1.6; }
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--night); color: var(--sand);
+  padding: 0 2rem; height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--sand); text-decoration: none; }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a { font-size: 13px; color: rgba(245,240,232,0.7); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--sand); }
+.nav-badge { font-family: var(--mono); font-size: 11px; padding: 2px 8px; border-radius: 3px; background: rgba(201,75,44,0.3); color: #f0a090; border: 0.5px solid rgba(201,75,44,0.4); }
+.lang-btn { font-family: var(--mono); font-size: 11px; padding: 3px 10px; border-radius: 4px; border: 0.5px solid rgba(245,240,232,0.3); background: transparent; color: rgba(245,240,232,0.6); cursor: pointer; transition: all 0.15s; }
+.lang-btn.active { background: var(--heat); border-color: var(--heat); color: #fff; }
+
+/* HERO */
+.hero {
+  background: var(--night);
+  color: var(--sand);
+  padding: 5rem 2rem 4rem;
+  position: relative; overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 70% at 75% 40%, rgba(201,75,44,0.15) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-layout { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center; }
+.hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--heat); text-transform: uppercase; margin-bottom: 1rem; }
+.hero-title { font-family: var(--serif); font-size: clamp(32px, 5vw, 52px); line-height: 1.1; color: var(--sand); margin-bottom: 0.5rem; }
+.hero-subtitle { font-size: 14px; color: rgba(245,240,232,0.5); margin-bottom: 1.5rem; letter-spacing: 0.01em; }
+.hero-desc { font-size: 15px; line-height: 1.75; color: rgba(245,240,232,0.75); max-width: 520px; margin-bottom: 2rem; }
+.hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+.badge { font-family: var(--mono); font-size: 11px; padding: 4px 10px; border-radius: 4px; border: 0.5px solid rgba(245,240,232,0.2); color: rgba(245,240,232,0.7); background: rgba(245,240,232,0.06); }
+.badge-hot { border-color: rgba(201,75,44,0.5); color: #f0a090; background: rgba(201,75,44,0.1); }
+.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary { padding: 10px 20px; background: var(--heat); color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; transition: opacity 0.15s; }
+.btn-primary:hover { opacity: 0.88; }
+.btn-secondary { padding: 10px 20px; background: transparent; color: var(--sand); border: 0.5px solid rgba(245,240,232,0.3); border-radius: 6px; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-block; transition: border-color 0.15s; }
+.btn-secondary:hover { border-color: rgba(245,240,232,0.7); }
+
+/* THERMO ANIMATION */
+.thermo-wrap { display: flex; align-items: center; gap: 1rem; }
+.thermo-svg { width: 32px; }
+.thermo-hours { display: flex; flex-direction: column; gap: 10px; }
+.thour { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; color: rgba(245,240,232,0.35); transition: color 0.4s; }
+.thour.on { color: rgba(245,240,232,0.9); }
+.thour-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(245,240,232,0.2); flex-shrink: 0; transition: background 0.4s; }
+.thour.on .thour-dot { background: var(--heat); }
+
+/* STAT STRIP */
+.stat-strip { background: var(--heat); color: #fff; padding: 1.25rem 2rem; }
+.stat-strip-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+.stat-item { text-align: center; }
+.stat-val { font-family: var(--serif); font-size: 28px; line-height: 1; margin-bottom: 4px; }
+.stat-lbl { font-size: 11px; opacity: 0.85; line-height: 1.4; }
+
+/* SECTIONS */
+section { padding: 4rem 2rem; }
+section:nth-child(even) { background: var(--card); }
+.inner { max-width: 900px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--heat); text-transform: uppercase; margin-bottom: 0.75rem; }
+.section-title { font-family: var(--serif); font-size: clamp(24px, 3vw, 36px); line-height: 1.2; margin-bottom: 1rem; color: var(--text); }
+.section-lead { font-size: 15px; line-height: 1.75; color: var(--muted); max-width: 680px; margin-bottom: 2rem; }
+
+/* MAP SECTION */
+.map-tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.map-tab { font-size: 12px; font-family: var(--mono); padding: 5px 14px; border-radius: 4px; border: 0.5px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+.map-tab.active { background: var(--night); border-color: var(--night); color: var(--sand); }
+.map-panel { display: none; }
+.map-panel.active { display: block; }
+.map-panel img { width: 100%; max-width: 700px; display: block; margin: 0 auto; border-radius: 8px; border: 0.5px solid var(--border); }
+.map-caption { font-size: 12px; color: var(--muted); text-align: center; margin-top: 0.75rem; font-family: var(--mono); }
+
+/* VALIDATION CARDS */
+.val-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 2rem; }
+.val-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; }
+.val-card-icon { font-size: 20px; margin-bottom: 0.75rem; color: var(--caatinga); }
+.val-card-title { font-size: 14px; font-weight: 500; margin-bottom: 0.5rem; color: var(--text); }
+.val-card-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.val-card-body code { font-family: var(--mono); font-size: 11px; background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 3px; }
+
+/* METRICS ROW */
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 1.5rem 0; }
+.metric { background: var(--bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 1rem; }
+.metric-val { font-family: var(--serif); font-size: 26px; color: var(--heat); line-height: 1; margin-bottom: 4px; }
+.metric-val small { font-family: var(--sans); font-size: 13px; color: var(--muted); }
+.metric-lbl { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+/* NOAA PILLS */
+.noaa-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 1rem 0; }
+.noaa-pill { font-size: 12px; padding: 6px 14px; border-radius: 20px; font-weight: 500; }
+.noaa-s { background: #EAF3DE; color: #27500A; }
+.noaa-c { background: #FAEEDA; color: #633806; }
+.noaa-e { background: #FAECE7; color: #712B13; border: 0.5px solid #F0997B; }
+
+/* CODE */
+.fn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 2rem; }
+.fn-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; }
+.fn-name { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--heat); margin-bottom: 4px; }
+.fn-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+.code-block { background: var(--night); border-radius: 10px; padding: 1.25rem 1.5rem; font-family: var(--mono); font-size: 13px; line-height: 1.9; color: #F5F0E8; overflow-x: auto; }
+.kw { color: #C94B2C; }
+.fn { color: #E8C547; }
+.str { color: #9FE1CB; }
+.cm { color: rgba(245,240,232,0.38); font-style: italic; }
+.note { font-size: 12px; color: var(--muted); margin-top: 0.75rem; padding: 0.6rem 0.85rem; background: rgba(201,75,44,0.05); border-left: 2px solid rgba(201,75,44,0.3); border-radius: 0; }
+
+/* FOOTER */
+footer { background: var(--night); color: rgba(245,240,232,0.5); padding: 2rem; text-align: center; font-size: 12px; }
+footer a { color: rgba(245,240,232,0.7); text-decoration: none; }
+footer a:hover { color: var(--sand); }
+
+/* CONTENT TOGGLE */
+[data-en], [data-pt] { }
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .hero-layout { grid-template-columns: 1fr; }
+  .thermo-wrap { display: none; }
+  nav { padding: 0 1rem; }
+  section { padding: 3rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-brand">heatindexbr</a>
+  <div class="nav-links">
+    <a href="#maps" data-en="Maps" data-pt="Mapas">Maps</a>
+    <a href="#validation" data-en="Methodology" data-pt="Metodologia">Methodology</a>
+    <a href="#usage" data-en="Usage" data-pt="Uso">Usage</a>
+    <a href="https://github.com/antcneto/heatindexbr" target="_blank">GitHub</a>
+    <span class="nav-badge">v0.1.0</span>
+    <div style="display:flex;gap:4px;margin-left:8px">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="btn-pt" onclick="setLang('pt')">PT</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-layout">
+      <div>
+        <p class="hero-eyebrow">R package</p>
+        <h1 class="hero-title" data-en="Heat index mapping<br>for Brazil's Semiarid" data-pt="Índice de Calor<br>no Semiárido Brasileiro">Heat index mapping<br>for Brazil's Semiarid</h1>
+        <p class="hero-subtitle" data-en="1,477 municipalities · 4 synoptic hours · ~1 km resolution · EPSG:5880" data-pt="1.477 municípios · 4 horários sinóticos · ~1 km de resolução · EPSG:5880">1,477 municipalities · 4 synoptic hours · ~1 km resolution · EPSG:5880</p>
+        <p class="hero-desc" data-en="Spatially interpolated Heat Index (Rothfusz 1990) rasters for the official Brazilian Semiarid region (CONDEL/SUDENE Res. 176/2024). Produced with kriging with external drift, validated against 59–73 INMET stations via leave-one-out cross-validation. R² = 0.884 at 15h." data-pt="Rasters do Índice de Calor (Rothfusz 1990) interpolados espacialmente para o Semiárido Brasileiro oficial (Res. CONDEL/SUDENE 176/2024). Produzido com krigagem com deriva externa, validado com 59–73 estações INMET por validação cruzada leave-one-out. R² = 0,884 às 15h.">Spatially interpolated Heat Index (Rothfusz 1990) rasters for the official Brazilian Semiarid region (CONDEL/SUDENE Res. 176/2024). Produced with kriging with external drift, validated against 59–73 INMET stations via leave-one-out cross-validation. R² = 0.884 at 15h.</p>
+        <div class="hero-badges">
+          <span class="badge">R ≥ 4.1</span>
+          <span class="badge badge-hot">DOI 10.5281/zenodo.20942619</span>
+          <span class="badge">EPSG:5880</span>
+          <span class="badge">MIT License</span>
+        </div>
+        <div class="hero-ctas">
+          <a href="#usage" class="btn-primary" data-en="Get started" data-pt="Começar agora">Get started</a>
+          <a href="https://github.com/antcneto/heatindexbr" target="_blank" class="btn-secondary">GitHub →</a>
+          <a href="https://zenodo.org/records/20942619" target="_blank" class="btn-secondary">Zenodo →</a>
+        </div>
+      </div>
+      <div class="thermo-wrap">
+        <svg class="thermo-svg" viewBox="0 0 32 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="11" y="4" width="10" height="58" rx="5" fill="rgba(245,240,232,0.07)" stroke="rgba(245,240,232,0.2)" stroke-width="0.5"/>
+          <rect x="13.5" y="50" width="5" id="tf" height="8" rx="1" fill="#C94B2C"/>
+          <circle cx="16" cy="74" r="9" fill="#C94B2C" opacity="0.85"/>
+          <circle cx="16" cy="74" r="5.5" fill="#f0a090"/>
+        </svg>
+        <div class="thermo-hours">
+          <div class="thour" id="th0"><div class="thour-dot"></div><span>00h · 24.3°C</span></div>
+          <div class="thour" id="th1"><div class="thour-dot"></div><span>09h · 26.6°C</span></div>
+          <div class="thour" id="th2"><div class="thour-dot"></div><span>15h · 31.2°C</span></div>
+          <div class="thour" id="th3"><div class="thour-dot"></div><span>21h · 22.7°C</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-strip-inner">
+    <div class="stat-item">
+      <div class="stat-val">1,477</div>
+      <div class="stat-lbl" data-en="municipalities covered" data-pt="municípios cobertos">municipalities covered</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">31M</div>
+      <div class="stat-lbl" data-en="people under heat stress" data-pt="pessoas sob estresse térmico">people under heat stress</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">0.884</div>
+      <div class="stat-lbl" data-en="R² at 15h (LOOCV)" data-pt="R² às 15h (LOOCV)">R² at 15h (LOOCV)</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">1.03°C</div>
+      <div class="stat-lbl" data-en="RMSE at 15h" data-pt="RMSE às 15h">RMSE at 15h</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">~1 km</div>
+      <div class="stat-lbl" data-en="raster resolution" data-pt="resolução do raster">raster resolution</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAPS -->
+<section id="maps">
+  <div class="inner">
+    <p class="eyebrow" data-en="The data" data-pt="Os dados">The data</p>
+    <h2 class="section-title" data-en="Heat index across the Semiarid" data-pt="Índice de Calor no Semiárido">Heat index across the Semiarid</h2>
+    <p class="section-lead" data-en="Annual mean Heat Index for 2025, mapped at ~1 km resolution across all 1,477 municipalities of Brazil's official Semiarid region. Four synoptic hours reveal contrasting thermal patterns driven by altitude, ERA5 forcing, and Caatinga land-surface processes." data-pt="Índice de Calor médio anual de 2025, mapeado com ~1 km de resolução para os 1.477 municípios do Semiárido Brasileiro oficial. Quatro horários sinóticos revelam padrões térmicos distintos, determinados por altitude, forçante ERA5 e processos de superfície da Caatinga.">Annual mean Heat Index for 2025, mapped at ~1 km resolution across all 1,477 municipalities of Brazil's official Semiarid region. Four synoptic hours reveal contrasting thermal patterns driven by altitude, ERA5 forcing, and Caatinga land-surface processes.</p>
+
+    <div class="map-tabs">
+      <button class="map-tab active" onclick="showMap('ic15')" data-en="IC at 15h" data-pt="IC às 15h">IC at 15h</button>
+      <button class="map-tab" onclick="showMap('noaa')" data-en="NOAA classification" data-pt="Classificação NOAA">NOAA classification</button>
+      <button class="map-tab" onclick="showMap('ciclo')" data-en="Daily cycle (4 hours)" data-pt="Ciclo diário (4 horários)">Daily cycle (4 hours)</button>
+    </div>
+
+    <div class="map-panel active" id="map-ic15">
+      <img src="figures/figura_IC_15h.png" alt="Heat Index map at 15h, Brazilian Semiarid, 2025">
+      <p class="map-caption" data-en="Annual mean Heat Index at 15h (local time) · KDE with external drift: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880" data-pt="IC médio anual às 15h (hora local) · KDE com deriva externa: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880">Annual mean Heat Index at 15h (local time) · KDE with external drift: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880</p>
+    </div>
+    <div class="map-panel" id="map-noaa">
+      <img src="figures/figura_NOAA_15h.png" alt="NOAA Heat Index classification at 15h, Brazilian Semiarid, 2025">
+      <p class="map-caption" data-en="NOAA Heat Index classification at 15h · 640 municipalities under extreme caution (IC 32–41°C) · 13.3 million people" data-pt="Classificação NOAA do IC às 15h · 640 municípios em cautela extrema (IC 32–41°C) · 13,3 milhões de habitantes">NOAA Heat Index classification at 15h · 640 municipalities under extreme caution (IC 32–41°C) · 13.3 million people</p>
+    </div>
+    <div class="map-panel" id="map-ciclo">
+      <img src="figures/figura_ciclo_diario.png" alt="Daily cycle of Heat Index, Brazilian Semiarid, 2025">
+      <p class="map-caption" data-en="Daily cycle: 00h (midnight) · 09h · 15h · 21h local time · Covariates vary by hour (NDVI at night, ERA5 at 15h)" data-pt="Ciclo diário: meia-noite · 9h · 15h · 21h (hora local) · Covariáveis variam por horário (NDVI à noite, ERA5 às 15h)">Daily cycle: 00h (midnight) · 09h · 15h · 21h local time · Covariates vary by hour (NDVI at night, ERA5 at 15h)</p>
+    </div>
+  </div>
+</section>
+
+<!-- POPULATION -->
+<section>
+  <div class="inner">
+    <p class="eyebrow" data-en="Population exposure" data-pt="Exposição populacional">Population exposure</p>
+    <h2 class="section-title" data-en="31 million people under heat stress" data-pt="31 milhões de pessoas sob estresse térmico">31 million people under heat stress</h2>
+    <p class="section-lead" data-en="At 15h, annual mean Heat Index classifies 96.8% of the Semiarid population under NOAA caution or extreme caution — based on 2022 IBGE Census. Annual means are a conservative lower bound: daily peaks in specific months can exceed IC > 41°C." data-pt="Às 15h, o IC médio anual classifica 96,8% da população do Semiárido nos níveis de cautela ou cautela extrema da escala NOAA — com base no Censo IBGE 2022. Médias anuais são o limite inferior conservador: picos diários em meses específicos podem superar IC > 41°C.">At 15h, annual mean Heat Index classifies 96.8% of the Semiarid population under NOAA caution or extreme caution — based on 2022 IBGE Census. Annual means are a conservative lower bound: daily peaks in specific months can exceed IC > 41°C.</p>
+    <div class="noaa-row">
+      <span class="noaa-pill noaa-s" data-en="979k people · No caution (&lt;27°C) · 93 municipalities" data-pt="979 mil hab. · Sem cautela (&lt;27°C) · 93 municípios">979k people · No caution (&lt;27°C) · 93 municipalities</span>
+      <span class="noaa-pill noaa-c" data-en="16.8M · Caution (27–32°C) · 813 municipalities" data-pt="16,8 M · Cautela (27–32°C) · 813 municípios">16.8M · Caution (27–32°C) · 813 municipalities</span>
+      <span class="noaa-pill noaa-e" data-en="13.3M · Extreme caution (32–41°C) · 640 municipalities" data-pt="13,3 M · Cautela extrema (32–41°C) · 640 municípios">13.3M · Extreme caution (32–41°C) · 640 municipalities</span>
+    </div>
+  </div>
+</section>
+
+<!-- VALIDATION -->
+<section id="validation">
+  <div class="inner">
+    <p class="eyebrow" data-en="Why trust the raster?" data-pt="Por que confiar no raster?">Why trust the raster?</p>
+    <h2 class="section-title" data-en="Rigorous interpolation, verified results" data-pt="Interpolação rigorosa, resultados verificados">Rigorous interpolation, verified results</h2>
+    <p class="section-lead" data-en="15 spatial interpolation methods were compared across all four synoptic hours via leave-one-out cross-validation (LOOCV). The winning method — kriging with external drift (KDE) — selects covariates per hour based on physical justification, not statistical convenience." data-pt="15 métodos de interpolação espacial foram comparados nos quatro horários sinóticos via validação cruzada leave-one-out (LOOCV). O método vencedor — krigagem com deriva externa (KDE) — seleciona covariáveis por horário com base em justificativa física, não conveniência estatística.">15 spatial interpolation methods were compared across all four synoptic hours via leave-one-out cross-validation (LOOCV). The winning method — kriging with external drift (KDE) — selects covariates per hour based on physical justification, not statistical convenience.</p>
+
+    <div class="metrics">
+      <div class="metric"><div class="metric-val">0.884</div><div class="metric-lbl" data-en="R² at 15h<br>KDE + alt + ERA5" data-pt="R² às 15h<br>KDE + alt + ERA5">R² at 15h<br>KDE + alt + ERA5</div></div>
+      <div class="metric"><div class="metric-val">1.03<small> °C</small></div><div class="metric-lbl" data-en="RMSE at 15h<br>LOOCV" data-pt="RMSE às 15h<br>LOOCV">RMSE at 15h<br>LOOCV</div></div>
+      <div class="metric"><div class="metric-val">0.775<small> °C</small></div><div class="metric-lbl" data-en="Mean abs. error<br>all folds" data-pt="Erro abs. médio<br>todos os folds">Mean abs. error<br>all folds</div></div>
+      <div class="metric"><div class="metric-val">−0.027</div><div class="metric-lbl" data-en="Moran's I<br>(residuals, p=0.86)" data-pt="I de Moran<br>(resíduos, p=0,86)">Moran's I<br>(residuals, p=0.86)</div></div>
+    </div>
+
+    <div class="val-grid">
+      <div class="val-card">
+        <div class="val-card-icon">✓</div>
+        <div class="val-card-title" data-en="Spatially unbiased residuals" data-pt="Resíduos espacialmente não enviesados">Spatially unbiased residuals</div>
+        <div class="val-card-body" data-en="Variogram analysis shows a pure nugget effect (Sill=0, Nugget≈1.05). Moran's I = −0.027, p=0.864: residuals are spatially random — the model captures all systematic spatial structure." data-pt="Variograma com efeito pepita puro (Sill=0, Nugget≈1,05). I de Moran = −0,027, p=0,864: resíduos espacialmente aleatórios — o modelo captura toda a estrutura espacial sistemática.">Variogram analysis shows a pure nugget effect (Sill=0, Nugget≈1.05). Moran's I = −0.027, p=0.864: residuals are spatially random — the model captures all systematic spatial structure.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-card-icon">✓</div>
+        <div class="val-card-title" data-en="Covariates are physically independent" data-pt="Covariáveis fisicamente independentes">Covariates are physically independent</div>
+        <div class="val-card-body" data-en="Partial correlations on 100k pixels: IC × ERA5 | altitude = 0.977; IC × altitude | ERA5 = −0.929. The raster is not redundant with an elevation model." data-pt="Correlações parciais em 100 mil pixels: IC × ERA5 | altitude = 0,977; IC × altitude | ERA5 = −0,929. O raster não é redundante com um modelo de elevação.">Partial correlations on 100k pixels: IC × ERA5 | altitude = 0.977; IC × altitude | ERA5 = −0.929. The raster is not redundant with an elevation model.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-card-icon">✓</div>
+        <div class="val-card-title" data-en="Random Forest rejected after spatial CV" data-pt="Random Forest rejeitado após CV espacial">Random Forest rejected after spatial CV</div>
+        <div class="val-card-body" data-en="Block spatial CV revealed leakage in RF (ΔR²=0.18 at 21h). KDE R² is stable across both LOOCV and block CV, confirming genuine generalization." data-pt="CV espacial por blocos revelou vazamento no RF (ΔR²=0,18 às 21h). O R² do KDE é estável nos dois protocolos, confirmando generalização genuína.">Block spatial CV revealed leakage in RF (ΔR²=0.18 at 21h). KDE R² is stable across both LOOCV and block CV, confirming genuine generalization.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USAGE -->
+<section id="usage">
+  <div class="inner">
+    <p class="eyebrow" data-en="Get started" data-pt="Primeiros passos">Get started</p>
+    <h2 class="section-title" data-en="Four lines to your first map" data-pt="Quatro linhas para o primeiro mapa">Four lines to your first map</h2>
+
+    <div class="fn-grid">
+      <div class="fn-card"><div class="fn-name">hi_download()</div><div class="fn-desc" data-en="Download and cache the raster from Zenodo. Returns a SpatRaster." data-pt="Baixa e armazena em cache o raster do Zenodo. Retorna um SpatRaster.">Download and cache the raster from Zenodo. Returns a SpatRaster.</div></div>
+      <div class="fn-card"><div class="fn-name">hi_municipality()</div><div class="fn-desc" data-en="Extract Heat Index stats for one or more municipalities by name." data-pt="Extrai estatísticas de IC para um ou mais municípios pelo nome.">Extract Heat Index stats for one or more municipalities by name.</div></div>
+      <div class="fn-card"><div class="fn-name">hi_shape()</div><div class="fn-desc" data-en="Extract stats for any custom sf polygon." data-pt="Extrai estatísticas para qualquer polígono sf personalizado.">Extract stats for any custom sf polygon.</div></div>
+      <div class="fn-card"><div class="fn-name">hi_search()</div><div class="fn-desc" data-en="Search for municipalities by name or state." data-pt="Busca municípios por nome ou UF.">Search for municipalities by name or state.</div></div>
+      <div class="fn-card"><div class="fn-name">hi_plot()</div><div class="fn-desc" data-en="Plot a raster or municipality result as a ggplot map." data-pt="Plota raster ou resultado municipal como mapa ggplot.">Plot a raster or municipality result as a ggplot map.</div></div>
+      <div class="fn-card"><div class="fn-name">hi_available()</div><div class="fn-desc" data-en="List available years, resolutions, and hours." data-pt="Lista anos, resoluções e horários disponíveis.">List available years, resolutions, and hours.</div></div>
+    </div>
+
+    <div class="code-block">
+<span class="cm"># Install from GitHub</span>
+<span class="cm"># remotes::install_github("antcneto/heatindexbr")</span>
+
+<span class="kw">library</span>(<span class="str">heatindexbr</span>)
+
+<span class="cm"># Search for a municipality (names are IBGE uppercase)</span>
+<span class="fn">hi_search</span>(<span class="str">"Mossoro"</span>, state = <span class="str">"RN"</span>)
+
+<span class="cm"># Extract annual mean Heat Index at 15h</span>
+<span class="fn">hi_municipality</span>(<span class="str">"MOSSORO"</span>, state = <span class="str">"RN"</span>, hour = <span class="str">"15h"</span>)
+
+<span class="cm"># Download the full raster and plot</span>
+r <span class="kw">&lt;-</span> <span class="fn">hi_download</span>(hour = <span class="str">"15h"</span>)
+<span class="fn">hi_plot</span>(r)</div>
+    <p class="note" data-en="Municipality names follow IBGE convention: uppercase without accents. Use hi_search() to find the correct name (e.g. MOSSORO, not Mossoró)." data-pt="Nomes de municípios seguem o padrão IBGE: maiúsculas sem acentos. Use hi_search() para encontrar o nome correto (ex.: MOSSORO, não Mossoró).">Municipality names follow IBGE convention: uppercase without accents. Use hi_search() to find the correct name (e.g. MOSSORO, not Mossoró).</p>
+  </div>
+</section>
+
+<footer>
+  <p>heatindexbr · DOI <a href="https://zenodo.org/records/20942619" target="_blank">10.5281/zenodo.20942619</a> · <a href="https://github.com/antcneto/heatindexbr" target="_blank">GitHub</a> · MIT License</p>
+  <p style="margin-top:0.5rem">Antônio Campos Neto · UFRN · 2025–2026</p>
+</footer>
+
+<script>
+// THERMO
+const temps = [4, 22, 50, 2];
+let cur = 2;
+function tick() {
+  document.querySelectorAll('.thour').forEach(el => el.classList.remove('on'));
+  document.getElementById('th' + cur).classList.add('on');
+  const tf = document.getElementById('tf');
+  const h = temps[cur];
+  tf.setAttribute('y', String(50 - h * 0.38));
+  tf.setAttribute('height', String(8 + h * 0.38));
+  cur = (cur + 1) % 4;
+}
+tick(); setInterval(tick, 1800);
+
+// MAPS
+function showMap(id) {
+  document.querySelectorAll('.map-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.map-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('map-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// LANG
+let lang = 'en';
+function setLang(l) {
+  lang = l;
+  document.getElementById('btn-en').classList.toggle('active', l === 'en');
+  document.getElementById('btn-pt').classList.toggle('active', l === 'pt');
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const val = el.getAttribute('data-' + l);
+    if (val) el.innerHTML = val;
+  });
+}
+</script>
+</body>
+</html>

@@ -1,79 +1,90 @@
-#' Extract Heat Index for a custom area
+#' Extract Heat Index for a custom spatial area
 #'
-#' Clips and extracts Heat Index statistics for any area defined by a
-#' user-supplied shapefile or \code{sf} object.
-#'
-#' @param shape An \code{sf} object or a path to a shapefile (.shp).
-#' @param hour Character. Synoptic hour. Default \code{"15h"}.
-#' @param year Integer. Reference year. Default \code{2025}.
-#' @param stat Character vector. Statistics to compute. Default \code{"mean"}.
-#' @param return_raster Logical. If \code{TRUE}, also returns the clipped raster.
+#' @param shape An \code{sf} object or path to a shapefile.
+#' @param hour Character or NULL. Local hour (default \code{"15h"}).
+#' @param year Integer. Year (default \code{2025}).
+#' @param resolution Character. Temporal resolution (default \code{"annual"}).
+#' @param month Integer. Month if \code{resolution = "monthly"}.
+#' @param day Integer. Day if \code{resolution = "daily"}.
+#' @param stat Character vector. Statistics (default \code{"mean"}).
+#' @param return_raster Logical. Return clipped SpatRaster? Default \code{TRUE}.
 #' @param cache_dir Character. Cache directory.
 #'
-#' @return A list with elements \code{stats} (data frame with statistics per
-#'   feature) and, if \code{return_raster = TRUE}, \code{raster} (SpatRaster).
+#' @return A list with \code{stats} and optionally \code{raster}.
 #'
 #' @examples
-#' \dontrun{
-#' # Extract for a custom region
-#' my_area <- sf::st_read("minha_area.shp")
-#' result  <- hi_shape(my_area, hour = "15h")
+#' \donttest{
+#' # area <- sf::st_read("my_area.shp")
+#' # res  <- hi_shape(area, hour = "15h")
 #' }
 #'
+#' @importFrom utils tail
+#' @importFrom stats setNames
 #' @export
 hi_shape <- function(shape,
-                     hour         = "15h",
-                     year         = 2025,
-                     stat         = "mean",
-                     return_raster = FALSE,
-                     cache_dir    = NULL) {
+                     hour          = "15h",
+                     year          = 2025,
+                     resolution    = "annual",
+                     month         = NULL,
+                     day           = NULL,
+                     stat          = "mean",
+                     return_raster = TRUE,
+                     cache_dir     = NULL) {
 
-  hour <- match.arg(hour, c("00h","09h","15h","21h"))
-
-  # Carrega shape se for caminho
   if (is.character(shape)) {
     if (!file.exists(shape))
       cli::cli_abort("File not found: {.file {shape}}")
     shape <- sf::st_read(shape, quiet = TRUE)
   }
-
   if (!inherits(shape, "sf"))
-    cli::cli_abort("{.arg shape} must be an {.cls sf} object or path to a shapefile.")
+    cli::cli_abort("{.arg shape} must be an {.cls sf} object or shapefile path.")
 
-  # Baixa raster
-  paths <- hi_download(year=year, hours=hour, cache_dir=cache_dir, quiet=TRUE)
-  r     <- terra::rast(paths[hour])
+  horas_loop <- if (is.null(hour)) c("00h","09h","15h","21h") else hour
 
-  # Reprojecta
-  shape_proj <- sf::st_transform(shape, terra::crs(r))
-  shape_vect <- terra::vect(shape_proj)
+  stats_list <- lapply(horas_loop, function(hora_atual) {
+    r   <- hi_download(year       = year,
+                       hour       = hora_atual,
+                       resolution = resolution,
+                       month      = month,
+                       day        = day,
+                       cache_dir  = cache_dir,
+                       quiet      = TRUE)
+    sp  <- sf::st_transform(shape, terra::crs(r))
+    sv  <- terra::vect(sp)
+    r_c <- terra::mask(terra::crop(r, sv), sv)
+    n_ok <- terra::global(!is.na(r_c), "sum")[[1]]
 
-  # Verifica sobreposição com o Semiárido
-  r_crop <- tryCatch(
-    terra::crop(r, shape_vect),
-    error = function(e)
-      cli::cli_abort("Shape does not overlap with the Brazilian Semiarid raster.")
-  )
-  r_clip <- terra::mask(r_crop, shape_vect)
+    if (requireNamespace("exactextractr", quietly = TRUE)) {
+      vals <- exactextractr::exact_extract(r, sp, stat)
+      if (is.vector(vals))
+        vals <- as.data.frame(stats::setNames(as.list(vals), stat))
+    } else {
+      vals <- data.frame(mean = terra::global(r_c, "mean", na.rm = TRUE)[[1]])
+    }
 
-  n_validos <- terra::global(!is.na(r_clip), "sum")[[1]]
-  if (n_validos == 0)
-    cli::cli_warn("No valid pixels found within the supplied shape.")
+    cbind(sf::st_drop_geometry(shape), vals,
+          data.frame(hour       = hora_atual,
+                     year       = year,
+                     resolution = resolution,
+                     n_pixels   = n_ok,
+                     stringsAsFactors = FALSE))
+  })
 
-  # Estatísticas
-  if (requireNamespace("exactextractr", quietly=TRUE)) {
-    vals <- exactextractr::exact_extract(r, shape_proj, stat)
-    if (is.vector(vals)) vals <- as.data.frame(t(vals))
-    names(vals) <- stat
-  } else {
-    vals <- data.frame(mean = terra::global(r_clip, "mean", na.rm=TRUE)[[1]])
+  out <- list(stats = do.call(rbind, stats_list))
+  rownames(out$stats) <- NULL
+
+  if (return_raster) {
+    r_last <- hi_download(year       = year,
+                          hour       = utils::tail(horas_loop, 1),
+                          resolution = resolution,
+                          month      = month,
+                          day        = day,
+                          cache_dir  = cache_dir,
+                          quiet      = TRUE)
+    sv <- terra::vect(sf::st_transform(shape, terra::crs(r_last)))
+    out$raster <- terra::mask(terra::crop(r_last, sv), sv)
   }
 
-  resultado <- list(
-    stats = cbind(sf::st_drop_geometry(shape), vals,
-                  hour=hour, year=year, n_pixels=n_validos)
-  )
-  if (return_raster) resultado$raster <- r_clip
-
-  resultado
+  out
 }
+

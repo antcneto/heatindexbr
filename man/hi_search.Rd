@@ -7,8 +7,8 @@
 hi_search(name, state = NULL)
 }
 \arguments{
-\item{name}{Character. Partial name to search (case-insensitive).
-Names are stored in uppercase (IBGE standard), so accents are ignored.}
+\item{name}{Character. Partial name to search (case-insensitive,
+accent-insensitive). Use uppercase without accents for best results.}
 
 \item{state}{Character. Optional two-letter state filter.}
 }
@@ -18,12 +18,12 @@ and \code{abbrev_state}.
 }
 \description{
 Helper to find valid municipality names and IBGE codes before calling
-\code{\link{hi_municipality}}.
+\code{\link{hi_municipality}}. Municipality names follow the IBGE
+uppercase standard without diacritics (e.g. \code{"MOSSORO"} not
+\code{"Mossoró"}).
 }
 \examples{
-\donttest{
 hi_search("MOSSORO")
-hi_search("SAO", state = "CE")
-}
+hi_search("CABROBO", state = "PE")
 
 }

@@ -1,107 +1,140 @@
 ---
-title: "Getting Started with heatindexbr"
+title: "Getting started with heatindexbr"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting Started with heatindexbr}
+  %\VignetteIndexEntry{Getting started with heatindexbr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
 ```
 
-## Introduction
-
-`heatindexbr` provides pre-computed Heat Index (HI) rasters for the
-**Brazilian Semiarid region** (1,477 municipalities, Res. CONDEL/SUDENE
-176/2024) at four synoptic hours and tools for spatial extraction.
-
-The Heat Index follows the Rothfusz (1990) formulation adopted by the
-US National Weather Service and combines air temperature and relative
-humidity into a single thermal stress metric.
+`heatindexbr` provides spatially interpolated Heat Index (Rothfusz 1990) rasters
+at ~1 km resolution for the 1,477 municipalities of Brazil's official Semiarid
+region (CONDEL/SUDENE Resolution 176/2024). This vignette walks through the
+core workflow: search → download → extract → plot.
 
 ## Installation
 
-```{r install}
-# From GitHub (development version)
-# install.packages("remotes")
-remotes::install_github("antcamposneto/heatindexbr")
+```{r install, eval=FALSE}
+# Install from GitHub
+remotes::install_github("antcneto/heatindexbr")
 ```
 
-## Basic usage
+```{r setup}
+library(heatindexbr)
+```
 
-### Search for a municipality
+## What data is available?
+
+Use `hi_available()` to see the years, resolutions, and synoptic hours
+currently distributed:
+
+```{r available}
+hi_available()
+```
+
+## Searching for municipalities
+
+Municipality names in `heatindexbr` follow the IBGE convention: **uppercase
+without accents**. Use `hi_search()` to find the correct name:
 
 ```{r search}
-library(heatindexbr)
-
-# Find municipalities named "Mossoró"
-hi_search("Mossoro")
-#>   code_muni   name_muni abbrev_state
-#> 1   2408102     MOSSORO           RN
+# Case-insensitive partial match
+hi_search("Mossoro", state = "RN")
+hi_search("Campina Grande", state = "PB")
 ```
 
-### Extract Heat Index for a municipality
+> **Important:** Always use the `name_muni` value returned by `hi_search()`
+> when calling `hi_municipality()`. For example, `"MOSSORO"`, not `"Mossoró"`.
 
-```{r extract}
-# Heat Index at 15h local time (peak heat stress)
-result <- hi_municipality("Mossoro", state = "RN", hour = "15h")
-print(result)
-#>   code_muni name_muni abbrev_state     mean    noaa_class hour year
-#> 1   2408102   MOSSORO           RN 33.47814 Extreme caution  15h 2025
+## Extracting Heat Index for a municipality
+
+`hi_municipality()` downloads the raster (cached on first use), crops it to
+the municipality boundary, and returns summary statistics with NOAA
+classification:
+
+```{r municipality}
+result <- hi_municipality("MOSSORO", state = "RN", hour = "15h")
+result
 ```
 
-### Extract for multiple municipalities
+The `noaa_class` column uses the standard NOAA Heat Index thresholds:
 
-```{r multiple}
-nordeste_capitals <- c(2408102, 2304400, 2611606, 2507507)
-hi_municipality(nordeste_capitals, hour = "15h",
-                stat = c("mean","min","max"))
+| Class | IC range | Risk |
+|---|---|---|
+| No caution | < 27°C | Low |
+| Caution | 27–32°C | Fatigue with prolonged exposure |
+| Extreme caution | 32–41°C | Heat cramps or exhaustion possible |
+| Danger | 41–54°C | Heat exhaustion likely |
+| Extreme danger | > 54°C | Heat stroke imminent |
+
+You can retrieve all four synoptic hours at once by leaving `hour = NULL`:
+
+```{r all-hours, eval=FALSE}
+hi_municipality("MOSSORO", state = "RN", hour = NULL)
 ```
 
-### Extract for a custom shapefile
+## Downloading and plotting the full raster
 
-```{r shape}
+`hi_download()` returns a `SpatRaster` (terra package). The raster is
+downloaded once and cached in your user data directory:
+
+```{r download}
+r <- hi_download(year = 2025, hour = "15h")
+r
+```
+
+Pass the raster directly to `hi_plot()` for a ready-to-use map:
+
+```{r plot}
+hi_plot(r,
+        title = "Annual mean Heat Index — 15h (2025)",
+        hour  = "15h",
+        year  = 2025)
+```
+
+## Extracting for a custom polygon
+
+If you have your own `sf` object (e.g. a watershed, a state boundary, or a
+study area), use `hi_shape()`:
+
+```{r shape, eval=FALSE}
 library(sf)
-my_area <- st_read("minha_area_de_estudo.shp")
-result  <- hi_shape(my_area, hour = "15h", return_raster = TRUE)
 
-# Plot the clipped raster
-hi_plot(result$raster, title = "Heat Index — Study Area")
+# Example: using your own polygon
+my_area <- st_read("my_area.gpkg")
+
+result <- hi_shape(my_area, hour = "15h")
+result$stats   # data.frame with mean, min, max, noaa_class
+result$raster  # clipped SpatRaster
 ```
 
-### All four synoptic hours
+## Technical note on the raster
 
-```{r cycle}
-# Download all hours
-paths <- hi_download(year = 2025, hours = c("00h","09h","15h","21h"))
-
-# Extract for one municipality across all hours
-hours <- c("00h","09h","15h","21h")
-ciclo <- lapply(hours, function(h) {
-  hi_municipality("Cabrobo", state="PE", hour=h)
-}) |> do.call(rbind, args=_)
-
-print(ciclo[, c("name_muni","hour","mean","noaa_class")])
-```
-
-## NOAA Classification
-
-| Class | IC range |
-|-------|----------|
-| No caution | < 27°C |
-| Caution | 27–32°C |
-| Extreme caution | 32–41°C |
-| Danger | 41–54°C |
-| Extreme danger | > 54°C |
+The underlying raster (`IC_2025_annual_all.tif`) is stored in **EPSG:5880**
+(SIRGAS 2000 / Brazil Polyconic) — the appropriate projected CRS for
+Brazil. Do not use the WGS84 version, which has a clipping artifact on the
+eastern boundary. See `vignette("methodology")` for full details on the
+interpolation method.
 
 ## Citation
 
-```{r citation}
+If you use `heatindexbr` in your research, please cite:
+
+```{r citation, eval=FALSE}
 citation("heatindexbr")
 ```
 
-Campos Neto, A. et al. (2026). Heat Index mapping for the Brazilian Semiarid:
-spatial interpolation under sparse monitoring networks.
-*International Journal of Climatology*. [In review]
+Or cite the Zenodo dataset directly:
+
+> Campos Neto, A. (2025). *heatindexbr: Heat Index rasters for Brazil's
+> Semiarid region* (v0.1.0). Zenodo.
+> https://doi.org/10.5281/zenodo.20942619

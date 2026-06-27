@@ -39,6 +39,7 @@ Useful links:
 \itemize{
   \item \url{https://github.com/antcamposneto/heatindexbr}
   \item \doi{10.5281/zenodo.20942619}
+  \item \url{https://antcneto.github.io/heatindexbr/}
   \item Report bugs at \url{https://github.com/antcamposneto/heatindexbr/issues}
 }
 

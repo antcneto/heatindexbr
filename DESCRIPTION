@@ -21,6 +21,7 @@ LazyData: true
 LazyDataCompression: xz
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
+Depends: R (>= 4.1.0)
 Imports:
     terra (>= 1.7.0),
     sf (>= 1.0.0),
@@ -29,13 +30,10 @@ Imports:
     ggplot2 (>= 3.4.0),
     tools
 Suggests:
-    tidyterra (>= 0.4.0),
-    exactextractr (>= 0.9.0),
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-URL: https://github.com/antcamposneto/heatindexbr,
-    https://doi.org/10.5281/zenodo.20942619
-BugReports: https://github.com/antcamposneto/heatindexbr/issues
-Depends: R (>= 4.1.0)
+Config/Needs/website: pkgdown
+URL: https://github.com/antcneto/heatindexbr, https://doi.org/10.5281/zenodo.20942619, https://antcneto.github.io/heatindexbr/
+BugReports: https://github.com/antcneto/heatindexbr/issues
