@@ -2,7 +2,7 @@
 # Place this file at: .github/workflows/pkgdown.yaml
 
 on:
-  push:
+  workflow_dispatch:
     branches: [main]
   pull_request:
     branches: [main]

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>heatindexbr — Heat Index for Brazil's Semiarid</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -32,7 +33,7 @@ nav {
 .nav-badge { font-family: var(--mono); font-size: 11px; padding: 2px 8px; border-radius: 3px; background: rgba(201,75,44,0.3); color: #f0a090; border: 0.5px solid rgba(201,75,44,0.4); }
 .lang-btn { font-family: var(--mono); font-size: 11px; padding: 3px 10px; border-radius: 4px; border: 0.5px solid rgba(245,240,232,0.3); background: transparent; color: rgba(245,240,232,0.6); cursor: pointer; transition: all 0.15s; }
 .lang-btn.active { background: var(--heat); border-color: var(--heat); color: #fff; }
-.hero { background: var(--night); color: var(--sand); padding: 5rem 2rem 4rem; position: relative; overflow: hidden; }
+.hero { background: #1A1A2E !important; color: #F5F0E8 !important; padding: 5rem 2rem 4rem; position: relative; overflow: hidden; }
 .hero::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 70% at 75% 40%, rgba(201,75,44,0.15) 0%, transparent 65%); pointer-events: none; }
 .hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
 .hero-layout { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center; }
@@ -114,8 +115,7 @@ footer a:hover { color: var(--sand); }
 </head>
 <body>
 
-<nav>
-  <a href="#" class="nav-brand">heatindexbr</a>
+<nav><a href="#" class="nav-brand">heatindexbr</a>
   <div class="nav-links">
     <a href="#maps" data-en="Maps" data-pt="Mapas">Maps</a>
     <a href="#validation" data-en="Methodology" data-pt="Metodologia">Methodology</a>
@@ -127,14 +127,11 @@ footer a:hover { color: var(--sand); }
       <button class="lang-btn" id="btn-pt" onclick="setLang('pt')">PT</button>
     </div>
   </div>
-</nav>
-
-<section class="hero">
-  <div class="hero-inner">
+</nav><section class="hero"><div class="hero-inner">
     <div class="hero-layout">
       <div>
         <p class="hero-eyebrow">R package</p>
-        <h1 class="hero-title" data-en="Heat index mapping<br>for Brazil's Semiarid" data-pt="Índice de Calor<br>no Semiárido Brasileiro">Heat index mapping<br>for Brazil's Semiarid</h1>
+        <div class="page-header"><h1 class="hero-title" data-en="Heat index mapping&lt;br&gt;for Brazil's Semiarid" data-pt="Índice de Calor&lt;br&gt;no Semiárido Brasileiro">Heat index mapping<br>for Brazil's Semiarid</h1></div>
         <p class="hero-subtitle" data-en="1,477 municipalities · 4 synoptic hours · ~1 km resolution · EPSG:5880" data-pt="1.477 municípios · 4 horários sinóticos · ~1 km de resolução · EPSG:5880">1,477 municipalities · 4 synoptic hours · ~1 km resolution · EPSG:5880</p>
         <p class="hero-desc" data-en="Spatially interpolated Heat Index (Rothfusz 1990) rasters for the official Brazilian Semiarid region (CONDEL/SUDENE Res. 176/2024). Produced with kriging with external drift validated against 59 to 73 INMET stations via leave-one-out cross-validation. R² = 0.884 at 15h." data-pt="Rasters do Índice de Calor (Rothfusz 1990) interpolados espacialmente para o Semiárido Brasileiro oficial (Res. CONDEL/SUDENE 176/2024). Produzido com krigagem com deriva externa, validado com 59 a 73 estações INMET por validação cruzada leave-one-out. R² = 0,884 às 15h.">Spatially interpolated Heat Index (Rothfusz 1990) rasters for the official Brazilian Semiarid region (CONDEL/SUDENE Res. 176/2024). Produced with kriging with external drift validated against 59 to 73 INMET stations via leave-one-out cross-validation. R² = 0.884 at 15h.</p>
         <div class="hero-badges">
@@ -150,35 +147,53 @@ footer a:hover { color: var(--sand); }
         </div>
       </div>
       <div class="thermo-wrap">
-        <svg class="thermo-svg" viewBox="0 0 32 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="11" y="4" width="10" height="58" rx="5" fill="rgba(245,240,232,0.07)" stroke="rgba(245,240,232,0.2)" stroke-width="0.5"/>
-          <rect x="13.5" y="50" width="5" id="tf" height="8" rx="1" fill="#C94B2C"/>
-          <circle cx="16" cy="74" r="9" fill="#C94B2C" opacity="0.85"/>
-          <circle cx="16" cy="74" r="5.5" fill="#f0a090"/>
-        </svg>
-        <div class="thermo-hours">
-          <div class="thour" id="th0"><div class="thour-dot"></div><span>00h · 24.3°C</span></div>
-          <div class="thour" id="th1"><div class="thour-dot"></div><span>09h · 26.6°C</span></div>
-          <div class="thour" id="th2"><div class="thour-dot"></div><span>15h · 31.2°C</span></div>
-          <div class="thour" id="th3"><div class="thour-dot"></div><span>21h · 22.7°C</span></div>
+        <svg class="thermo-svg" viewbox="0 0 32 90" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="11" y="4" width="10" height="58" rx="5" fill="rgba(245,240,232,0.07)" stroke="rgba(245,240,232,0.2)" stroke-width="0.5"></rect><rect x="13.5" y="50" width="5" id="tf" height="8" rx="1" fill="#C94B2C"></rect><circle cx="16" cy="74" r="9" fill="#C94B2C" opacity="0.85"></circle><circle cx="16" cy="74" r="5.5" fill="#f0a090"></circle></svg><div class="thermo-hours">
+          <div class="thour" id="th0">
+<div class="thour-dot"></div>
+<span>00h · 24.3°C</span>
+</div>
+          <div class="thour" id="th1">
+<div class="thour-dot"></div>
+<span>09h · 26.6°C</span>
+</div>
+          <div class="thour" id="th2">
+<div class="thour-dot"></div>
+<span>15h · 31.2°C</span>
+</div>
+          <div class="thour" id="th3">
+<div class="thour-dot"></div>
+<span>21h · 22.7°C</span>
+</div>
         </div>
       </div>
     </div>
   </div>
-</section>
-
-<div class="stat-strip">
+</section><div class="stat-strip">
   <div class="stat-strip-inner">
-    <div class="stat-item"><div class="stat-val">1,477</div><div class="stat-lbl" data-en="municipalities covered" data-pt="municípios cobertos">municipalities covered</div></div>
-    <div class="stat-item"><div class="stat-val">31M</div><div class="stat-lbl" data-en="people under heat stress" data-pt="pessoas sob estresse térmico">people under heat stress</div></div>
-    <div class="stat-item"><div class="stat-val">0.884</div><div class="stat-lbl" data-en="R² at 15h (LOOCV)" data-pt="R² às 15h (LOOCV)">R² at 15h (LOOCV)</div></div>
-    <div class="stat-item"><div class="stat-val">1.04°C</div><div class="stat-lbl" data-en="RMSE at 15h" data-pt="RMSE às 15h">RMSE at 15h</div></div>
-    <div class="stat-item"><div class="stat-val">~1 km</div><div class="stat-lbl" data-en="raster resolution" data-pt="resolução do raster">raster resolution</div></div>
+    <div class="stat-item">
+<div class="stat-val">1,477</div>
+<div class="stat-lbl" data-en="municipalities covered" data-pt="municípios cobertos">municipalities covered</div>
+</div>
+    <div class="stat-item">
+<div class="stat-val">31M</div>
+<div class="stat-lbl" data-en="people under heat stress" data-pt="pessoas sob estresse térmico">people under heat stress</div>
+</div>
+    <div class="stat-item">
+<div class="stat-val">0.884</div>
+<div class="stat-lbl" data-en="R² at 15h (LOOCV)" data-pt="R² às 15h (LOOCV)">R² at 15h (LOOCV)</div>
+</div>
+    <div class="stat-item">
+<div class="stat-val">1.04°C</div>
+<div class="stat-lbl" data-en="RMSE at 15h" data-pt="RMSE às 15h">RMSE at 15h</div>
+</div>
+    <div class="stat-item">
+<div class="stat-val">~1 km</div>
+<div class="stat-lbl" data-en="raster resolution" data-pt="resolução do raster">raster resolution</div>
+</div>
   </div>
 </div>
 
-<section id="maps">
-  <div class="inner">
+<section id="maps"><div class="inner">
     <p class="eyebrow" data-en="The data" data-pt="Os dados">The data</p>
     <h2 class="section-title" data-en="Heat index across the Semiarid" data-pt="Índice de Calor no Semiárido">Heat index across the Semiarid</h2>
     <p class="section-lead" data-en="Annual mean Heat Index for 2025, mapped at ~1 km resolution across all 1,477 municipalities of Brazil's official Semiarid region. Four synoptic hours capture the full thermal cycle: nocturnal minimum, morning warming, afternoon peak, and evening cooling." data-pt="IC médio anual de 2025, com ~1 km de resolução para os 1.477 municípios do Semiárido Brasileiro oficial. Quatro horários sinóticos capturam o ciclo térmico completo: mínima noturna, aquecimento matinal, pico vespertino e resfriamento noturno.">Annual mean Heat Index for 2025, mapped at ~1 km resolution across all 1,477 municipalities of Brazil's official Semiarid region. Four synoptic hours capture the full thermal cycle: nocturnal minimum, morning warming, afternoon peak, and evening cooling.</p>
@@ -188,58 +203,70 @@ footer a:hover { color: var(--sand); }
       <button class="map-tab" onclick="showMap(this,'ciclo')" data-en="Daily cycle" data-pt="Ciclo diário">Daily cycle</button>
     </div>
     <div class="map-panel active" id="map-ic15">
-      <img src="figures/figura_IC_15h.png" alt="Heat Index map at 15h, Brazilian Semiarid, 2025">
-      <p class="map-caption" data-en="Annual mean Heat Index at 15h · KDE with external drift: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880" data-pt="IC médio anual às 15h · KDE com deriva externa: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880">Annual mean Heat Index at 15h · KDE with external drift: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880</p>
+      <img src="figures/figura_IC_15h.png" alt="Heat Index map at 15h, Brazilian Semiarid, 2025"><p class="map-caption" data-en="Annual mean Heat Index at 15h · KDE with external drift: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880" data-pt="IC médio anual às 15h · KDE com deriva externa: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880">Annual mean Heat Index at 15h · KDE with external drift: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880</p>
     </div>
     <div class="map-panel" id="map-noaa">
-      <img src="figures/figura_NOAA_15h.png" alt="NOAA Heat Index classification at 15h, Brazilian Semiarid, 2025">
-      <p class="map-caption" data-en="NOAA classification at 15h · 640 municipalities under extreme caution (IC 32 to 41°C) · 13.3 million people" data-pt="Classificação NOAA às 15h · 640 municípios em cautela extrema (IC 32 a 41°C) · 13,3 milhões de habitantes">NOAA classification at 15h · 640 municipalities under extreme caution (IC 32 to 41°C) · 13.3 million people</p>
+      <img src="figures/figura_NOAA_15h.png" alt="NOAA Heat Index classification at 15h, Brazilian Semiarid, 2025"><p class="map-caption" data-en="NOAA classification at 15h · 640 municipalities under extreme caution (IC 32 to 41°C) · 13.3 million people" data-pt="Classificação NOAA às 15h · 640 municípios em cautela extrema (IC 32 a 41°C) · 13,3 milhões de habitantes">NOAA classification at 15h · 640 municipalities under extreme caution (IC 32 to 41°C) · 13.3 million people</p>
     </div>
     <div class="map-panel" id="map-ciclo">
-      <img src="figures/figura_ciclo_diario.png" alt="Daily cycle of Heat Index, Brazilian Semiarid, 2025">
-      <p class="map-caption" data-en="Daily cycle: midnight, 09h, 15h, 21h local time · Covariates vary by hour: NDVI at night, ERA5 at 15h" data-pt="Ciclo diário: meia-noite, 9h, 15h, 21h (hora local) · Covariáveis variam por horário: NDVI à noite, ERA5 às 15h">Daily cycle: midnight, 09h, 15h, 21h local time · Covariates vary by hour: NDVI at night, ERA5 at 15h</p>
+      <img src="figures/figura_ciclo_diario.png" alt="Daily cycle of Heat Index, Brazilian Semiarid, 2025"><p class="map-caption" data-en="Daily cycle: midnight, 09h, 15h, 21h local time · Covariates vary by hour: NDVI at night, ERA5 at 15h" data-pt="Ciclo diário: meia-noite, 9h, 15h, 21h (hora local) · Covariáveis variam por horário: NDVI à noite, ERA5 às 15h">Daily cycle: midnight, 09h, 15h, 21h local time · Covariates vary by hour: NDVI at night, ERA5 at 15h</p>
     </div>
   </div>
-</section>
-
-<section>
-  <div class="inner">
+</section><section><div class="inner">
     <p class="eyebrow" data-en="Population exposure" data-pt="Exposição populacional">Population exposure</p>
     <h2 class="section-title" data-en="31 million people under heat stress" data-pt="31 milhões de pessoas sob estresse térmico">31 million people under heat stress</h2>
-    <p class="section-lead" data-en="At 15h, annual mean Heat Index classifies 96.8% of the Semiarid population under NOAA caution or extreme caution, based on 2022 IBGE Census data. Annual means are a conservative lower bound: daily peaks in specific months can exceed IC > 41°C." data-pt="Às 15h, o IC médio anual classifica 96,8% da população do Semiárido nos níveis de cautela ou cautela extrema da escala NOAA, com base no Censo IBGE 2022. Médias anuais representam o limite inferior conservador: picos diários em meses específicos podem superar IC > 41°C.">At 15h, annual mean Heat Index classifies 96.8% of the Semiarid population under NOAA caution or extreme caution, based on 2022 IBGE Census data. Annual means are a conservative lower bound: daily peaks in specific months can exceed IC > 41°C.</p>
+    <p class="section-lead" data-en="At 15h, annual mean Heat Index classifies 96.8% of the Semiarid population under NOAA caution or extreme caution, based on 2022 IBGE Census data. Annual means are a conservative lower bound: daily peaks in specific months can exceed IC &gt; 41°C." data-pt="Às 15h, o IC médio anual classifica 96,8% da população do Semiárido nos níveis de cautela ou cautela extrema da escala NOAA, com base no Censo IBGE 2022. Médias anuais representam o limite inferior conservador: picos diários em meses específicos podem superar IC &gt; 41°C.">At 15h, annual mean Heat Index classifies 96.8% of the Semiarid population under NOAA caution or extreme caution, based on 2022 IBGE Census data. Annual means are a conservative lower bound: daily peaks in specific months can exceed IC &gt; 41°C.</p>
     <div class="noaa-row">
       <span class="noaa-pill noaa-s" data-en="979k · No caution (&lt;27°C) · 93 municipalities" data-pt="979 mil hab. · Sem cautela (&lt;27°C) · 93 municípios">979k · No caution (&lt;27°C) · 93 municipalities</span>
       <span class="noaa-pill noaa-c" data-en="16.8M · Caution (27 to 32°C) · 813 municipalities" data-pt="16,8 M · Cautela (27 a 32°C) · 813 municípios">16.8M · Caution (27 to 32°C) · 813 municipalities</span>
       <span class="noaa-pill noaa-e" data-en="13.3M · Extreme caution (32 to 41°C) · 640 municipalities" data-pt="13,3 M · Cautela extrema (32 a 41°C) · 640 municípios">13.3M · Extreme caution (32 to 41°C) · 640 municipalities</span>
     </div>
   </div>
-</section>
-
-<section id="validation">
-  <div class="inner">
+</section><section id="validation"><div class="inner">
     <p class="eyebrow" data-en="Why trust the raster?" data-pt="Por que confiar no raster?">Why trust the raster?</p>
     <h2 class="section-title" data-en="Rigorous interpolation, verified results" data-pt="Interpolação rigorosa, resultados verificados">Rigorous interpolation, verified results</h2>
     <p class="section-lead" data-en="Fifteen spatial interpolation methods were compared across all four synoptic hours via leave-one-out cross-validation (LOOCV). The winning method, kriging with external drift (KDE), selects covariates per hour based on physical justification: NDVI captures nocturnal land-surface processes in the Caatinga; ERA5 captures regional synoptic forcing at 15h." data-pt="Quinze métodos de interpolação espacial foram comparados nos quatro horários via validação cruzada leave-one-out (LOOCV). O método vencedor, a krigagem com deriva externa (KDE), seleciona covariáveis por horário com base em justificativa física: NDVI captura processos noturnos de superfície na Caatinga; ERA5 captura a forçante sinótica regional às 15h.">Fifteen spatial interpolation methods were compared across all four synoptic hours via leave-one-out cross-validation (LOOCV). The winning method, kriging with external drift (KDE), selects covariates per hour based on physical justification: NDVI captures nocturnal land-surface processes in the Caatinga; ERA5 captures regional synoptic forcing at 15h.</p>
 
     <table class="loocv-table">
-      <thead>
-        <tr>
-          <th data-en="Hour (local)" data-pt="Hora (local)">Hour (local)</th>
+<thead><tr>
+<th data-en="Hour (local)" data-pt="Hora (local)">Hour (local)</th>
           <th data-en="Covariates" data-pt="Covariáveis">Covariates</th>
           <th>R²</th>
           <th>RMSE (°C)</th>
           <th>MAE (°C)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>21h</td><td data-en="alt + dist_coast + NDVI + ERA5" data-pt="alt + dist_costa + NDVI + ERA5">alt + dist_coast + NDVI + ERA5</td><td class="highlight">0.863</td><td>1.05</td><td>0.867</td></tr>
-        <tr><td>00h</td><td data-en="alt + dist_coast + NDVI + ERA5" data-pt="alt + dist_costa + NDVI + ERA5">alt + dist_coast + NDVI + ERA5</td><td class="highlight">0.819</td><td>1.10</td><td>0.888</td></tr>
-        <tr><td>09h</td><td data-en="alt + NDVI" data-pt="alt + NDVI">alt + NDVI</td><td class="highlight">0.885</td><td>1.06</td><td>0.799</td></tr>
-        <tr><td>15h</td><td data-en="alt + ERA5-Land T2m" data-pt="alt + ERA5-Land T2m">alt + ERA5-Land T2m</td><td class="highlight">0.884</td><td>1.04</td><td>0.775</td></tr>
-      </tbody>
-    </table>
-
-    <div class="val-grid">
+        </tr></thead>
+<tbody>
+<tr>
+<td>21h</td>
+<td data-en="alt + dist_coast + NDVI + ERA5" data-pt="alt + dist_costa + NDVI + ERA5">alt + dist_coast + NDVI + ERA5</td>
+<td class="highlight">0.863</td>
+<td>1.05</td>
+<td>0.867</td>
+</tr>
+<tr>
+<td>00h</td>
+<td data-en="alt + dist_coast + NDVI + ERA5" data-pt="alt + dist_costa + NDVI + ERA5">alt + dist_coast + NDVI + ERA5</td>
+<td class="highlight">0.819</td>
+<td>1.10</td>
+<td>0.888</td>
+</tr>
+<tr>
+<td>09h</td>
+<td data-en="alt + NDVI" data-pt="alt + NDVI">alt + NDVI</td>
+<td class="highlight">0.885</td>
+<td>1.06</td>
+<td>0.799</td>
+</tr>
+<tr>
+<td>15h</td>
+<td data-en="alt + ERA5-Land T2m" data-pt="alt + ERA5-Land T2m">alt + ERA5-Land T2m</td>
+<td class="highlight">0.884</td>
+<td>1.04</td>
+<td>0.775</td>
+</tr>
+</tbody>
+</table>
+<div class="val-grid">
       <div class="val-card">
         <div class="val-card-icon">✓</div>
         <div class="val-card-title" data-en="Spatially unbiased residuals" data-pt="Resíduos espacialmente não enviesados">Spatially unbiased residuals</div>
@@ -257,19 +284,34 @@ footer a:hover { color: var(--sand); }
       </div>
     </div>
   </div>
-</section>
-
-<section id="usage">
-  <div class="inner">
+</section><section id="usage"><div class="inner">
     <p class="eyebrow" data-en="Get started" data-pt="Primeiros passos">Get started</p>
     <h2 class="section-title" data-en="Four lines to your first map" data-pt="Quatro linhas para o primeiro mapa">Four lines to your first map</h2>
     <div class="fn-grid">
-      <div class="fn-card"><div class="fn-name">hi_download()</div><div class="fn-desc" data-en="Download and cache the raster from Zenodo. Returns a SpatRaster." data-pt="Baixa e armazena em cache o raster do Zenodo. Retorna um SpatRaster.">Download and cache the raster from Zenodo. Returns a SpatRaster.</div></div>
-      <div class="fn-card"><div class="fn-name">hi_municipality()</div><div class="fn-desc" data-en="Extract Heat Index stats for one or more municipalities by name." data-pt="Extrai estatísticas de IC para um ou mais municípios pelo nome.">Extract Heat Index stats for one or more municipalities by name.</div></div>
-      <div class="fn-card"><div class="fn-name">hi_shape()</div><div class="fn-desc" data-en="Extract stats for any custom sf polygon." data-pt="Extrai estatísticas para qualquer polígono sf personalizado.">Extract stats for any custom sf polygon.</div></div>
-      <div class="fn-card"><div class="fn-name">hi_search()</div><div class="fn-desc" data-en="Search for municipalities by name or state." data-pt="Busca municípios por nome ou UF.">Search for municipalities by name or state.</div></div>
-      <div class="fn-card"><div class="fn-name">hi_plot()</div><div class="fn-desc" data-en="Plot a raster or municipality result as a ggplot map." data-pt="Plota raster ou resultado municipal como mapa ggplot.">Plot a raster or municipality result as a ggplot map.</div></div>
-      <div class="fn-card"><div class="fn-name">hi_available()</div><div class="fn-desc" data-en="List available years, resolutions, and hours." data-pt="Lista anos, resoluções e horários disponíveis.">List available years, resolutions, and hours.</div></div>
+      <div class="fn-card">
+<div class="fn-name">hi_download()</div>
+<div class="fn-desc" data-en="Download and cache the raster from Zenodo. Returns a SpatRaster." data-pt="Baixa e armazena em cache o raster do Zenodo. Retorna um SpatRaster.">Download and cache the raster from Zenodo. Returns a SpatRaster.</div>
+</div>
+      <div class="fn-card">
+<div class="fn-name">hi_municipality()</div>
+<div class="fn-desc" data-en="Extract Heat Index stats for one or more municipalities by name." data-pt="Extrai estatísticas de IC para um ou mais municípios pelo nome.">Extract Heat Index stats for one or more municipalities by name.</div>
+</div>
+      <div class="fn-card">
+<div class="fn-name">hi_shape()</div>
+<div class="fn-desc" data-en="Extract stats for any custom sf polygon." data-pt="Extrai estatísticas para qualquer polígono sf personalizado.">Extract stats for any custom sf polygon.</div>
+</div>
+      <div class="fn-card">
+<div class="fn-name">hi_search()</div>
+<div class="fn-desc" data-en="Search for municipalities by name or state." data-pt="Busca municípios por nome ou UF.">Search for municipalities by name or state.</div>
+</div>
+      <div class="fn-card">
+<div class="fn-name">hi_plot()</div>
+<div class="fn-desc" data-en="Plot a raster or municipality result as a ggplot map." data-pt="Plota raster ou resultado municipal como mapa ggplot.">Plot a raster or municipality result as a ggplot map.</div>
+</div>
+      <div class="fn-card">
+<div class="fn-name">hi_available()</div>
+<div class="fn-desc" data-en="List available years, resolutions, and hours." data-pt="Lista anos, resoluções e horários disponíveis.">List available years, resolutions, and hours.</div>
+</div>
     </div>
     <div class="code-block">
 <span class="cm"># Install from GitHub</span>
@@ -288,14 +330,9 @@ r <span class="kw">&lt;-</span> <span class="fn">hi_download</span>(hour = <span
 <span class="fn">hi_plot</span>(r)</div>
     <p class="note" data-en="Municipality names follow IBGE convention: uppercase without accents. Use hi_search() to find the correct name (e.g. MOSSORO, not Mossoró)." data-pt="Nomes de municípios seguem o padrão IBGE: maiúsculas sem acentos. Use hi_search() para encontrar o nome correto (ex.: MOSSORO, não Mossoró).">Municipality names follow IBGE convention: uppercase without accents. Use hi_search() to find the correct name (e.g. MOSSORO, not Mossoró).</p>
   </div>
-</section>
-
-<footer>
-  <p>heatindexbr · DOI <a href="https://zenodo.org/records/20942619" target="_blank">10.5281/zenodo.20942619</a> · <a href="https://github.com/antcneto/heatindexbr" target="_blank">GitHub</a> · MIT License</p>
+</section><footer><p>heatindexbr · DOI <a href="https://zenodo.org/records/20942619" target="_blank">10.5281/zenodo.20942619</a> · <a href="https://github.com/antcneto/heatindexbr" target="_blank">GitHub</a> · MIT License</p>
   <p style="margin-top:0.5rem">Antônio Campos Neto · UFRN · 2025–2026</p>
-</footer>
-
-<script>
+</footer><script>
 const temps = [4, 22, 50, 2];
 let cur = 2;
 function tick() {
