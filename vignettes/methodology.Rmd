@@ -22,11 +22,13 @@ specific use case.
 
 The Heat Index (IC) is computed using the Rothfusz (1990) regression equation,
 which combines air temperature (T, °C) and relative humidity (RH, %) into a
-single thermal comfort index. Wind speed is not considered, which makes the
-index tractable for regional-scale mapping where homogeneous wind data are
-unavailable. Four synoptic hours were selected (00h, 09h, 15h, and 21h local
-time, UTC-3) to capture the full thermal cycle of a typical day: nocturnal
-minimum, morning warming, afternoon peak, and evening cooling.
+single thermal comfort index, building on the foundational work of Steadman
+(1979) on human physiological response to heat and humidity. Wind speed is not
+considered, which makes the index tractable for regional-scale mapping where
+homogeneous wind data are unavailable. Four synoptic hours were selected (00h,
+09h, 15h, and 21h local time, UTC-3) to capture the full thermal cycle of a
+typical day: nocturnal minimum, morning warming, afternoon peak, and evening
+cooling.
 
 ---
 
@@ -128,8 +130,8 @@ confirm that altitude and ERA5 capture independent physical processes:
 - IC × altitude | ERA5 = -0.929 (p < 0.001)
 
 Simple correlations for comparison: IC × ERA5 = 0.933, IC × altitude = -0.778,
-altitude × ERA5 = -0.529. The raster is not redundant with an elevation model;
-ERA5 explains nearly all remaining variance after altitude is controlled for,
+altitude × ERA5 = -0.529. The raster is not redundant with an elevation model,
+as ERA5 explains nearly all remaining variance after altitude is controlled for,
 confirming the thermodynamic basis of the interpolation.
 
 ---
@@ -139,7 +141,7 @@ confirming the thermodynamic basis of the interpolation.
 A concern with sparse station networks is that prediction errors increase
 monotonically with distance from the nearest station. The correlation between
 LOOCV absolute error and distance to the nearest neighbour station is -0.109
-(non-significant). Prediction error does not grow with distance.
+(non-significant), meaning prediction error does not grow with distance.
 
 The largest errors occur in the 33 to 55 km range, corresponding to coastal
 and Agreste zones with steep gradients. Interior Semiarid areas show smaller
@@ -199,8 +201,17 @@ reserved for a forthcoming publication.
 
 ---
 
-## Reference
+## References
 
-Rothfusz, L. P. (1990). *The heat index equation (or, more than you ever
-wanted to know about heat index)*. NWS Technical Attachment SR 90-23.
-National Weather Service, Fort Worth, TX.
+ROTHFUSZ, L. P. The heat index equation (or, more than you ever wanted to know
+about heat index). NWS Technical Attachment SR 90-23. National Weather Service,
+Fort Worth, TX, 1990.
+
+STEADMAN, R. G. The assessment of sultriness. Part I: a temperature-humidity
+index based on human physiology and clothing science. **Journal of Applied
+Meteorology**, v. 18, n. 7, p. 861-873, 1979.
+
+BRASIL. Resolução CONDEL/SUDENE n. 176, de 26 de março de 2024. Aprova a
+delimitação do Semiárido Brasileiro. Superintendência do Desenvolvimento do
+Nordeste, Recife, 2024. Disponível em:
+<https://www.gov.br/sudene/pt-br/assuntos/superintendencia/semiarido>.
