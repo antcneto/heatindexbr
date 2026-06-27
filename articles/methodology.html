@@ -78,18 +78,19 @@ to assess the raster’s fitness for their specific use case.</p>
 equation, which combines air temperature (T, °C) and relative humidity
 (RH, %) into a single thermal comfort index. Wind speed is not
 considered, which makes the index tractable for regional-scale mapping
-where homogeneous wind data are unavailable. The four synoptic hours
-used — 00h, 09h, 15h, and 21h (local UTC-3) — correspond to standard
-INMET observation times.</p>
+where homogeneous wind data are unavailable. Four synoptic hours were
+selected (00h, 09h, 15h, and 21h local time, UTC-3) to capture the full
+thermal cycle of a typical day: nocturnal minimum, morning warming,
+afternoon peak, and evening cooling.</p>
 <hr>
 </div>
 <div class="section level2">
 <h2 id="input-data">Input data<a class="anchor" aria-label="anchor" href="#input-data"></a>
 </h2>
 <p><strong>Weather stations:</strong> INMET automatic stations, 2025
-(annual means). A completeness threshold of ≥75% was applied, resulting
-in 59–73 stations per hour depending on data availability. The 15h hour
-(18h UTC) achieves the largest network: 73 stations.</p>
+(annual means). A completeness threshold of 75% was applied, resulting
+in 59 to 73 stations per hour depending on data availability. The 15h
+hour (18h UTC) achieves the largest network: 73 stations.</p>
 <p><strong>Covariates used in the best models:</strong></p>
 <table class="table">
 <thead><tr class="header">
@@ -116,7 +117,7 @@ in 59–73 stations per hour depending on data availability. The 15h hour
 <tr class="even">
 <td>Distance to coastline</td>
 <td>Computed via ne_coastline()</td>
-<td>—</td>
+<td>vector</td>
 </tr>
 </tbody>
 </table>
@@ -129,45 +130,64 @@ in 59–73 stations per hour depending on data availability. The 15h hour
 synoptic hours using leave-one-out cross-validation (LOOCV). The
 candidate methods included kriging with external drift (KDE) with
 various covariate combinations, ordinary kriging, linear regression
-(with coordinates and altitude), Random Forest, RF + Kriging of
+(with coordinates and altitude), Random Forest, RF + kriging of
 residuals, IDW, and thin-plate splines.</p>
 <p><strong>Winning method by hour:</strong></p>
-<table class="table">
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+</colgroup>
 <thead><tr class="header">
 <th>Hour (local)</th>
+<th>Hour (UTC)</th>
 <th>Method</th>
 <th>Covariates</th>
 <th>R²</th>
-<th>RMSE</th>
+<th>RMSE (°C)</th>
+<th>MAE (°C)</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>00h</td>
-<td>KDE</td>
-<td>alt + dist_coast + NDVI + ERA5_00h</td>
+<td>21h</td>
+<td>00h UTC</td>
+<td>KDE_tudo</td>
+<td>alt + dist_coast + NDVI + ERA5</td>
 <td>0.863</td>
-<td>—</td>
+<td>1.05</td>
+<td>0.867</td>
 </tr>
 <tr class="even">
-<td>09h</td>
-<td>KDE</td>
-<td>alt + NDVI</td>
-<td>0.885</td>
-<td>—</td>
+<td>00h</td>
+<td>03h UTC</td>
+<td>KDE_tudo</td>
+<td>alt + dist_coast + NDVI + ERA5</td>
+<td>0.819</td>
+<td>1.10</td>
+<td>0.888</td>
 </tr>
 <tr class="odd">
-<td>15h</td>
-<td>KDE</td>
-<td>alt + ERA5_18h</td>
-<td><strong>0.884</strong></td>
-<td><strong>1.03°C</strong></td>
+<td>09h</td>
+<td>12h UTC</td>
+<td>KDE_alt_ndvi</td>
+<td>alt + NDVI</td>
+<td>0.885</td>
+<td>1.06</td>
+<td>0.799</td>
 </tr>
 <tr class="even">
-<td>21h</td>
-<td>KDE</td>
-<td>alt + dist_coast + NDVI + ERA5_00h</td>
-<td>0.819</td>
-<td>—</td>
+<td>15h</td>
+<td>18h UTC</td>
+<td>KDE_alt_era5</td>
+<td>alt + ERA5-Land T2m</td>
+<td>0.884</td>
+<td>1.04</td>
+<td>0.775</td>
 </tr>
 </tbody>
 </table>
@@ -175,7 +195,7 @@ residuals, IDW, and thin-plate splines.</p>
 processes:</p>
 <ul>
 <li>
-<strong>NDVI</strong> contributes at night (00h, 21h): local
+<strong>NDVI</strong> contributes at night (21h, 00h): local
 land-surface processes in the Caatinga biome modulate nocturnal
 temperature more than synoptic forcing.</li>
 <li>
@@ -200,36 +220,36 @@ leakage:</p>
 <th>Hour</th>
 <th>LOOCV R²</th>
 <th>Block CV R²</th>
-<th>ΔR²</th>
+<th>Delta R²</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td>21h</td>
 <td>~0.86</td>
 <td>~0.68</td>
-<td><strong>0.18</strong></td>
+<td>0.18</td>
 </tr>
 <tr class="even">
 <td>15h</td>
 <td>~0.88</td>
 <td>~0.80</td>
-<td><strong>0.08</strong></td>
+<td>0.08</td>
 </tr>
 </tbody>
 </table>
-<p>KDE’s R² remained stable across both protocols. We interpret this as
+<p>KDE R² remained stable across both protocols. We interpret this as
 KDE genuinely capturing the spatial structure of the Heat Index, while
 RF was partially memorising the local neighbourhood of each station.</p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="why-indirect-interpolation-t-rh-ic-was-rejected">Why indirect interpolation (T + RH → IC) was rejected<a class="anchor" aria-label="anchor" href="#why-indirect-interpolation-t-rh-ic-was-rejected"></a>
+<h2 id="why-indirect-interpolation-t-rh-to-ic-was-rejected">Why indirect interpolation (T + RH to IC) was rejected<a class="anchor" aria-label="anchor" href="#why-indirect-interpolation-t-rh-to-ic-was-rejected"></a>
 </h2>
 <p>An alternative workflow would interpolate temperature and humidity
 separately, then compute IC from the interpolated fields. This approach
-was tested and rejected: it introduced a systematic bias of
-<strong>+0.246°C at 15h</strong> relative to direct IC interpolation.
-The direct approach is used throughout.</p>
+was tested and rejected: it introduced a systematic bias of +0.246°C at
+15h relative to direct IC interpolation. The direct approach is used
+throughout.</p>
 <hr>
 </div>
 <div class="section level2">
@@ -239,10 +259,10 @@ The direct approach is used throughout.</p>
 tests:</p>
 <p><strong>Variogram analysis:</strong> All fitted models (spherical,
 exponential, Gaussian) converged to a pure nugget effect: Sill = 0,
-Nugget ≈ 1.05. This means no residual spatial autocorrelation remains
-after fitting — the model has absorbed all systematic spatial
-structure.</p>
-<p><strong>Moran’s I:</strong> I = −0.027, p = 0.864. Residuals are
+Nugget approximately 1.05. This means no residual spatial
+autocorrelation remains after fitting, indicating the model has absorbed
+all systematic spatial structure.</p>
+<p><strong>Moran’s I:</strong> I = -0.027, p = 0.864. Residuals are
 spatially random.</p>
 <p>Together, these results confirm that the KDE model is well-specified
 and that the residual variance reflects only local measurement noise,
@@ -256,18 +276,14 @@ not unmodelled spatial patterns.</p>
 pixels confirm that altitude and ERA5 capture independent physical
 processes:</p>
 <ul>
-<li>IC × ERA5 | altitude = <strong>0.977</strong> (p &lt; 0.001)</li>
-<li>IC × altitude | ERA5 = <strong>−0.929</strong> (p &lt; 0.001)</li>
+<li>IC × ERA5 | altitude = 0.977 (p &lt; 0.001)</li>
+<li>IC × altitude | ERA5 = -0.929 (p &lt; 0.001)</li>
 </ul>
-<p>Simple correlations for comparison:</p>
-<ul>
-<li>IC × ERA5 = 0.933</li>
-<li>IC × altitude = −0.778</li>
-<li>altitude × ERA5 = −0.529</li>
-</ul>
-<p>The raster is not redundant with an elevation model — ERA5 explains
-nearly all remaining variance after altitude is controlled for,
-confirming the thermodynamic basis of the interpolation.</p>
+<p>Simple correlations for comparison: IC × ERA5 = 0.933, IC × altitude
+= -0.778, altitude × ERA5 = -0.529. The raster is not redundant with an
+elevation model; ERA5 explains nearly all remaining variance after
+altitude is controlled for, confirming the thermodynamic basis of the
+interpolation.</p>
 <hr>
 </div>
 <div class="section level2">
@@ -276,20 +292,18 @@ confirming the thermodynamic basis of the interpolation.</p>
 <p>A concern with sparse station networks is that prediction errors
 increase monotonically with distance from the nearest station. The
 correlation between LOOCV absolute error and distance to the nearest
-neighbour station is <strong>−0.109 (non-significant)</strong>.
-Prediction error does not grow with distance.</p>
-<p>The largest errors occur in the 33–55 km range, corresponding to
+neighbour station is -0.109 (non-significant). Prediction error does not
+grow with distance.</p>
+<p>The largest errors occur in the 33 to 55 km range, corresponding to
 coastal and Agreste zones with steep gradients. Interior Semiarid areas
-show smaller errors because of genuine climatic homogeneity — not
-because stations are closer.</p>
-<p>Consequently, the distance-to-station raster
-(<code>dist_estacao_km.tif</code>) should be interpreted as a
-<strong>descriptive map of the monitoring network</strong>, not as a
+show smaller errors because of genuine climatic homogeneity, not because
+stations are closer. Consequently, the distance-to-station raster should
+be interpreted as a descriptive map of the monitoring network, not as a
 predictive confidence interval.</p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="loocv-summary-15h-18h-utc-73-stations">LOOCV summary (15h / 18h UTC, 73 stations)<a class="anchor" aria-label="anchor" href="#loocv-summary-15h-18h-utc-73-stations"></a>
+<h2 id="loocv-summary-15h-73-stations">LOOCV summary (15h, 73 stations)<a class="anchor" aria-label="anchor" href="#loocv-summary-15h-73-stations"></a>
 </h2>
 <table class="table">
 <thead><tr class="header">
@@ -310,18 +324,14 @@ predictive confidence interval.</p>
 <td>2.808°C</td>
 </tr>
 <tr class="even">
-<td>Folds with NA</td>
-<td>0</td>
-</tr>
-<tr class="odd">
 <td>Nearest-neighbour distance: min</td>
 <td>33 km</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Nearest-neighbour distance: median</td>
 <td>86.8 km</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Nearest-neighbour distance: max</td>
 <td>248.4 km</td>
 </tr>
@@ -340,7 +350,7 @@ predictive confidence interval.</p>
 <tbody>
 <tr class="odd">
 <td>File</td>
-<td><code>IC_2025_annual_all.tif</code></td>
+<td>IC_2025_annual_all.tif</td>
 </tr>
 <tr class="even">
 <td>Bands</td>
@@ -366,18 +376,12 @@ predictive confidence interval.</p>
 <td>File size</td>
 <td>17.1 MB</td>
 </tr>
-<tr class="even">
-<td>NA values</td>
-<td>Ocean / outside Semiarid boundary</td>
-</tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Do not use the WGS84 version</strong>
+<p>Do not use the WGS84 version
 (<code>IC_2025_annual_all_WGS84.tif</code>). A reprojection artefact
 clips the eastern boundary of the domain. The EPSG:5880 version is the
 correct product.</p>
-</blockquote>
 <hr>
 </div>
 <div class="section level2">
@@ -401,13 +405,13 @@ municipalities):</p>
 <td>3.2%</td>
 </tr>
 <tr class="even">
-<td>Caution (27–32°C)</td>
+<td>Caution (27 to 32°C)</td>
 <td>813</td>
 <td>16.8 million</td>
 <td>54.1%</td>
 </tr>
 <tr class="odd">
-<td>Extreme caution (32–41°C)</td>
+<td>Extreme caution (32 to 41°C)</td>
 <td>640</td>
 <td>13.3 million</td>
 <td>42.7%</td>
@@ -415,14 +419,14 @@ municipalities):</p>
 <tr class="even">
 <td>Danger / Extreme danger</td>
 <td>0</td>
-<td>—</td>
-<td>—</td>
+<td>0</td>
+<td>0%</td>
 </tr>
 </tbody>
 </table>
-<p>Annual means represent a <strong>conservative lower bound</strong> on
-exposure. Daily peak values in specific months can exceed IC &gt; 41°C.
-Analysis of extremes is reserved for a forthcoming publication.</p>
+<p>Annual means represent a conservative lower bound on exposure. Daily
+peak values in specific months can exceed IC &gt; 41°C. Analysis of
+extremes is reserved for a forthcoming publication.</p>
 <hr>
 </div>
 <div class="section level2">
