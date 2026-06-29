@@ -7,13 +7,22 @@
 hi_available()
 }
 \value{
-A \code{data.frame} with columns \code{year},
-\code{resolution}, \code{hours}, and \code{status}.
+A data frame with columns:
+\describe{
+\item{product}{Product identifier: \code{"climatology"} or \code{"synoptic_2025"}.}
+\item{period}{Temporal coverage of the product.}
+\item{months}{Months available (1–12 for climatology, NA for synoptic).}
+\item{hours_local}{Local hours available (0–23 for climatology, 4 synoptic hours for synoptic_2025).}
+\item{resolution}{Spatial resolution.}
+\item{n_files}{Number of raster files in the dataset.}
+\item{format}{Available download formats.}
+\item{status}{Whether the product is available for download.}
+}
 }
 \description{
-Shows which years, resolutions, and hours are currently available.
+Returns a data frame describing the datasets available for download via
+\code{\link[=hi_download]{hi_download()}} and \code{\link[=hi_municipality]{hi_municipality()}}.
 }
 \examples{
 hi_available()
-
 }

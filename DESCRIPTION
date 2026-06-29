@@ -1,20 +1,23 @@
 Package: heatindexbr
 Title: Heat Index Mapping for the Brazilian Semiarid Region
-Version: 0.1.0
+Version: 0.2.0
 Authors@R:
     person("Antônio", "Campos Neto",
            email = "antonio.camposneto9@gmail.com",
            role = c("aut", "cre"),
            comment = c(ORCID = "https://orcid.org/0009-0007-3844-3869"))
-Description: Provides pre-computed Heat Index (Rothfusz 1990) rasters for
-    the Brazilian Semiarid region (1,477 municipalities, Res.
-    CONDEL/SUDENE 176/2024) at four synoptic hours (00h, 09h, 15h, 21h
-    local time) and tools for spatial extraction by municipality name,
-    IBGE code, or user-supplied shapefile. Data are hosted on Zenodo
-    (doi:10.5281/zenodo.20942619) and downloaded on first use to a
-    local cache. Interpolated using External Drift Kriging with altitude
-    and ERA5-Land covariates. Future versions will include monthly,
-    daily, and hourly products.
+Description: Provides spatially interpolated Heat Index (Rothfusz 1990)
+    climatology rasters for the Brazilian Semiarid region (1,477
+    municipalities, Res. CONDEL/SUDENE 176/2024). The main product covers
+    2000-2025 at ~1 km resolution across 288 combinations of month and
+    local hour (12 months x 24 hours), interpolated using kriging with
+    external drift (KDE) with covariate selection per combination via
+    leave-one-out cross-validation. A municipal summary table and a
+    population exposure dataset (IBGE Census 2000, 2010, 2022) are also
+    provided. Data are hosted on Zenodo (doi:10.5281/zenodo.21049066)
+    and downloaded on first use to a local cache. The 2025 synoptic
+    product (four hours, annual means, doi:10.5281/zenodo.20942619)
+    remains available via product = "synoptic_2025".
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -30,11 +33,12 @@ Imports:
     ggplot2 (>= 3.4.0),
     tools
 Suggests:
+    exactextractr,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
     tidyterra
 VignetteBuilder: knitr
 Config/Needs/website: pkgdown
-URL: https://github.com/antcneto/heatindexbr, https://doi.org/10.5281/zenodo.20942619, https://antcneto.github.io/heatindexbr/
+URL: https://github.com/antcneto/heatindexbr, https://doi.org/10.5281/zenodo.21049066, https://doi.org/10.5281/zenodo.20942619, https://antcneto.github.io/heatindexbr/
 BugReports: https://github.com/antcneto/heatindexbr/issues

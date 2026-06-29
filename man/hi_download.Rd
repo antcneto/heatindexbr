@@ -2,52 +2,77 @@
 % Please edit documentation in R/download_data.R
 \name{hi_download}
 \alias{hi_download}
-\title{Download Heat Index rasters for the Brazilian Semiarid}
+\title{Download Heat Index raster data}
 \usage{
 hi_download(
-  year = 2025,
-  hour = "15h",
-  resolution = "annual",
+  product = c("climatology", "synoptic_2025"),
   month = NULL,
-  day = NULL,
+  hour_local = NULL,
   cache_dir = NULL,
   overwrite = FALSE,
   quiet = FALSE
 )
 }
 \arguments{
-\item{year}{Integer. Reference year. Currently only \code{2025}.}
+\item{product}{Character. One of \code{"climatology"} (default) or
+\code{"synoptic_2025"}. The climatology product provides monthly mean Heat
+Index for 2000-2025 at 24 hourly intervals. The synoptic_2025 product
+provides annual means for 2025 at four synoptic hours (0h, 9h, 15h, 21h
+local time).}
 
-\item{hour}{Character or NULL. Local synoptic hour: \code{"00h"},
-\code{"09h"}, \code{"15h"} (default), \code{"21h"}, or \code{NULL}
-to load all four hours as a multi-band SpatRaster.}
+\item{month}{Integer (1-12). Month of interest. If \code{NULL}, all months are
+returned.}
 
-\item{resolution}{Character. Temporal resolution. Currently only
-\code{"annual"} is available.}
+\item{hour_local}{Integer (0-23) or character such as \code{"15h"}. Local hour
+(UTC-3). Converted internally to UTC before selecting the band. If \code{NULL},
+all hours for the requested month are returned.}
 
-\item{month}{Integer (1-12). Required when \code{resolution = "monthly"}.}
+\item{cache_dir}{Character. Directory to store downloaded files. Defaults
+to the package cache via \code{\link[tools:userdir]{tools::R_user_dir()}}.}
 
-\item{day}{Integer (1-365). Required when \code{resolution = "daily"}.}
+\item{overwrite}{Logical. If \code{TRUE}, re-downloads even if the file is
+already cached. Default is \code{FALSE}.}
 
-\item{cache_dir}{Character. Local cache directory.}
-
-\item{overwrite}{Logical. Re-download even if cached? Default \code{FALSE}.}
-
-\item{quiet}{Logical. Suppress messages? Default \code{FALSE}.}
+\item{quiet}{Logical. If \code{TRUE}, suppresses download progress messages.
+Default is \code{FALSE}.}
 }
 \value{
-A loaded \code{SpatRaster} object.
+A \link[terra:SpatRaster-class]{terra::SpatRaster} object. Returns a single-band raster when
+both \code{month} and \code{hour_local} are specified, a 24-band raster when only
+\code{month} is specified, a 12-band raster when only \code{hour_local} is
+specified, or the full 288-band stack when both are \code{NULL}.
 }
 \description{
-Downloads pre-computed Heat Index rasters from Zenodo
-(DOI: 10.5281/zenodo.20942619) to a local cache directory.
+Downloads Heat Index rasters from Zenodo and caches them locally.
+The default product is the 2000-2025 climatology, which covers all 12 months
+and 24 local hours at ~1 km resolution for the Brazilian Semiarid region.
+}
+\details{
+\strong{How download works:} the full 288-band stack (~1 GB) is downloaded once
+and cached locally. Subsequent calls to \code{hi_download()} read directly from
+the cache without re-downloading. The requested bands are then extracted
+in memory. Use \code{overwrite = TRUE} to force a fresh download of the stack.
+
+\strong{UTC conversion:} hours are stored internally as UTC. The \code{hour_local}
+argument accepts local time (UTC-3) and converts automatically. For
+example, \code{hour_local = 15} retrieves the band at 18h UTC.
+
+\strong{Band index:} bands are ordered month-outer, hour-inner:
+band 1 = January 00h UTC, band 2 = January 01h UTC, ...,
+band 24 = January 23h UTC, band 25 = February 00h UTC, and so on.
 }
 \examples{
-\donttest{
-r <- hi_download(year = 2025, hour = "15h")
-}
+\dontrun{
+# January at 15h local time (single band)
+r <- hi_download(month = 1, hour_local = 15)
 
+# All hours for July (24-band raster)
+r_july <- hi_download(month = 7)
+
+# Full 288-band climatology stack
+r_stack <- hi_download()
+
+# Legacy 2025 synoptic product
+r_2025 <- hi_download(product = "synoptic_2025", hour_local = 15)
 }
-\references{
-Dataset: \doi{10.5281/zenodo.20942619}
 }

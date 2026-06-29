@@ -2,49 +2,55 @@
 % Please edit documentation in R/extract_shape.R
 \name{hi_shape}
 \alias{hi_shape}
-\title{Extract Heat Index for a custom spatial area}
+\title{Extract Heat Index statistics for a custom spatial area}
 \usage{
 hi_shape(
   shape,
-  hour = "15h",
-  year = 2025,
-  resolution = "annual",
   month = NULL,
-  day = NULL,
+  hour_local = NULL,
+  product = c("climatology", "synoptic_2025"),
   stat = "mean",
   return_raster = TRUE,
   cache_dir = NULL
 )
 }
 \arguments{
-\item{shape}{An \code{sf} object or path to a shapefile.}
+\item{shape}{An \code{sf} object or a path to a shapefile.}
 
-\item{hour}{Character or NULL. Local hour (default \code{"15h"}).}
+\item{month}{Integer (1-12). Month of interest. If \code{NULL}, all 12 months
+are returned.}
 
-\item{year}{Integer. Year (default \code{2025}).}
+\item{hour_local}{Integer (0-23) or character such as \code{"15h"}. Local hour
+(UTC-3). If \code{NULL}, all 24 hours are returned.}
 
-\item{resolution}{Character. Temporal resolution (default \code{"annual"}).}
+\item{product}{Character. \code{"climatology"} (default) or \code{"synoptic_2025"}.}
 
-\item{month}{Integer. Month if \code{resolution = "monthly"}.}
+\item{stat}{Character. Statistic to compute over pixels. One of \code{"mean"}
+(default), \code{"median"}, \code{"min"}, or \code{"max"}. If \code{exactextractr} is
+installed, it is used for more accurate polygon extraction.}
 
-\item{day}{Integer. Day if \code{resolution = "daily"}.}
+\item{return_raster}{Logical. If \code{TRUE}, also returns the masked
+SpatRaster cropped to \code{shape}. Default is \code{TRUE}.}
 
-\item{stat}{Character vector. Statistics (default \code{"mean"}).}
-
-\item{return_raster}{Logical. Return clipped SpatRaster? Default \code{TRUE}.}
-
-\item{cache_dir}{Character. Cache directory.}
+\item{cache_dir}{Character. Cache directory passed to \code{\link[=hi_download]{hi_download()}}.}
 }
 \value{
-A list with \code{stats} and optionally \code{raster}.
+A named list with:
+\describe{
+\item{stats}{A data frame with extraction results per month and hour.}
+\item{raster}{A SpatRaster masked to \code{shape} (only if
+\code{return_raster = TRUE}).}
+}
 }
 \description{
-Extract Heat Index for a custom spatial area
+Extracts Heat Index statistics from the climatology raster for any
+user-supplied \code{sf} polygon. The full 288-band stack is downloaded and
+cached on first use; subsequent calls read from the local cache.
 }
 \examples{
 \donttest{
 # area <- sf::st_read("my_area.shp")
-# res  <- hi_shape(area, hour = "15h")
+# res  <- hi_shape(area, month = 1, hour_local = 15)
+# res$stats
 }
-
 }

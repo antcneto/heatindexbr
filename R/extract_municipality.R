@@ -1,132 +1,205 @@
-#' Extract Heat Index for municipalities of the Brazilian Semiarid
+#' Extract Heat Index statistics for one or more municipalities
 #'
-#' @param municipality Character or integer. Municipality name (uppercase,
-#'   no accents) or 7-digit IBGE code. Use \code{\link{hi_search}} to
-#'   find valid names. Names follow IBGE uppercase standard without accents
-#'   (e.g. \code{"MOSSORO"} not \code{"Mossoro"} or \code{"Mossoro"}).
-#' @param state Character. Two-letter state abbreviation (e.g. \code{"RN"}).
-#' @param hour Character or NULL. Local hour: \code{"00h"}, \code{"09h"},
-#'   \code{"15h"} (default), \code{"21h"}, or \code{NULL} for all hours.
-#' @param year Integer. Year (default \code{2025}).
-#' @param resolution Character. Temporal resolution (default \code{"annual"}).
-#' @param month Integer. Month (1-12) if \code{resolution = "monthly"}.
-#' @param day Integer. Day (1-365) if \code{resolution = "daily"}.
-#' @param stat Character vector. Statistics: \code{"mean"} (default),
-#'   \code{"min"}, \code{"max"}, \code{"median"}, \code{"sd"},
-#'   \code{"q25"}, \code{"q75"}.
-#' @param return_raster Logical. Also return clipped SpatRaster?
-#' @param cache_dir Character. Cache directory.
+#' Returns mean Heat Index and standard deviation for the requested
+#' municipality, month, and local hour. By default, data are retrieved from
+#' the pre-computed municipal table (fast, no raster download required). Set
+#' `source = "raster"` to extract directly from the downloaded stack.
 #'
-#' @return A \code{data.frame} with statistics and NOAA classification,
-#'   or a named list with \code{stats} and \code{raster} if
-#'   \code{return_raster = TRUE}.
+#' @param municipality Character. Municipality name in IBGE uppercase
+#'   convention (no accents). Use [hi_search()] to find the correct name.
+#' @param state Character. Two-letter state abbreviation (e.g. `"RN"`).
+#'   Recommended when the name is not unique across states.
+#' @param month Integer (1-12). Month of interest. If `NULL`, all 12 months
+#'   are returned.
+#' @param hour_local Integer (0-23) or character such as `"15h"`. Local hour
+#'   (UTC-3). If `NULL`, all 24 hours are returned.
+#' @param product Character. `"climatology"` (default) or `"synoptic_2025"`.
+#' @param source Character. `"table"` (default) reads from the pre-computed
+#'   municipal CSV (~29 MB, cached on first use). `"raster"` downloads the
+#'   full stack and extracts pixel statistics for the municipality polygon.
+#' @param return_raster Logical. If `TRUE` and `source = "raster"`, also
+#'   returns the masked SpatRaster. Default is `FALSE`.
+#' @param cache_dir Character. Cache directory passed to [hi_download()].
 #'
-#' @examples
-#' \donttest{
-#' hi_municipality("MOSSORO", state = "RN", hour = "15h")
-#' }
+#' @return A data frame with columns `code_muni`, `name_muni`,
+#'   `abbrev_state`, `month`, `hour_local`, `hour_utc`, `ic_mean`, `ic_sd`,
+#'   and `noaa_class`. When `return_raster = TRUE`, a named list with
+#'   elements `stats` and `raster`.
 #'
-#' @importFrom stats setNames
-#' @importFrom utils tail
+#' @importFrom stats sd
 #' @export
+#' @examples
+#' \dontrun{
+#' # January at 15h local (fast, table source)
+#' hi_municipality("MOSSORO", state = "RN", month = 1, hour_local = 15)
+#'
+#' # All months and hours
+#' hi_municipality("MOSSORO", state = "RN")
+#'
+#' # Legacy synoptic_2025
+#' hi_municipality("MOSSORO", state = "RN",
+#'                 product = "synoptic_2025", hour_local = 15)
+#' }
 hi_municipality <- function(municipality,
                              state         = NULL,
-                             hour          = "15h",
-                             year          = 2025,
-                             resolution    = "annual",
                              month         = NULL,
-                             day           = NULL,
-                             stat          = "mean",
+                             hour_local    = NULL,
+                             product       = c("climatology", "synoptic_2025"),
+                             source        = c("table", "raster"),
                              return_raster = FALSE,
                              cache_dir     = NULL) {
 
-  stat <- match.arg(stat,
-                    c("mean","min","max","median","sd","q25","q75"),
-                    several.ok = TRUE)
+  product <- match.arg(product)
+  source  <- match.arg(source)
 
-  # Reconstrói sf a partir do WKT (evita problema de sf_column no .rda)
-  mun_semi <- .get_semiarido_sf()
-
-  if (!is.null(state))
-    mun_semi <- mun_semi[toupper(mun_semi$abbrev_state) %in% toupper(state), ]
-
-  if (is.numeric(municipality) ||
-      all(grepl("^\\d+$", as.character(municipality)))) {
-    selecionados <- mun_semi[mun_semi$code_muni %in%
-                               as.character(municipality), ]
-  } else {
-    idx <- grepl(paste(toupper(municipality), collapse = "|"),
-                 mun_semi$name_muni, ignore.case = FALSE)
-    selecionados <- mun_semi[idx, ]
+  if (product == "synoptic_2025") {
+    return(.hi_municipality_synoptic(municipality, state, hour_local,
+                                     return_raster, cache_dir))
   }
 
-  if (nrow(selecionados) == 0)
-    cli::cli_abort(
-      c("No municipality found matching {.val {municipality}}.",
-        "i" = "Use {.fn hi_search} to find valid names.",
-        "i" = "Names use IBGE uppercase standard (e.g. MOSSORO not Mossoro)."))
+  mun_sf <- .get_semiarido_sf()
+  hit    <- .match_municipality(mun_sf, municipality, state)
 
-  horas_loop <- if (is.null(hour)) c("00h","09h","15h","21h") else hour
+  # ---- table source (fast) ----
+  if (source == "table") {
+    tbl <- .load_clim_table(cache_dir)
 
-  resultado <- lapply(horas_loop, function(hora_atual) {
-    r <- hi_download(year       = year,
-                     hour       = hora_atual,
-                     resolution = resolution,
-                     month      = month,
-                     day        = day,
-                     cache_dir  = cache_dir,
-                     quiet      = TRUE)
+    result <- tbl[tbl$code_muni == hit$code_muni, ]
 
-    mun_proj <- sf::st_transform(selecionados, terra::crs(r))
-
-    if (requireNamespace("exactextractr", quietly = TRUE)) {
-      vals <- exactextractr::exact_extract(r, mun_proj, stat)
-      if (is.vector(vals))
-        vals <- as.data.frame(stats::setNames(as.list(vals), stat))
-    } else {
-      v    <- terra::extract(r, terra::vect(mun_proj), fun = mean, na.rm = TRUE)
-      vals <- data.frame(mean = v[, 2])
+    if (!is.null(month)) {
+      result <- result[result$month %in% as.integer(month), ]
+    }
+    if (!is.null(hour_local)) {
+      h_utc  <- .local_to_utc(hour_local)
+      result <- result[result$hour_utc %in% h_utc, ]
     }
 
-    df <- cbind(
-      sf::st_drop_geometry(
-        selecionados[, c("code_muni","name_muni","abbrev_state")]),
-      vals,
-      data.frame(hour       = hora_atual,
-                 year       = year,
-                 resolution = resolution,
-                 stringsAsFactors = FALSE)
-    )
-    if ("mean" %in% stat)
-      df$noaa_class <- .noaa_classify(df$mean)
-    df
-  })
+    result$hour_local <- (result$hour_utc - 3L) %% 24L
+    result$noaa_class <- as.character(.noaa_classify(result$ic_mean))
 
-  resultado <- do.call(rbind, resultado)
-  rownames(resultado) <- NULL
+    # Warn for low-R2 combinations
+    if (!is.null(month) && !is.null(hour_local)) {
+      .warn_low_r2(as.integer(month), .local_to_utc(hour_local))
+    }
 
-  if (return_raster) {
-    r_last <- hi_download(year       = year,
-                          hour       = utils::tail(horas_loop, 1),
-                          resolution = resolution,
-                          month      = month,
-                          day        = day,
-                          cache_dir  = cache_dir,
-                          quiet      = TRUE)
-    mun_v  <- terra::vect(sf::st_transform(selecionados, terra::crs(r_last)))
-    r_clip <- terra::mask(terra::crop(r_last, mun_v), mun_v)
-    return(list(stats = resultado, raster = r_clip))
+    return(result[, c("code_muni", "name_muni", "abbrev_state",
+                      "month", "hour_local", "hour_utc",
+                      "ic_mean", "ic_sd", "noaa_class")])
   }
 
-  resultado
+  # ---- raster source ----
+  r_full <- hi_download(product = "climatology", month = month,
+                        hour_local = hour_local, cache_dir = cache_dir)
+
+  r_crop <- terra::crop(r_full, terra::vect(hit))
+  r_mask <- terra::mask(r_crop, terra::vect(hit))
+  vals   <- terra::values(r_mask, na.rm = TRUE)
+
+  if (!is.matrix(vals)) vals <- matrix(vals, ncol = 1)
+
+  months_sel <- if (!is.null(month)) as.integer(month) else 1:12
+  hours_utc  <- if (!is.null(hour_local)) .local_to_utc(hour_local) else 0:23
+  combos     <- expand.grid(hour_utc = hours_utc, month = months_sel)
+  combos     <- combos[order(combos$month, combos$hour_utc), ]
+
+  stats <- data.frame(
+    code_muni    = hit$code_muni,
+    name_muni    = hit$name_muni,
+    abbrev_state = hit$abbrev_state,
+    month        = combos$month,
+    hour_utc     = combos$hour_utc,
+    hour_local   = (combos$hour_utc - 3L) %% 24L,
+    ic_mean      = colMeans(vals, na.rm = TRUE),
+    ic_sd        = apply(vals, 2, sd, na.rm = TRUE),
+    stringsAsFactors = FALSE
+  )
+  stats$noaa_class <- as.character(.noaa_classify(stats$ic_mean))
+
+  if (return_raster) return(list(stats = stats, raster = r_mask))
+  stats
 }
 
-#' @keywords internal
+# ---- internal helpers ----
+
+.match_municipality <- function(mun_sf, municipality, state) {
+  idx <- toupper(mun_sf$name_muni) == toupper(municipality)
+  if (!is.null(state)) {
+    idx <- idx & toupper(mun_sf$abbrev_state) == toupper(state)
+  }
+  if (sum(idx) == 0L) {
+    cli::cli_abort(
+      "Municipality {.val {municipality}} not found. \\
+      Use {.fn hi_search} to check the correct name."
+    )
+  }
+  if (sum(idx) > 1L) {
+    cli::cli_abort(
+      "Multiple matches for {.val {municipality}}. \\
+      Specify {.arg state} to disambiguate."
+    )
+  }
+  mun_sf[idx, ]
+}
+
+.load_clim_table <- function(cache_dir) {
+  if (is.null(cache_dir)) {
+    cache_dir <- tools::R_user_dir("heatindexbr", which = "cache")
+  }
+  dest <- file.path(cache_dir, "climatology", "ic_municipal_288h.csv")
+  if (!file.exists(dest)) {
+    url <- paste0(
+      "https://zenodo.org/records/21049066/files/",
+      "ic_municipal_288h.csv?download=1"
+    )
+    dir.create(dirname(dest), showWarnings = FALSE, recursive = TRUE)
+    cli::cli_inform("Downloading municipal Heat Index table (~29 MB)...")
+    curl::curl_download(url, dest)
+  }
+  utils::read.csv(dest, stringsAsFactors = FALSE)
+}
+
 .noaa_classify <- function(ic) {
   cut(ic,
       breaks = c(-Inf, 27, 32, 41, 54, Inf),
-      labels = c("No caution","Caution","Extreme caution",
-                 "Danger","Extreme danger"),
+      labels = c("No caution", "Caution", "Extreme caution",
+                 "Danger", "Extreme danger"),
       right  = FALSE)
 }
 
+.hi_municipality_synoptic <- function(municipality, state, hour_local,
+                                       return_raster, cache_dir) {
+  mun_sf <- .get_semiarido_sf()
+  hit    <- .match_municipality(mun_sf, municipality, state)
+
+  r_full <- hi_download(product = "synoptic_2025",
+                        hour_local = hour_local,
+                        cache_dir = cache_dir)
+  r_crop <- terra::crop(r_full, terra::vect(hit))
+  r_mask <- terra::mask(r_crop, terra::vect(hit))
+
+  if (is.null(hour_local)) {
+    local_hours <- c(0L, 9L, 15L, 21L)
+  } else {
+    if (is.character(hour_local)) {
+      hour_local <- as.integer(gsub("[^0-9]", "", hour_local))
+    }
+    local_hours <- as.integer(hour_local)
+  }
+
+  vals <- terra::values(r_mask, na.rm = TRUE)
+  if (!is.matrix(vals)) vals <- matrix(vals, ncol = 1)
+
+  stats <- data.frame(
+    code_muni    = hit$code_muni,
+    name_muni    = hit$name_muni,
+    abbrev_state = hit$abbrev_state,
+    hour_local   = paste0(local_hours, "h"),
+    year         = 2025L,
+    ic_mean      = colMeans(vals, na.rm = TRUE),
+    stringsAsFactors = FALSE
+  )
+  stats$noaa_class <- as.character(.noaa_classify(stats$ic_mean))
+
+  if (return_raster) return(list(stats = stats, raster = r_mask))
+  stats
+}

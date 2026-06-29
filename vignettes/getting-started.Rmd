@@ -16,15 +16,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-`heatindexbr` provides spatially interpolated Heat Index (Rothfusz 1990) rasters
-at ~1 km resolution for the 1,477 municipalities of Brazil's official Semiarid
-region (CONDEL/SUDENE Resolution 176/2024). This vignette walks through the
-core workflow: search → download → extract → plot.
+`heatindexbr` provides spatially interpolated Heat Index (Rothfusz 1990)
+rasters at ~1 km resolution for the 1,477 municipalities of Brazil's official
+Semiarid region (CONDEL/SUDENE Resolution 176/2024). The main product is a
+climatology for 2000-2025 covering all 12 months and 24 local hours. This
+vignette walks through the core workflow: search, download, extract, and plot.
 
 ## Installation
 
 ```{r install, eval=FALSE}
-# Install from GitHub
 remotes::install_github("antcneto/heatindexbr")
 ```
 
@@ -34,8 +34,8 @@ library(heatindexbr)
 
 ## What data is available?
 
-Use `hi_available()` to see the years, resolutions, and synoptic hours
-currently distributed:
+Use `hi_available()` to see the products, temporal coverage, and available
+months and hours:
 
 ```{r available}
 hi_available()
@@ -43,27 +43,34 @@ hi_available()
 
 ## Searching for municipalities
 
-Municipality names in `heatindexbr` follow the IBGE convention: **uppercase
-without accents**. Use `hi_search()` to find the correct name:
+Municipality names follow the IBGE convention: **uppercase without accents**.
+Use `hi_search()` to find the correct name before calling other functions:
 
 ```{r search}
-# Case-insensitive partial match
 hi_search("Mossoro", state = "RN")
 hi_search("Campina Grande", state = "PB")
 ```
 
-> **Important:** Always use the `name_muni` value returned by `hi_search()`
-> when calling `hi_municipality()`. For example, `"MOSSORO"`, not `"Mossoró"`.
+> **Note:** always use the `name_muni` value returned by `hi_search()` in
+> subsequent calls. For example, use `"MOSSORO"`, not `"Mossoró"`. This
+> limitation follows the IBGE naming standard.
 
 ## Extracting Heat Index for a municipality
 
-`hi_municipality()` downloads the raster (cached on first use), crops it to
-the municipality boundary, and returns summary statistics with NOAA
-classification:
+`hi_municipality()` downloads the municipal table on first use (~29 MB,
+cached locally) and returns summary statistics with NOAA classification.
+No raster download is required for this operation.
 
 ```{r municipality}
-result <- hi_municipality("MOSSORO", state = "RN", hour = "15h")
+result <- hi_municipality("MOSSORO", state = "RN",
+                          month = 1, hour_local = 15)
 result
+```
+
+To retrieve all months and hours for a municipality:
+
+```{r municipality-all, eval=FALSE}
+hi_municipality("MOSSORO", state = "RN")
 ```
 
 The `noaa_class` column uses the standard NOAA Heat Index thresholds:
@@ -71,69 +78,72 @@ The `noaa_class` column uses the standard NOAA Heat Index thresholds:
 | Class | IC range | Risk |
 |---|---|---|
 | No caution | < 27°C | Low |
-| Caution | 27–32°C | Fatigue with prolonged exposure |
-| Extreme caution | 32–41°C | Heat cramps or exhaustion possible |
-| Danger | 41–54°C | Heat exhaustion likely |
+| Caution | 27-32°C | Fatigue with prolonged exposure |
+| Extreme caution | 32-41°C | Heat cramps or exhaustion possible |
+| Danger | 41-54°C | Heat exhaustion likely |
 | Extreme danger | > 54°C | Heat stroke imminent |
 
-You can retrieve all four synoptic hours at once by leaving `hour = NULL`:
+## Downloading and plotting the raster
 
-```{r all-hours, eval=FALSE}
-hi_municipality("MOSSORO", state = "RN", hour = NULL)
+`hi_download()` downloads the full 288-band climatology stack (~1 GB) on
+first use and caches it locally. Subsequent calls read from the cache and
+extract only the requested bands in memory.
+
+```{r download, eval=FALSE}
+# Single band: January at 15h local time
+r <- hi_download(month = 1, hour_local = 15)
+
+# All hours for July (24-band raster)
+r_july <- hi_download(month = 7)
+
+# Full 288-band stack
+r_stack <- hi_download()
 ```
 
-## Downloading and plotting the full raster
-
-`hi_download()` returns a `SpatRaster` (terra package). The raster is
-downloaded once and cached in your user data directory:
-
-```{r download}
-r <- hi_download(year = 2025, hour = "15h")
-r
+```{r plot, eval=FALSE}
+hi_plot(r, title = "Heat Index — January, 15h local")
 ```
 
-Pass the raster directly to `hi_plot()` for a ready-to-use map:
-
-```{r plot}
-hi_plot(r,
-        title = "Annual mean Heat Index — 15h (2025)",
-        hour  = "15h",
-        year  = 2025)
-```
+> **Note on hours:** all hours are specified in local time (UTC-3). The
+> conversion to UTC is handled internally. For example, `hour_local = 15`
+> retrieves the band stored at 18h UTC.
 
 ## Extracting for a custom polygon
 
-If you have your own `sf` object (e.g. a watershed, a state boundary, or a
-study area), use `hi_shape()`:
+Use `hi_shape()` with any `sf` polygon object:
 
 ```{r shape, eval=FALSE}
 library(sf)
-
-# Example: using your own polygon
 my_area <- st_read("my_area.gpkg")
-
-result <- hi_shape(my_area, hour = "15h")
-result$stats   # data.frame with mean, min, max, noaa_class
-result$raster  # clipped SpatRaster
+result  <- hi_shape(my_area, month = 1, hour_local = 15)
+result$stats
+result$raster
 ```
 
-## Technical note on the raster
+## Working with the 2025 synoptic product
 
-The underlying raster (`IC_2025_annual_all.tif`) is stored in **EPSG:5880**
-(SIRGAS 2000 / Brazil Polyconic) — the appropriate projected CRS for
-Brazil. Do not use the WGS84 version, which has a clipping artifact on the
-eastern boundary. See `vignette("methodology")` for full details on the
-interpolation method.
+The original 2025 product (four synoptic hours, annual means) remains
+available via the `product` argument:
+
+```{r synoptic, eval=FALSE}
+r_2025 <- hi_download(product = "synoptic_2025", hour_local = 15)
+hi_municipality("MOSSORO", state = "RN",
+                product = "synoptic_2025", hour_local = 15)
+```
 
 ## Citation
-
-If you use `heatindexbr` in your research, please cite:
 
 ```{r citation, eval=FALSE}
 citation("heatindexbr")
 ```
 
-Or cite the Zenodo dataset directly:
+Climatology dataset (2000-2025):
+
+> Campos Neto, A. (2026). *Heat Index climatology for the Brazilian Semiarid
+> (2000-2025): 1 km rasters, municipal table, and population exposure data*.
+> Zenodo. https://doi.org/10.5281/zenodo.21049066
+
+Synoptic 2025 dataset:
 
 > Campos Neto, A. (2025). *heatindexbr: Heat Index rasters for Brazil's
 > Semiarid region* (v0.1.0). Zenodo.

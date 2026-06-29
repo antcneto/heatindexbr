@@ -18,13 +18,13 @@ knitr::opts_chunk$set(
 
 O `heatindexbr` disponibiliza rasters do Índice de Calor (Rothfusz 1990) com
 resolução de ~1 km para os 1.477 municípios do Semiárido Brasileiro oficial
-(Res. CONDEL/SUDENE 176/2024). Esta vignette apresenta o fluxo de uso principal:
-busca → download → extração → visualização.
+(Res. CONDEL/SUDENE 176/2024). O produto principal é uma climatologia para
+2000-2025 cobrindo todos os 12 meses e 24 horas locais. Esta vignette apresenta
+o fluxo de uso principal: busca, download, extração e visualização.
 
 ## Instalação
 
 ```{r install, eval=FALSE}
-# Instale pelo GitHub
 remotes::install_github("antcneto/heatindexbr")
 ```
 
@@ -34,7 +34,7 @@ library(heatindexbr)
 
 ## Quais dados estão disponíveis?
 
-Use `hi_available()` para ver os anos, resoluções e horários sinóticos
+Use `hi_available()` para ver os produtos, cobertura temporal e horas
 disponíveis:
 
 ```{r available}
@@ -43,97 +43,107 @@ hi_available()
 
 ## Busca de municípios
 
-Os nomes de municípios no `heatindexbr` seguem o padrão IBGE: **maiúsculas
-sem acentos**. Use `hi_search()` para encontrar o nome correto:
+Os nomes seguem o padrão IBGE: **maiúsculas sem acentos**. Use `hi_search()`
+para encontrar o nome correto antes de chamar outras funções:
 
 ```{r search}
-# Busca parcial, sem distinção de maiúsculas
 hi_search("Mossoro", state = "RN")
 hi_search("Campina Grande", state = "PB")
 ```
 
-> **Atenção:** sempre utilize o valor da coluna `name_muni` retornado por
-> `hi_search()` ao chamar `hi_municipality()`. Por exemplo, `"MOSSORO"` e
-> não `"Mossoró"`. Esta é uma limitação do padrão de nomenclatura do IBGE;
-> a função `hi_search()` existe exatamente para facilitar essa conversão.
+> **Atenção:** utilize sempre o valor da coluna `name_muni` retornado por
+> `hi_search()`. Por exemplo, `"MOSSORO"` e não `"Mossoró"`. Esta limitação
+> segue o padrão de nomenclatura do IBGE.
 
 ## Extração do Índice de Calor para um município
 
-`hi_municipality()` baixa o raster (armazenado em cache na primeira vez),
-recorta para o limite municipal e retorna estatísticas resumidas com
-classificação NOAA:
+`hi_municipality()` baixa a tabela municipal na primeira chamada (~29 MB,
+armazenada em cache localmente) e retorna estatísticas resumidas com
+classificação NOAA. Nenhum download de raster é necessário para esta operação.
 
 ```{r municipality}
-resultado <- hi_municipality("MOSSORO", state = "RN", hour = "15h")
+resultado <- hi_municipality("MOSSORO", state = "RN",
+                             month = 1, hour_local = 15)
 resultado
 ```
 
-A coluna `noaa_class` utiliza os limites oficiais da escala NOAA:
+Para obter todos os meses e horas de um município:
+
+```{r municipality-all, eval=FALSE}
+hi_municipality("MOSSORO", state = "RN")
+```
+
+A coluna `noaa_class` usa os limiares oficiais da escala NOAA:
 
 | Classe | IC | Risco |
 |---|---|---|
 | Sem cautela | < 27°C | Baixo |
-| Cautela | 27–32°C | Fadiga com exposição prolongada |
-| Cautela extrema | 32–41°C | Cãibras ou exaustão por calor possíveis |
-| Perigo | 41–54°C | Exaustão por calor provável |
+| Cautela | 27-32°C | Fadiga com exposição prolongada |
+| Cautela extrema | 32-41°C | Cãibras ou exaustão por calor possíveis |
+| Perigo | 41-54°C | Exaustão por calor provável |
 | Perigo extremo | > 54°C | Insolação iminente |
 
-Para obter todos os quatro horários sinóticos de uma vez, use `hour = NULL`:
+## Download e visualização do raster
 
-```{r all-hours, eval=FALSE}
-hi_municipality("MOSSORO", state = "RN", hour = NULL)
+`hi_download()` baixa o stack climatológico de 288 bandas (~1 GB) na primeira
+chamada e armazena em cache local. Chamadas subsequentes leem do cache e
+extraem apenas as bandas solicitadas em memória.
+
+```{r download, eval=FALSE}
+# Banda única: janeiro às 15h local
+r <- hi_download(month = 1, hour_local = 15)
+
+# Todas as horas de julho (raster de 24 bandas)
+r_julho <- hi_download(month = 7)
+
+# Stack completo de 288 bandas
+r_stack <- hi_download()
 ```
 
-## Download e visualização do raster completo
-
-`hi_download()` retorna um `SpatRaster` (pacote terra). O raster é baixado
-uma única vez e reutilizado do cache nas chamadas seguintes:
-
-```{r download}
-r <- hi_download(year = 2025, hour = "15h")
-r
+```{r plot, eval=FALSE}
+hi_plot(r, title = "Índice de Calor — Janeiro, 15h local")
 ```
 
-Passe o raster diretamente para `hi_plot()` para gerar o mapa:
-
-```{r plot}
-hi_plot(r,
-        title = "IC médio anual — 15h (2025)",
-        hour  = "15h",
-        year  = 2025)
-```
+> **Nota sobre horas:** todas as horas são especificadas em hora local
+> (UTC-3). A conversão para UTC é feita internamente. Por exemplo,
+> `hour_local = 15` recupera a banda armazenada às 18h UTC.
 
 ## Extração para polígono personalizado
 
-Se você tiver um objeto `sf` próprio (bacia hidrográfica, limite estadual,
-área de estudo), use `hi_shape()`:
+Use `hi_shape()` com qualquer objeto `sf`:
 
 ```{r shape, eval=FALSE}
 library(sf)
-
 minha_area <- st_read("minha_area.gpkg")
-
-resultado <- hi_shape(minha_area, hour = "15h")
-resultado$stats   # data.frame com mean, min, max, noaa_class
-resultado$raster  # SpatRaster recortado
+resultado  <- hi_shape(minha_area, month = 1, hour_local = 15)
+resultado$stats
+resultado$raster
 ```
 
-## Nota técnica sobre o raster
+## Produto sinótico de 2025
 
-O raster base (`IC_2025_annual_all.tif`) está em **EPSG:5880** (SIRGAS 2000 /
-Brazil Polyconic) — o SRC projetado adequado para o Brasil. A versão em WGS84
-possui um artefato de recorte na borda leste e não deve ser utilizada. Consulte
-`vignette("methodology")` para detalhes completos sobre o método de interpolação.
+O produto original de 2025 (quatro horários sinóticos, médias anuais)
+permanece disponível via argumento `product`:
+
+```{r synoptic, eval=FALSE}
+r_2025 <- hi_download(product = "synoptic_2025", hour_local = 15)
+hi_municipality("MOSSORO", state = "RN",
+                product = "synoptic_2025", hour_local = 15)
+```
 
 ## Como citar
-
-Se você utilizar o `heatindexbr` em sua pesquisa, por favor cite:
 
 ```{r citation, eval=FALSE}
 citation("heatindexbr")
 ```
 
-Ou cite diretamente o conjunto de dados no Zenodo:
+Dataset climatológico (2000-2025):
+
+> Campos Neto, A. (2026). *Climatologia do Índice de Calor para o Semiárido
+> Brasileiro (2000-2025): rasters 1 km, tabela municipal e exposição
+> populacional*. Zenodo. https://doi.org/10.5281/zenodo.21049066
+
+Dataset sinótico 2025:
 
 > Campos Neto, A. (2025). *heatindexbr: rasters de Índice de Calor para o
 > Semiárido Brasileiro* (v0.1.0). Zenodo.

@@ -2,59 +2,65 @@
 % Please edit documentation in R/extract_municipality.R
 \name{hi_municipality}
 \alias{hi_municipality}
-\title{Extract Heat Index for municipalities of the Brazilian Semiarid}
+\title{Extract Heat Index statistics for one or more municipalities}
 \usage{
 hi_municipality(
   municipality,
   state = NULL,
-  hour = "15h",
-  year = 2025,
-  resolution = "annual",
   month = NULL,
-  day = NULL,
-  stat = "mean",
+  hour_local = NULL,
+  product = c("climatology", "synoptic_2025"),
+  source = c("table", "raster"),
   return_raster = FALSE,
   cache_dir = NULL
 )
 }
 \arguments{
-\item{municipality}{Character or integer. Municipality name (uppercase,
-no accents) or 7-digit IBGE code. Use \code{\link{hi_search}} to
-find valid names. Names follow IBGE uppercase standard without accents
-(e.g. \code{"MOSSORO"} not \code{"Mossoro"} or \code{"Mossoro"}).}
+\item{municipality}{Character. Municipality name in IBGE uppercase
+convention (no accents). Use \code{\link[=hi_search]{hi_search()}} to find the correct name.}
 
-\item{state}{Character. Two-letter state abbreviation (e.g. \code{"RN"}).}
+\item{state}{Character. Two-letter state abbreviation (e.g. \code{"RN"}).
+Recommended when the name is not unique across states.}
 
-\item{hour}{Character or NULL. Local hour: \code{"00h"}, \code{"09h"},
-\code{"15h"} (default), \code{"21h"}, or \code{NULL} for all hours.}
+\item{month}{Integer (1-12). Month of interest. If \code{NULL}, all 12 months
+are returned.}
 
-\item{year}{Integer. Year (default \code{2025}).}
+\item{hour_local}{Integer (0-23) or character such as \code{"15h"}. Local hour
+(UTC-3). If \code{NULL}, all 24 hours are returned.}
 
-\item{resolution}{Character. Temporal resolution (default \code{"annual"}).}
+\item{product}{Character. \code{"climatology"} (default) or \code{"synoptic_2025"}.}
 
-\item{month}{Integer. Month (1-12) if \code{resolution = "monthly"}.}
+\item{source}{Character. \code{"table"} (default) reads from the pre-computed
+municipal CSV (~29 MB, cached on first use). \code{"raster"} downloads the
+full stack and extracts pixel statistics for the municipality polygon.}
 
-\item{day}{Integer. Day (1-365) if \code{resolution = "daily"}.}
+\item{return_raster}{Logical. If \code{TRUE} and \code{source = "raster"}, also
+returns the masked SpatRaster. Default is \code{FALSE}.}
 
-\item{stat}{Character vector. Statistics: \code{"mean"} (default),
-\code{"min"}, \code{"max"}, \code{"median"}, \code{"sd"},
-\code{"q25"}, \code{"q75"}.}
-
-\item{return_raster}{Logical. Also return clipped SpatRaster?}
-
-\item{cache_dir}{Character. Cache directory.}
+\item{cache_dir}{Character. Cache directory passed to \code{\link[=hi_download]{hi_download()}}.}
 }
 \value{
-A \code{data.frame} with statistics and NOAA classification,
-or a named list with \code{stats} and \code{raster} if
-\code{return_raster = TRUE}.
+A data frame with columns \code{code_muni}, \code{name_muni},
+\code{abbrev_state}, \code{month}, \code{hour_local}, \code{hour_utc}, \code{ic_mean}, \code{ic_sd},
+and \code{noaa_class}. When \code{return_raster = TRUE}, a named list with
+elements \code{stats} and \code{raster}.
 }
 \description{
-Extract Heat Index for municipalities of the Brazilian Semiarid
+Returns mean Heat Index and standard deviation for the requested
+municipality, month, and local hour. By default, data are retrieved from
+the pre-computed municipal table (fast, no raster download required). Set
+\code{source = "raster"} to extract directly from the downloaded stack.
 }
 \examples{
-\donttest{
-hi_municipality("MOSSORO", state = "RN", hour = "15h")
-}
+\dontrun{
+# January at 15h local (fast, table source)
+hi_municipality("MOSSORO", state = "RN", month = 1, hour_local = 15)
 
+# All months and hours
+hi_municipality("MOSSORO", state = "RN")
+
+# Legacy synoptic_2025
+hi_municipality("MOSSORO", state = "RN",
+                product = "synoptic_2025", hour_local = 15)
+}
 }
