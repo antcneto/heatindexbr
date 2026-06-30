@@ -1,4 +1,89 @@
 url: https://antcneto.github.io/heatindexbr/
+
 template:
   bootstrap: 5
+  bslib:
+    base_font: {google: "Inter"}
+    heading_font: {google: "DM Serif Display"}
+    code_font: {google: "JetBrains Mono"}
+    primary: "#C94B2C"
+    link-color: "#C94B2C"
+    bg: "#FFFFFF"
+    fg: "#1A1A2E"
 
+navbar:
+  bg: dark
+  type: dark
+  left:
+    - icon: fa-home
+      href: index.html
+    - text: "Reference"
+      href: reference/index.html
+    - text: "Articles"
+      menu:
+        - text: "Getting started (EN)"
+          href: articles/getting-started.html
+        - text: "Primeiros passos (PT)"
+          href: articles/primeiros-passos.html
+        - text: "------"
+        - text: "Methodology (EN)"
+          href: articles/methodology.html
+        - text: "Metodologia (PT)"
+          href: articles/metodologia.html
+  right:
+    - icon: fa-github
+      href: https://github.com/antcneto/heatindexbr
+    - text: "DOI"
+      href: https://zenodo.org/records/21049066
+
+home:
+  title: "heatindexbr — Heat Index climatology for Brazil's Semiarid"
+  description: >
+    Spatially interpolated Heat Index rasters at 1 km resolution for
+    the 1,477 municipalities of Brazil's Semiarid region
+    (CONDEL/SUDENE Resolution 176/2024). 288-band climatology, 2000-2025.
+  links:
+    - text: "Zenodo dataset (climatology 2000-2025)"
+      href: https://zenodo.org/records/21049066
+    - text: "Zenodo dataset (synoptic 2025, v0.1.0)"
+      href: https://zenodo.org/records/20942619
+    - text: "Report an issue"
+      href: https://github.com/antcneto/heatindexbr/issues
+
+reference:
+  - title: "Download & access"
+    desc: "Functions to download and cache raster data from Zenodo."
+    contents:
+      - hi_download
+      - hi_available
+  - title: "Spatial extraction"
+    desc: "Extract Heat Index statistics for municipalities or custom polygons."
+    contents:
+      - hi_municipality
+      - hi_shape
+  - title: "Search & explore"
+    desc: "Find municipalities and visualize results."
+    contents:
+      - hi_search
+      - hi_plot
+  - title: "Data"
+    desc: "Internal datasets bundled with the package."
+    contents:
+      - semiarido_municipios
+
+articles:
+  - title: "Tutorials"
+    navbar: ~
+    contents:
+      - getting-started
+      - primeiros-passos
+  - title: "Methods"
+    navbar: ~
+    contents:
+      - methodology
+      - metodologia
+
+footer:
+  structure:
+    left: [developed_by, built_with]
+    right: [package]

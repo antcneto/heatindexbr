@@ -19,6 +19,21 @@ this article for reference.
 
 ---
 
+## Pipeline overview
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("fluxograma_metodologia.png")
+```
+
+Three independent data sources (INMET stations, ERA5-Land, and static
+covariates) are processed in parallel and converge into the LOOCV validation
+step. From there, the validated product branches into two independent
+consistency checks before being packaged into three final products: the
+raster stack, the municipal table, and the population exposure dataset, all
+distributed via Zenodo and the `heatindexbr` package.
+
+---
+
 ## The Heat Index
 
 The Heat Index (IC) is computed using the Rothfusz (1990) regression
@@ -79,16 +94,16 @@ applied in sequence: R² greater than or equal to 0.70, then lowest RMSE among
 methods meeting that threshold. Four KDE variants compete across the 288
 combinations:
 
-- **KDE: Altitude** — altitude alone as external drift.
-- **KDE: Alt + UR ERA5** — altitude plus relative humidity and ERA5-Land T2m.
-- **KDE: Alt + T ERA5** — altitude plus air temperature and ERA5-Land T2m.
-- **KDE: Alt + T + UR ERA5** — the full covariate set.
+- **KDE: Altitude**: altitude alone as external drift.
+- **KDE: Alt + UR ERA5**: altitude plus relative humidity and ERA5-Land T2m.
+- **KDE: Alt + T ERA5**: altitude plus air temperature and ERA5-Land T2m.
+- **KDE: Alt + T + UR ERA5**: the full covariate set.
 
 The heatmap below shows which method wins for each of the 288 combinations,
 organized by month (columns) and local hour (rows, UTC-3).
 
 ```{r, echo=FALSE, out.width="100%"}
-knitr::include_graphics("heatmap_metodos_288h.png")
+knitr::include_graphics("../figures/heatmap_metodos_288h.png")
 ```
 
 A clear physical pattern emerges. At night (00h to 06h local time), **KDE:
@@ -134,7 +149,7 @@ reanalysis product, which is entirely independent of the interpolation model
 and the station data.
 
 ```{r, echo=FALSE, out.width="100%"}
-knitr::include_graphics("consistencia_merra2.png")
+knitr::include_graphics("../figures/consistencia_merra2.png")
 ```
 
 The comparison shows R² = 0.813 and Bias = -0.43°C. Because both products are

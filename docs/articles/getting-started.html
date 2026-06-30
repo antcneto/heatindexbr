@@ -16,7 +16,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">heatindexbr</a>
 
@@ -29,21 +29,22 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with heatindexbr</a></li>
-    <li><a class="dropdown-item" href="../articles/methodology.html">Methodology: why trust the raster?</a></li>
-    <li><a class="dropdown-item" href="../articles/primeiros-passos.html">Primeiros passos com o heatindexbr</a></li>
+<li><a class="dropdown-item" href="../articles/getting-started.html">Getting started (EN)</a></li>
+    <li><a class="dropdown-item" href="../articles/primeiros-passos.html">Primeiros passos (PT)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/methodology.html">Methodology (EN)</a></li>
+    <li><a class="dropdown-item" href="../articles/metodologia.html">Metodologia (PT)</a></li>
   </ul>
 </li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
-</form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/antcneto/heatindexbr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/antcneto/heatindexbr"><span class="fa fa-github"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://zenodo.org/records/21049066">DOI</a></li>
       </ul>
 </div>
 
@@ -171,6 +172,18 @@ thresholds:</p>
 <div class="section level2">
 <h2 id="downloading-and-plotting-the-raster">Downloading and plotting the raster<a class="anchor" aria-label="anchor" href="#downloading-and-plotting-the-raster"></a>
 </h2>
+<blockquote>
+<p><strong>First-use download:</strong> the first call to
+<code><a href="../reference/hi_download.html">hi_download()</a></code> or
+<code>hi_municipality(source = "raster")</code> downloads the full
+climatology stack (~1.6 GB) from Zenodo. Depending on your connection
+speed, this can take anywhere from a few minutes to about 30 minutes.
+This happens only once; all subsequent calls read from the local cache
+and return instantly. If you only need municipal-level statistics, use
+the default <code><a href="../reference/hi_municipality.html">hi_municipality()</a></code> with
+<code>source = "table"</code> instead, which downloads a 29 MB file and
+never touches the raster.</p>
+</blockquote>
 <p><code><a href="../reference/hi_download.html">hi_download()</a></code> downloads the full 288-band climatology
 stack (~1 GB) on first use and caches it locally. Subsequent calls read
 from the cache and extract only the requested bands in memory.</p>
@@ -184,7 +197,7 @@ from the cache and extract only the requested bands in memory.</p>
 <span><span class="co"># Full 288-band stack</span></span>
 <span><span class="va">r_stack</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_download.html">hi_download</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/hi_plot.html">hi_plot</a></span><span class="op">(</span><span class="va">r</span>, title <span class="op">=</span> <span class="st">"Heat Index — January, 15h local"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/hi_plot.html">hi_plot</a></span><span class="op">(</span><span class="va">r</span>, title <span class="op">=</span> <span class="st">"Heat Index, January, 15h local"</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
 <p><strong>Note on hours:</strong> all hours are specified in local time
 (UTC-3). The conversion to UTC is handled internally. For example,
@@ -237,11 +250,11 @@ Brazil’s Semiarid region</em> (v0.1.0). Zenodo. <a href="https://doi.org/10.52
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Antônio Campos Neto.</p>
+  <p>Developed by Antônio Campos Neto. Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>heatindexbr</p>
 </div>
 
     </footer>

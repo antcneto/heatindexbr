@@ -21,7 +21,7 @@
 body { font-family: var(--sans); color: var(--text); background: var(--bg); line-height: 1.6; }
 nav {
   position: sticky; top: 0; z-index: 100;
-  background: var(--night); color: var(--sand);
+  background: #1A1A2E !important; color: #F5F0E8 !important;
   padding: 0 2rem; height: 52px;
   display: flex; align-items: center; justify-content: space-between;
 }
@@ -39,7 +39,7 @@ nav {
 .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--heat); text-transform: uppercase; margin-bottom: 1rem; }
 .hero-title { font-family: var(--serif); font-size: clamp(32px, 5vw, 52px); line-height: 1.1; color: var(--sand); margin-bottom: 0.5rem; }
 .hero-subtitle { font-size: 14px; color: rgba(245,240,232,0.5); margin-bottom: 1.5rem; }
-.hero-desc { font-size: 15px; line-height: 1.75; color: rgba(245,240,232,0.75); max-width: 520px; margin-bottom: 2rem; }
+.hero-desc { font-size: 15px; line-height: 1.75; color: rgba(245,240,232,0.75); max-width: 540px; margin-bottom: 2rem; }
 .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
 .badge { font-family: var(--mono); font-size: 11px; padding: 4px 10px; border-radius: 4px; border: 0.5px solid rgba(245,240,232,0.2); color: rgba(245,240,232,0.7); background: rgba(245,240,232,0.06); }
 .badge-hot { border-color: rgba(201,75,44,0.5); color: #f0a090; background: rgba(201,75,44,0.1); }
@@ -50,16 +50,16 @@ nav {
 .btn-secondary:hover { border-color: rgba(245,240,232,0.7); }
 .thermo-wrap { display: flex; align-items: center; gap: 1rem; }
 .thermo-svg { width: 32px; }
-.thermo-hours { display: flex; flex-direction: column; gap: 10px; }
-.thour { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; color: rgba(245,240,232,0.35); transition: color 0.4s; }
+.thermo-hours { display: flex; flex-direction: column; gap: 8px; }
+.thour { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; color: rgba(245,240,232,0.35); transition: color 0.4s; }
 .thour.on { color: rgba(245,240,232,0.9); }
-.thour-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(245,240,232,0.2); flex-shrink: 0; transition: background 0.4s; }
+.thour-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(245,240,232,0.2); flex-shrink: 0; transition: background 0.4s; }
 .thour.on .thour-dot { background: var(--heat); }
 .stat-strip { background: var(--heat); color: #fff; padding: 1.25rem 2rem; }
-.stat-strip-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+.stat-strip-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
 .stat-item { text-align: center; }
-.stat-val { font-family: var(--serif); font-size: 28px; line-height: 1; margin-bottom: 4px; }
-.stat-lbl { font-size: 11px; opacity: 0.85; line-height: 1.4; }
+.stat-val { font-family: var(--serif); font-size: 26px; line-height: 1; margin-bottom: 4px; }
+.stat-lbl { font-size: 10.5px; opacity: 0.85; line-height: 1.4; }
 section { padding: 4rem 2rem; }
 section:nth-child(even) { background: var(--card); }
 .inner { max-width: 900px; margin: 0 auto; }
@@ -71,7 +71,7 @@ section:nth-child(even) { background: var(--card); }
 .map-tab.active { background: var(--night); border-color: var(--night); color: var(--sand); }
 .map-panel { display: none; }
 .map-panel.active { display: block; }
-.map-panel img { width: 100%; max-width: 700px; display: block; margin: 0 auto; border-radius: 8px; border: 0.5px solid var(--border); }
+.map-panel img { width: 100%; max-width: 720px; display: block; margin: 0 auto; border-radius: 8px; border: 0.5px solid var(--border); }
 .map-caption { font-size: 12px; color: var(--muted); text-align: center; margin-top: 0.75rem; font-family: var(--mono); }
 .val-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 2rem; }
 .val-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; }
@@ -81,9 +81,9 @@ section:nth-child(even) { background: var(--card); }
 .val-card-body code { font-family: var(--mono); font-size: 11px; background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 3px; }
 .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 1.5rem 0; }
 .metric { background: var(--bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 1rem; }
-.metric-val { font-family: var(--serif); font-size: 26px; color: var(--heat); line-height: 1; margin-bottom: 4px; }
-.metric-val small { font-family: var(--sans); font-size: 13px; color: var(--muted); }
-.metric-lbl { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.metric-val { font-family: var(--serif); font-size: 24px; color: var(--heat); line-height: 1; margin-bottom: 4px; }
+.metric-val small { font-family: var(--sans); font-size: 12px; color: var(--muted); }
+.metric-lbl { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
 .noaa-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 1rem 0; }
 .noaa-pill { font-size: 12px; padding: 6px 14px; border-radius: 20px; font-weight: 500; }
 .noaa-s { background: #EAF3DE; color: #27500A; }
@@ -93,7 +93,7 @@ section:nth-child(even) { background: var(--card); }
 .fn-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; }
 .fn-name { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--heat); margin-bottom: 4px; }
 .fn-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
-.code-block { background: var(--night); border-radius: 10px; padding: 1.25rem 1.5rem; font-family: var(--mono); font-size: 13px; line-height: 1.9; color: #F5F0E8; overflow-x: auto; }
+.code-block { background: var(--night); border-radius: 10px; padding: 1.25rem 1.5rem; font-family: var(--mono); font-size: 12.5px; line-height: 1.85; color: #F5F0E8; overflow-x: auto; }
 .kw { color: #C94B2C; } .fn { color: #E8C547; } .str { color: #9FE1CB; } .cm { color: rgba(245,240,232,0.38); font-style: italic; }
 .note { font-size: 12px; color: var(--muted); margin-top: 0.75rem; padding: 0.6rem 0.85rem; background: rgba(201,75,44,0.05); border-left: 2px solid rgba(201,75,44,0.3); }
 .loocv-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 1.5rem 0; }
@@ -101,13 +101,22 @@ section:nth-child(even) { background: var(--card); }
 .loocv-table td { padding: 10px 12px; border-bottom: 0.5px solid var(--border); color: var(--text); }
 .loocv-table tr:last-child td { border-bottom: none; }
 .loocv-table .highlight { color: var(--heat); font-weight: 500; font-family: var(--mono); }
-footer { background: var(--night); color: rgba(245,240,232,0.5); padding: 2rem; text-align: center; font-size: 12px; }
+.changelog { border-left: 2px solid var(--border); margin-left: 8px; padding-left: 1.5rem; }
+.changelog-item { position: relative; padding-bottom: 2rem; }
+.changelog-item:last-child { padding-bottom: 0; }
+.changelog-dot { position: absolute; left: -1.59rem; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--heat); border: 2px solid var(--card); }
+.changelog-version { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--heat); margin-bottom: 2px; }
+.changelog-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; color: var(--text); }
+.changelog-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.changelog-tag { font-family: var(--mono); font-size: 10px; padding: 1px 7px; border-radius: 3px; background: var(--bg); border: 0.5px solid var(--border); color: var(--muted); margin-left: 6px; }
+footer { background: #1A1A2E !important; color: rgba(245,240,232,0.5); padding: 2rem; text-align: center; font-size: 12px; }
 footer a { color: rgba(245,240,232,0.7); text-decoration: none; }
 footer a:hover { color: var(--sand); }
 @media (max-width: 640px) {
   .hero-layout { grid-template-columns: 1fr; }
   .thermo-wrap { display: none; }
-  nav { padding: 0 1rem; }
+  nav { padding: 0 1rem; flex-wrap: wrap; height: auto; }
+  .nav-links { flex-wrap: wrap; gap: 0.75rem; padding: 0.5rem 0; }
   section { padding: 3rem 1rem; }
 }
 </style>
@@ -118,10 +127,12 @@ footer a:hover { color: var(--sand); }
   <a href="#" class="nav-brand">heatindexbr</a>
   <div class="nav-links">
     <a href="articles/getting-started.html" data-en="Tutorial" data-pt="Tutorial">Tutorial</a>
-    <a href="articles/methodology.html" data-en="Methodology" data-pt="Metodologia">Methodology</a>
+    <a href="articles/methodology.html" data-en="Methodology" data-pt="Methodology (EN)">Methodology</a>
+    <a href="articles/metodologia.html" data-en="Metodologia (PT)" data-pt="Metodologia">Metodologia (PT)</a>
     <a href="reference/index.html" data-en="Reference" data-pt="Referência">Reference</a>
+    <a href="#changelog" data-en="Changelog" data-pt="Changelog">Changelog</a>
     <a href="https://github.com/antcneto/heatindexbr" target="_blank">GitHub</a>
-    <span class="nav-badge">v0.1.0</span>
+    <span class="nav-badge">v0.2.0</span>
     <div style="display:flex;gap:4px;margin-left:8px">
       <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
       <button class="lang-btn" id="btn-pt" onclick="setLang('pt')">PT</button>
@@ -134,19 +145,19 @@ footer a:hover { color: var(--sand); }
     <div class="hero-layout">
       <div>
         <p class="hero-eyebrow">R package</p>
-        <h1 class="hero-title" data-en="Heat index mapping<br>for Brazil's Semiarid" data-pt="Índice de Calor<br>no Semiárido Brasileiro">Heat index mapping<br>for Brazil's Semiarid</h1>
-        <p class="hero-subtitle" data-en="1,477 municipalities · 4 synoptic hours · ~1 km resolution · EPSG:5880" data-pt="1.477 municípios · 4 horários sinóticos · ~1 km de resolução · EPSG:5880">1,477 municipalities · 4 synoptic hours · ~1 km resolution · EPSG:5880</p>
-        <p class="hero-desc" data-en="Spatially interpolated Heat Index (Rothfusz 1990) rasters for the official Brazilian Semiarid region (CONDEL/SUDENE Res. 176/2024). Produced with kriging with external drift validated against 59 to 73 INMET stations via leave-one-out cross-validation. R² = 0.884 at 15h." data-pt="Rasters do Índice de Calor (Rothfusz 1990) interpolados espacialmente para o Semiárido Brasileiro oficial (Res. CONDEL/SUDENE 176/2024). Produzido com krigagem com deriva externa, validado com 59 a 73 estações INMET por validação cruzada leave-one-out. R² = 0,884 às 15h.">Spatially interpolated Heat Index (Rothfusz 1990) rasters for the official Brazilian Semiarid region (CONDEL/SUDENE Res. 176/2024). Produced with kriging with external drift validated against 59 to 73 INMET stations via leave-one-out cross-validation. R² = 0.884 at 15h.</p>
+        <h1 class="hero-title" data-en="Heat index climatology<br>for Brazil's Semiarid" data-pt="Climatologia do Índice de Calor<br>no Semiárido Brasileiro">Heat index climatology<br>for Brazil's Semiarid</h1>
+        <p class="hero-subtitle" data-en="1,477 municipalities · 288 month×hour combinations · 2000-2025 · ~1 km resolution" data-pt="1.477 municípios · 288 combinações mês×hora · 2000-2025 · ~1 km de resolução">1,477 municipalities · 288 month×hour combinations · 2000-2025 · ~1 km resolution</p>
+        <p class="hero-desc" data-en="Spatially interpolated Heat Index (Rothfusz 1990) climatology for the official Brazilian Semiarid region (CONDEL/SUDENE Res. 176/2024). Covers 12 months × 24 hours (2000-2025) using kriging with external drift, with covariate selection validated per combination via leave-one-out cross-validation. Mean R² = 0.778, RMSE = 1.12°C across 288 combinations." data-pt="Climatologia do Índice de Calor (Rothfusz 1990) interpolada espacialmente para o Semiárido Brasileiro oficial (Res. CONDEL/SUDENE 176/2024). Cobre 12 meses × 24 horas (2000-2025) usando krigagem com deriva externa, com seleção de covariáveis validada por combinação via validação cruzada leave-one-out. R² médio = 0,778, RMSE = 1,12°C nas 288 combinações.">Spatially interpolated Heat Index (Rothfusz 1990) climatology for the official Brazilian Semiarid region (CONDEL/SUDENE Res. 176/2024). Covers 12 months × 24 hours (2000-2025) using kriging with external drift, with covariate selection validated per combination via leave-one-out cross-validation. Mean R² = 0.778, RMSE = 1.12°C across 288 combinations.</p>
         <div class="hero-badges">
           <span class="badge">R ≥ 4.1</span>
-          <span class="badge badge-hot">DOI 10.5281/zenodo.20942619</span>
+          <span class="badge badge-hot">DOI 10.5281/zenodo.21049066</span>
           <span class="badge">EPSG:5880</span>
           <span class="badge">MIT License</span>
         </div>
         <div class="hero-ctas">
           <a href="#usage" class="btn-primary" data-en="Get started" data-pt="Começar agora">Get started</a>
           <a href="https://github.com/antcneto/heatindexbr" target="_blank" class="btn-secondary">GitHub</a>
-          <a href="https://zenodo.org/records/20942619" target="_blank" class="btn-secondary">Zenodo</a>
+          <a href="https://zenodo.org/records/21049066" target="_blank" class="btn-secondary">Zenodo</a>
         </div>
       </div>
       <div class="thermo-wrap">
@@ -157,10 +168,10 @@ footer a:hover { color: var(--sand); }
           <circle cx="16" cy="74" r="5.5" fill="#f0a090"/>
         </svg>
         <div class="thermo-hours">
-          <div class="thour" id="th0"><div class="thour-dot"></div><span>00h · 24.3°C</span></div>
-          <div class="thour" id="th1"><div class="thour-dot"></div><span>09h · 26.6°C</span></div>
-          <div class="thour" id="th2"><div class="thour-dot"></div><span>15h · 31.2°C</span></div>
-          <div class="thour" id="th3"><div class="thour-dot"></div><span>21h · 22.7°C</span></div>
+          <div class="thour" id="th0"><div class="thour-dot"></div><span>Jan · 0h</span></div>
+          <div class="thour" id="th1"><div class="thour-dot"></div><span>Abr · 9h</span></div>
+          <div class="thour" id="th2"><div class="thour-dot"></div><span>Jul · 15h</span></div>
+          <div class="thour" id="th3"><div class="thour-dot"></div><span>Out · 21h</span></div>
         </div>
       </div>
     </div>
@@ -169,10 +180,10 @@ footer a:hover { color: var(--sand); }
 
 <div class="stat-strip">
   <div class="stat-strip-inner">
-    <div class="stat-item"><div class="stat-val">1,477</div><div class="stat-lbl" data-en="municipalities covered" data-pt="municípios cobertos">municipalities covered</div></div>
-    <div class="stat-item"><div class="stat-val">31M</div><div class="stat-lbl" data-en="people under heat stress" data-pt="pessoas sob estresse térmico">people under heat stress</div></div>
-    <div class="stat-item"><div class="stat-val">0.884</div><div class="stat-lbl" data-en="R² at 15h (LOOCV)" data-pt="R² às 15h (LOOCV)">R² at 15h (LOOCV)</div></div>
-    <div class="stat-item"><div class="stat-val">1.04°C</div><div class="stat-lbl" data-en="RMSE at 15h" data-pt="RMSE às 15h">RMSE at 15h</div></div>
+    <div class="stat-item"><div class="stat-val">288</div><div class="stat-lbl" data-en="month × hour combinations" data-pt="combinações mês × hora">month × hour combinations</div></div>
+    <div class="stat-item"><div class="stat-val">26</div><div class="stat-lbl" data-en="years of climatology (2000-2025)" data-pt="anos de climatologia (2000-2025)">years of climatology (2000-2025)</div></div>
+    <div class="stat-item"><div class="stat-val">0.778</div><div class="stat-lbl" data-en="mean R² (LOOCV)" data-pt="R² médio (LOOCV)">mean R² (LOOCV)</div></div>
+    <div class="stat-item"><div class="stat-val">1.12°C</div><div class="stat-lbl" data-en="mean RMSE" data-pt="RMSE médio">mean RMSE</div></div>
     <div class="stat-item"><div class="stat-val">~1 km</div><div class="stat-lbl" data-en="raster resolution" data-pt="resolução do raster">raster resolution</div></div>
   </div>
 </div>
@@ -180,37 +191,25 @@ footer a:hover { color: var(--sand); }
 <section id="maps">
   <div class="inner">
     <p class="eyebrow" data-en="The data" data-pt="Os dados">The data</p>
-    <h2 class="section-title" data-en="Heat index across the Semiarid" data-pt="Índice de Calor no Semiárido">Heat index across the Semiarid</h2>
-    <p class="section-lead" data-en="Annual mean Heat Index for 2025, mapped at ~1 km resolution across all 1,477 municipalities of Brazil's official Semiarid region. Four synoptic hours capture the full thermal cycle: nocturnal minimum, morning warming, afternoon peak, and evening cooling." data-pt="IC médio anual de 2025, com ~1 km de resolução para os 1.477 municípios do Semiárido Brasileiro oficial. Quatro horários sinóticos capturam o ciclo térmico completo: mínima noturna, aquecimento matinal, pico vespertino e resfriamento noturno.">Annual mean Heat Index for 2025, mapped at ~1 km resolution across all 1,477 municipalities of Brazil's official Semiarid region. Four synoptic hours capture the full thermal cycle: nocturnal minimum, morning warming, afternoon peak, and evening cooling.</p>
-    <div class="map-tabs">
-      <button class="map-tab active" onclick="showMap(this,'ic15')" data-en="IC at 15h" data-pt="IC às 15h">IC at 15h</button>
-      <button class="map-tab" onclick="showMap(this,'noaa')" data-en="NOAA classification" data-pt="Classificação NOAA">NOAA classification</button>
-      <button class="map-tab" onclick="showMap(this,'ciclo')" data-en="Daily cycle" data-pt="Ciclo diário">Daily cycle</button>
-    </div>
-    <div class="map-panel active" id="map-ic15">
-      <img src="figures/figura_IC_15h.png" alt="Heat Index map at 15h, Brazilian Semiarid, 2025">
-      <p class="map-caption" data-en="Annual mean Heat Index at 15h · KDE with external drift: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880" data-pt="IC médio anual às 15h · KDE com deriva externa: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880">Annual mean Heat Index at 15h · KDE with external drift: altitude + ERA5-Land T2m · INMET 2025 · EPSG:5880</p>
-    </div>
-    <div class="map-panel" id="map-noaa">
-      <img src="figures/figura_NOAA_15h.png" alt="NOAA Heat Index classification at 15h, Brazilian Semiarid, 2025">
-      <p class="map-caption" data-en="NOAA classification at 15h · 640 municipalities under extreme caution (IC 32 to 41°C) · 13.3 million people" data-pt="Classificação NOAA às 15h · 640 municípios em cautela extrema (IC 32 a 41°C) · 13,3 milhões de habitantes">NOAA classification at 15h · 640 municipalities under extreme caution (IC 32 to 41°C) · 13.3 million people</p>
-    </div>
-    <div class="map-panel" id="map-ciclo">
-      <img src="figures/figura_ciclo_diario.png" alt="Daily cycle of Heat Index, Brazilian Semiarid, 2025">
-      <p class="map-caption" data-en="Daily cycle: midnight, 09h, 15h, 21h local time · Covariates vary by hour: NDVI at night, ERA5 at 15h" data-pt="Ciclo diário: meia-noite, 9h, 15h, 21h (hora local) · Covariáveis variam por horário: NDVI à noite, ERA5 às 15h">Daily cycle: midnight, 09h, 15h, 21h local time · Covariates vary by hour: NDVI at night, ERA5 at 15h</p>
-    </div>
-  </div>
-</section>
+    <h2 class="section-title" data-en="A climatology, not a single year" data-pt="Uma climatologia, não um único ano">A climatology, not a single year</h2>
+    <p class="section-lead" data-en="Each of the 288 rasters represents the 2000-2025 mean Heat Index for one month and one UTC hour, giving a much more robust picture of typical thermal conditions than any single year could. The interpolation method varies by combination: KDE with altitude dominates at night, while ERA5-based covariates dominate during daytime hours, when synoptic forcing is stronger." data-pt="Cada um dos 288 rasters representa o IC médio de 2000-2025 para um mês e uma hora UTC, oferecendo um retrato muito mais robusto das condições térmicas típicas do que qualquer ano isolado. O método de interpolação varia por combinação: KDE com altitude domina à noite, enquanto covariáveis baseadas em ERA5 dominam durante o dia, quando a forçante sinótica é mais forte.">Each of the 288 rasters represents the 2000-2025 mean Heat Index for one month and one UTC hour, giving a much more robust picture of typical thermal conditions than any single year could. The interpolation method varies by combination: KDE with altitude dominates at night, while ERA5-based covariates dominate during daytime hours, when synoptic forcing is stronger.</p>
 
-<section>
-  <div class="inner">
-    <p class="eyebrow" data-en="Population exposure" data-pt="Exposição populacional">Population exposure</p>
-    <h2 class="section-title" data-en="31 million people under heat stress" data-pt="31 milhões de pessoas sob estresse térmico">31 million people under heat stress</h2>
-    <p class="section-lead" data-en="At 15h, annual mean Heat Index classifies 96.8% of the Semiarid population under NOAA caution or extreme caution, based on 2022 IBGE Census data. Annual means are a conservative lower bound: daily peaks in specific months can exceed IC > 41°C." data-pt="Às 15h, o IC médio anual classifica 96,8% da população do Semiárido nos níveis de cautela ou cautela extrema da escala NOAA, com base no Censo IBGE 2022. Médias anuais representam o limite inferior conservador: picos diários em meses específicos podem superar IC > 41°C.">At 15h, annual mean Heat Index classifies 96.8% of the Semiarid population under NOAA caution or extreme caution, based on 2022 IBGE Census data. Annual means are a conservative lower bound: daily peaks in specific months can exceed IC > 41°C.</p>
-    <div class="noaa-row">
-      <span class="noaa-pill noaa-s" data-en="979k · No caution (&lt;27°C) · 93 municipalities" data-pt="979 mil hab. · Sem cautela (&lt;27°C) · 93 municípios">979k · No caution (&lt;27°C) · 93 municipalities</span>
-      <span class="noaa-pill noaa-c" data-en="16.8M · Caution (27 to 32°C) · 813 municipalities" data-pt="16,8 M · Cautela (27 a 32°C) · 813 municípios">16.8M · Caution (27 to 32°C) · 813 municipalities</span>
-      <span class="noaa-pill noaa-e" data-en="13.3M · Extreme caution (32 to 41°C) · 640 municipalities" data-pt="13,3 M · Cautela extrema (32 a 41°C) · 640 municípios">13.3M · Extreme caution (32 to 41°C) · 640 municipalities</span>
+    <div class="map-tabs">
+      <button class="map-tab active" onclick="showMap(this,'methods')" data-en="Winning method by month × hour" data-pt="Método vencedor por mês × hora">Winning method by month × hour</button>
+      <button class="map-tab" onclick="showMap(this,'merra2')" data-en="Consistency with MERRA-2" data-pt="Consistência com MERRA-2">Consistency with MERRA-2</button>
+      <button class="map-tab" onclick="showMap(this,'pipeline')" data-en="Methodology pipeline" data-pt="Pipeline metodológico">Methodology pipeline</button>
+    </div>
+    <div class="map-panel active" id="map-methods">
+      <img src="figures/heatmap_metodos_288h.png" alt="Winning interpolation method by month and local hour, Brazilian Semiarid 2000-2025">
+      <p class="map-caption" data-en="Criterion: R² ≥ 0.70 + lowest RMSE. KDE with altitude dominates at night (blue); ERA5-based covariates dominate during the day (orange/red)." data-pt="Critério: R² ≥ 0,70 + menor RMSE. KDE com altitude domina à noite (azul); covariáveis com ERA5 dominam durante o dia (laranja/vermelho).">Criterion: R² ≥ 0.70 + lowest RMSE. KDE with altitude dominates at night (blue); ERA5-based covariates dominate during the day (orange/red).</p>
+    </div>
+    <div class="map-panel" id="map-merra2">
+      <img src="figures/consistencia_merra2.png" alt="Consistency between predicted Heat Index and MERRA-2 reanalysis, upscaled to 55 km">
+      <p class="map-caption" data-en="Predicted IC (1 km, upscaled to 55 km) vs MERRA-2 reanalysis (~55 km), independent of the interpolation model. R² = 0.813, Bias = -0.43°C." data-pt="IC predito (1 km, upscaled para 55 km) vs reanálise MERRA-2 (~55 km), independente do modelo de interpolação. R² = 0,813, Bias = -0,43°C.">Predicted IC (1 km, upscaled to 55 km) vs MERRA-2 reanalysis (~55 km), independent of the interpolation model. R² = 0.813, Bias = -0.43°C.</p>
+    </div>
+    <div class="map-panel" id="map-pipeline">
+      <img src="figures/fluxograma_metodologia.png" alt="Methodology pipeline flowchart: from station data to final products">
+      <p class="map-caption" data-en="Three parallel data sources converge into LOOCV validation, branch into two independent consistency checks, and produce three final products distributed via Zenodo." data-pt="Três fontes de dados em paralelo convergem para a validação LOOCV, se bifurcam em duas verificações de consistência independentes, e geram três produtos finais distribuídos via Zenodo.">Three parallel data sources converge into LOOCV validation, branch into two independent consistency checks, and produce three final products distributed via Zenodo.</p>
     </div>
   </div>
 </section>
@@ -218,42 +217,31 @@ footer a:hover { color: var(--sand); }
 <section id="validation">
   <div class="inner">
     <p class="eyebrow" data-en="Why trust the raster?" data-pt="Por que confiar no raster?">Why trust the raster?</p>
-    <h2 class="section-title" data-en="Rigorous interpolation, verified results" data-pt="Interpolação rigorosa, resultados verificados">Rigorous interpolation, verified results</h2>
-    <p class="section-lead" data-en="Fifteen spatial interpolation methods were compared across all four synoptic hours via leave-one-out cross-validation (LOOCV). The winning method, kriging with external drift (KDE), selects covariates per hour based on physical justification: NDVI captures nocturnal land-surface processes in the Caatinga; ERA5 captures regional synoptic forcing at 15h." data-pt="Quinze métodos de interpolação espacial foram comparados nos quatro horários via validação cruzada leave-one-out (LOOCV). O método vencedor, a krigagem com deriva externa (KDE), seleciona covariáveis por horário com base em justificativa física: NDVI captura processos noturnos de superfície na Caatinga; ERA5 captura a forçante sinótica regional às 15h.">Fifteen spatial interpolation methods were compared across all four synoptic hours via leave-one-out cross-validation (LOOCV). The winning method, kriging with external drift (KDE), selects covariates per hour based on physical justification: NDVI captures nocturnal land-surface processes in the Caatinga; ERA5 captures regional synoptic forcing at 15h.</p>
+    <h2 class="section-title" data-en="Validated combination by combination" data-pt="Validado combinação por combinação">Validated combination by combination</h2>
+    <p class="section-lead" data-en="Each of the 288 month × hour combinations was independently cross-validated using leave-one-out cross-validation (LOOCV) against 119 INMET stations. The winning interpolation method was selected per combination, not globally, because the dominant physical process changes throughout the day." data-pt="Cada uma das 288 combinações mês × hora foi validada de forma independente via validação cruzada leave-one-out (LOOCV) contra 119 estações INMET. O método de interpolação vencedor foi selecionado por combinação, não globalmente, pois o processo físico dominante muda ao longo do dia.">Each of the 288 month × hour combinations was independently cross-validated using leave-one-out cross-validation (LOOCV) against 119 INMET stations. The winning interpolation method was selected per combination, not globally, because the dominant physical process changes throughout the day.</p>
 
-    <table class="loocv-table">
-      <thead>
-        <tr>
-          <th data-en="Hour (local)" data-pt="Hora (local)">Hour (local)</th>
-          <th data-en="Covariates" data-pt="Covariáveis">Covariates</th>
-          <th>R²</th>
-          <th>RMSE (°C)</th>
-          <th>MAE (°C)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>21h</td><td data-en="alt + dist_coast + NDVI + ERA5" data-pt="alt + dist_costa + NDVI + ERA5">alt + dist_coast + NDVI + ERA5</td><td class="highlight">0.863</td><td>1.05</td><td>0.867</td></tr>
-        <tr><td>00h</td><td data-en="alt + dist_coast + NDVI + ERA5" data-pt="alt + dist_costa + NDVI + ERA5">alt + dist_coast + NDVI + ERA5</td><td class="highlight">0.819</td><td>1.10</td><td>0.888</td></tr>
-        <tr><td>09h</td><td data-en="alt + NDVI" data-pt="alt + NDVI">alt + NDVI</td><td class="highlight">0.885</td><td>1.06</td><td>0.799</td></tr>
-        <tr><td>15h</td><td data-en="alt + ERA5-Land T2m" data-pt="alt + ERA5-Land T2m">alt + ERA5-Land T2m</td><td class="highlight">0.884</td><td>1.04</td><td>0.775</td></tr>
-      </tbody>
-    </table>
+    <div class="metrics">
+      <div class="metric"><div class="metric-val">0.778</div><div class="metric-lbl" data-en="Mean R²<br>across 288 combinations" data-pt="R² médio<br>nas 288 combinações">Mean R²<br>across 288 combinations</div></div>
+      <div class="metric"><div class="metric-val">1.12<small> °C</small></div><div class="metric-lbl" data-en="Mean RMSE<br>LOOCV" data-pt="RMSE médio<br>LOOCV">Mean RMSE<br>LOOCV</div></div>
+      <div class="metric"><div class="metric-val">0.85<small> °C</small></div><div class="metric-lbl" data-en="Mean absolute error<br>across all folds" data-pt="Erro absoluto médio<br>todos os folds">Mean absolute error<br>across all folds</div></div>
+      <div class="metric"><div class="metric-val">0.813</div><div class="metric-lbl" data-en="R² vs MERRA-2<br>independent reanalysis" data-pt="R² vs MERRA-2<br>reanálise independente">R² vs MERRA-2<br>independent reanalysis</div></div>
+    </div>
 
     <div class="val-grid">
       <div class="val-card">
         <div class="val-card-icon">✓</div>
-        <div class="val-card-title" data-en="Spatially unbiased residuals" data-pt="Resíduos espacialmente não enviesados">Spatially unbiased residuals</div>
-        <div class="val-card-body" data-en="Variogram analysis shows a pure nugget effect (Sill = 0, Nugget ≈ 1.05). Moran's I = -0.027, p = 0.864: residuals are spatially random, confirming the model absorbs all systematic spatial structure." data-pt="Variograma com efeito pepita puro (Sill = 0, Nugget ≈ 1,05). I de Moran = -0,027, p = 0,864: resíduos espacialmente aleatórios, confirmando que o modelo captura toda a estrutura espacial sistemática.">Variogram analysis shows a pure nugget effect (Sill = 0, Nugget ≈ 1.05). Moran's I = -0.027, p = 0.864: residuals are spatially random, confirming the model absorbs all systematic spatial structure.</div>
+        <div class="val-card-title" data-en="Method varies by physical regime" data-pt="Método varia por regime físico">Method varies by physical regime</div>
+        <div class="val-card-body" data-en="KDE with altitude alone wins at night (00h-06h UTC), when synoptic forcing is weak. ERA5-based covariates dominate during daytime hours (10h-20h UTC), when regional atmospheric forcing drives temperature more than local relief." data-pt="KDE apenas com altitude vence à noite (00h-06h UTC), quando a forçante sinótica é fraca. Covariáveis com ERA5 dominam durante o dia (10h-20h UTC), quando a forçante atmosférica regional determina a temperatura mais que o relevo local.">KDE with altitude alone wins at night (00h-06h UTC), when synoptic forcing is weak. ERA5-based covariates dominate during daytime hours (10h-20h UTC), when regional atmospheric forcing drives temperature more than local relief.</div>
       </div>
       <div class="val-card">
         <div class="val-card-icon">✓</div>
-        <div class="val-card-title" data-en="Covariates are physically independent" data-pt="Covariáveis fisicamente independentes">Covariates are physically independent</div>
-        <div class="val-card-body" data-en="Partial correlations on 100,000 pixels: IC × ERA5 | altitude = 0.977; IC × altitude | ERA5 = -0.929. The raster is not redundant with an elevation model: both covariates capture distinct physical processes." data-pt="Correlações parciais em 100 mil pixels: IC × ERA5 | altitude = 0,977; IC × altitude | ERA5 = -0,929. O raster não é redundante com modelo de elevação: cada covariável captura processos físicos distintos.">Partial correlations on 100,000 pixels: IC × ERA5 | altitude = 0.977; IC × altitude | ERA5 = -0.929. The raster is not redundant with an elevation model: both covariates capture distinct physical processes.</div>
+        <div class="val-card-title" data-en="Independent of MERRA-2 model assumptions" data-pt="Independente das premissas do MERRA-2">Independent of MERRA-2 model assumptions</div>
+        <div class="val-card-body" data-en="MERRA-2 is a global reanalysis product, entirely independent of the INMET station network used to build this climatology. Strong agreement (R² = 0.813) at the upscaled 55 km resolution supports the physical plausibility of the 1 km product." data-pt="O MERRA-2 é um produto de reanálise global, totalmente independente da rede de estações INMET usada para construir esta climatologia. A forte concordância (R² = 0,813) na resolução upscaled de 55 km reforça a plausibilidade física do produto de 1 km.">MERRA-2 is a global reanalysis product, entirely independent of the INMET station network used to build this climatology. Strong agreement (R² = 0.813) at the upscaled 55 km resolution supports the physical plausibility of the 1 km product.</div>
       </div>
       <div class="val-card">
         <div class="val-card-icon">✓</div>
-        <div class="val-card-title" data-en="Random Forest rejected after spatial CV" data-pt="Random Forest rejeitado após CV espacial">Random Forest rejected after spatial CV</div>
-        <div class="val-card-body" data-en="Block spatial CV revealed leakage in RF (delta R² = 0.18 at 21h, 0.08 at 15h). KDE R² is stable across both LOOCV and block CV, confirming genuine spatial generalization." data-pt="CV espacial por blocos revelou vazamento no RF (delta R² = 0,18 às 21h, 0,08 às 15h). O R² do KDE é estável nos dois protocolos, confirmando generalização espacial genuína.">Block spatial CV revealed leakage in RF (delta R² = 0.18 at 21h, 0.08 at 15h). KDE R² is stable across both LOOCV and block CV, confirming genuine spatial generalization.</div>
+        <div class="val-card-title" data-en="Low-confidence combinations are flagged" data-pt="Combinações de baixa confiança são sinalizadas">Low-confidence combinations are flagged</div>
+        <div class="val-card-body" data-en="58 of 288 combinations fall below R² = 0.70, concentrated in March-June around 06h-09h UTC, a transitional period between rainy and dry seasons. These are flagged internally and the package warns users when such a combination is requested." data-pt="58 das 288 combinações ficam abaixo de R² = 0,70, concentradas entre março e junho, próximo de 06h-09h UTC, um período de transição entre as estações chuvosa e seca. Essas combinações são sinalizadas internamente e o pacote avisa o usuário quando uma delas é solicitada.">58 of 288 combinations fall below R² = 0.70, concentrated in March-June around 06h-09h UTC, a transitional period between rainy and dry seasons. These are flagged internally and the package warns users when such a combination is requested.</div>
       </div>
     </div>
   </div>
@@ -262,14 +250,14 @@ footer a:hover { color: var(--sand); }
 <section id="usage">
   <div class="inner">
     <p class="eyebrow" data-en="Get started" data-pt="Primeiros passos">Get started</p>
-    <h2 class="section-title" data-en="Four lines to your first map" data-pt="Quatro linhas para o primeiro mapa">Four lines to your first map</h2>
+    <h2 class="section-title" data-en="Four lines to your first result" data-pt="Quatro linhas para o primeiro resultado">Four lines to your first result</h2>
     <div class="fn-grid">
-      <div class="fn-card"><div class="fn-name">hi_download()</div><div class="fn-desc" data-en="Download and cache the raster from Zenodo. Returns a SpatRaster." data-pt="Baixa e armazena em cache o raster do Zenodo. Retorna um SpatRaster.">Download and cache the raster from Zenodo. Returns a SpatRaster.</div></div>
-      <div class="fn-card"><div class="fn-name">hi_municipality()</div><div class="fn-desc" data-en="Extract Heat Index stats for one or more municipalities by name." data-pt="Extrai estatísticas de IC para um ou mais municípios pelo nome.">Extract Heat Index stats for one or more municipalities by name.</div></div>
-      <div class="fn-card"><div class="fn-name">hi_shape()</div><div class="fn-desc" data-en="Extract stats for any custom sf polygon." data-pt="Extrai estatísticas para qualquer polígono sf personalizado.">Extract stats for any custom sf polygon.</div></div>
+      <div class="fn-card"><div class="fn-name">hi_download()</div><div class="fn-desc" data-en="Download the climatology stack (cached after first use) and extract any month × hour combination." data-pt="Baixa o stack climatológico (em cache após o primeiro uso) e extrai qualquer combinação mês × hora.">Download the climatology stack (cached after first use) and extract any month × hour combination.</div></div>
+      <div class="fn-card"><div class="fn-name">hi_municipality()</div><div class="fn-desc" data-en="Fast lookup from the pre-computed municipal table. No raster download needed." data-pt="Consulta rápida na tabela municipal pré-computada. Nenhum download de raster necessário.">Fast lookup from the pre-computed municipal table. No raster download needed.</div></div>
+      <div class="fn-card"><div class="fn-name">hi_shape()</div><div class="fn-desc" data-en="Extract statistics for any custom sf polygon." data-pt="Extrai estatísticas para qualquer polígono sf personalizado.">Extract statistics for any custom sf polygon.</div></div>
       <div class="fn-card"><div class="fn-name">hi_search()</div><div class="fn-desc" data-en="Search for municipalities by name or state." data-pt="Busca municípios por nome ou UF.">Search for municipalities by name or state.</div></div>
       <div class="fn-card"><div class="fn-name">hi_plot()</div><div class="fn-desc" data-en="Plot a raster or municipality result as a ggplot map." data-pt="Plota raster ou resultado municipal como mapa ggplot.">Plot a raster or municipality result as a ggplot map.</div></div>
-      <div class="fn-card"><div class="fn-name">hi_available()</div><div class="fn-desc" data-en="List available years, resolutions, and hours." data-pt="Lista anos, resoluções e horários disponíveis.">List available years, resolutions, and hours.</div></div>
+      <div class="fn-card"><div class="fn-name">hi_available()</div><div class="fn-desc" data-en="List available products, months, and hours." data-pt="Lista produtos, meses e horas disponíveis.">List available products, months, and hours.</div></div>
     </div>
     <div class="code-block">
 <span class="cm"># Install from GitHub</span>
@@ -277,27 +265,49 @@ footer a:hover { color: var(--sand); }
 
 <span class="kw">library</span>(<span class="str">heatindexbr</span>)
 
-<span class="cm"># Search for a municipality (names follow IBGE uppercase convention)</span>
-<span class="fn">hi_search</span>(<span class="str">"Mossoro"</span>, state = <span class="str">"RN"</span>)
+<span class="cm"># Fast: municipal table, no raster download</span>
+<span class="fn">hi_municipality</span>(<span class="str">"MOSSORO"</span>, state = <span class="str">"RN"</span>, month = <span class="str">1</span>, hour_local = <span class="str">15</span>)
 
-<span class="cm"># Extract annual mean Heat Index at 15h</span>
-<span class="fn">hi_municipality</span>(<span class="str">"MOSSORO"</span>, state = <span class="str">"RN"</span>, hour = <span class="str">"15h"</span>)
+<span class="cm"># Single raster band (downloads stack once, cached after)</span>
+r <span class="kw">&lt;-</span> <span class="fn">hi_download</span>(month = <span class="str">1</span>, hour_local = <span class="str">15</span>)
+<span class="fn">hi_plot</span>(r)
 
-<span class="cm"># Download the full raster and plot</span>
-r <span class="kw">&lt;-</span> <span class="fn">hi_download</span>(hour = <span class="str">"15h"</span>)
-<span class="fn">hi_plot</span>(r)</div>
-    <p class="note" data-en="Municipality names follow IBGE convention: uppercase without accents. Use hi_search() to find the correct name (e.g. MOSSORO, not Mossoró)." data-pt="Nomes de municípios seguem o padrão IBGE: maiúsculas sem acentos. Use hi_search() para encontrar o nome correto (ex.: MOSSORO, não Mossoró).">Municipality names follow IBGE convention: uppercase without accents. Use hi_search() to find the correct name (e.g. MOSSORO, not Mossoró).</p>
+<span class="cm"># Legacy 2025 synoptic product (v0.1.0)</span>
+<span class="fn">hi_download</span>(product = <span class="str">"synoptic_2025"</span>, hour_local = <span class="str">15</span>)</div>
+    <p class="note" data-en="Hours are specified in local time (UTC-3) and converted automatically. Municipality names follow IBGE convention: uppercase without accents. Use hi_search() to find the correct name." data-pt="As horas são especificadas em hora local (UTC-3) e convertidas automaticamente. Nomes de municípios seguem o padrão IBGE: maiúsculas sem acentos. Use hi_search() para encontrar o nome correto.">Hours are specified in local time (UTC-3) and converted automatically. Municipality names follow IBGE convention: uppercase without accents. Use hi_search() to find the correct name.</p>
+    <p class="note" style="border-left-color: var(--heat); background: rgba(201,75,44,0.08)" data-en="First-use download: hi_download() and hi_municipality(source = 'raster') download the full 1.6 GB climatology stack on first call, which can take from a few minutes up to about 30 minutes depending on your connection. This happens only once; later calls read from the local cache instantly. If you only need municipal statistics, the default hi_municipality() reads a 29 MB table instead and never touches the raster." data-pt="Download no primeiro uso: hi_download() e hi_municipality(source = 'raster') baixam o stack climatológico completo de 1,6 GB na primeira chamada, o que pode levar de alguns minutos a até 30 minutos dependendo da sua conexão. Isso acontece apenas uma vez; chamadas posteriores leem do cache local instantaneamente. Se você só precisa de estatísticas municipais, o padrão hi_municipality() lê uma tabela de 29 MB e nunca toca no raster.">First-use download: hi_download() and hi_municipality(source = 'raster') download the full 1.6 GB climatology stack on first call, which can take from a few minutes up to about 30 minutes depending on your connection. This happens only once; later calls read from the local cache instantly. If you only need municipal statistics, the default hi_municipality() reads a 29 MB table instead and never touches the raster.</p>
+  </div>
+</section>
+
+<section id="changelog">
+  <div class="inner">
+    <p class="eyebrow" data-en="Version history" data-pt="Histórico de versões">Version history</p>
+    <h2 class="section-title" data-en="Changelog" data-pt="Changelog">Changelog</h2>
+    <div class="changelog">
+      <div class="changelog-item">
+        <div class="changelog-dot"></div>
+        <div class="changelog-version">v0.2.0 <span class="changelog-tag" data-en="current" data-pt="atual">current</span></div>
+        <div class="changelog-title" data-en="Climatology 2000-2025" data-pt="Climatologia 2000-2025">Climatology 2000-2025</div>
+        <div class="changelog-body" data-en="New main product: 288-band climatology (12 months × 24 UTC hours, 2000-2025). Added hi_available() product listing, automatic UTC/local hour conversion, municipal table for fast lookups without raster downloads, and population exposure data (IBGE Census 2000, 2010, 2022). DOI: 10.5281/zenodo.21049066." data-pt="Novo produto principal: climatologia de 288 bandas (12 meses × 24 horas UTC, 2000-2025). Adicionado hi_available() com lista de produtos, conversão automática UTC/hora local, tabela municipal para consultas rápidas sem download de raster, e dados de exposição populacional (Censo IBGE 2000, 2010, 2022). DOI: 10.5281/zenodo.21049066.">New main product: 288-band climatology (12 months × 24 UTC hours, 2000-2025). Added hi_available() product listing, automatic UTC/local hour conversion, municipal table for fast lookups without raster downloads, and population exposure data (IBGE Census 2000, 2010, 2022). DOI: 10.5281/zenodo.21049066.</div>
+      </div>
+      <div class="changelog-item">
+        <div class="changelog-dot" style="background: var(--muted)"></div>
+        <div class="changelog-version">v0.1.0</div>
+        <div class="changelog-title" data-en="Initial release: synoptic 2025" data-pt="Lançamento inicial: sinótico 2025">Initial release: synoptic 2025</div>
+        <div class="changelog-body" data-en="First public release. Annual mean Heat Index for 2025 at four synoptic hours (00h, 09h, 15h, 21h local time). Remains available via product = \"synoptic_2025\" for backward compatibility. DOI: 10.5281/zenodo.20942619." data-pt="Primeiro lançamento público. IC médio anual de 2025 em quatro horários sinóticos (00h, 09h, 15h, 21h hora local). Permanece disponível via product = \"synoptic_2025\" para compatibilidade retroativa. DOI: 10.5281/zenodo.20942619.">First public release. Annual mean Heat Index for 2025 at four synoptic hours (00h, 09h, 15h, 21h local time). Remains available via product = "synoptic_2025" for backward compatibility. DOI: 10.5281/zenodo.20942619.</div>
+      </div>
+    </div>
   </div>
 </section>
 
 <footer>
-  <p>heatindexbr · DOI <a href="https://zenodo.org/records/20942619" target="_blank">10.5281/zenodo.20942619</a>
-    <a href="https://github.com/antcneto/heatindexbr" target="_blank">GitHub</a> · MIT License</p>
-  <p style="margin-top:0.5rem">Antônio Campos Neto · UFRN · 2025–2026</p>
+  <p>heatindexbr · DOI <a href="https://zenodo.org/records/21049066" target="_blank">10.5281/zenodo.21049066</a> · <a href="https://github.com/antcneto/heatindexbr" target="_blank">GitHub</a> · MIT License</p>
+  <p style="margin-top:0.5rem">Antônio Campos Neto · UFRN · 2025-2026</p>
 </footer>
 
 <script>
-const temps = [4, 22, 50, 2];
+const labels = ["Jan · 0h", "Abr · 9h", "Jul · 15h", "Out · 21h"];
+const temps  = [4, 22, 50, 2];
 let cur = 2;
 function tick() {
   document.querySelectorAll('.thour').forEach(el => el.classList.remove('on'));

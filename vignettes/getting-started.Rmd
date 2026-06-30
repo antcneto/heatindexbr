@@ -85,6 +85,15 @@ The `noaa_class` column uses the standard NOAA Heat Index thresholds:
 
 ## Downloading and plotting the raster
 
+> **First-use download:** the first call to `hi_download()` or
+> `hi_municipality(source = "raster")` downloads the full climatology stack
+> (~1.6 GB) from Zenodo. Depending on your connection speed, this can take
+> anywhere from a few minutes to about 30 minutes. This happens only once;
+> all subsequent calls read from the local cache and return instantly. If you
+> only need municipal-level statistics, use the default
+> `hi_municipality()` with `source = "table"` instead, which downloads a
+> 29 MB file and never touches the raster.
+
 `hi_download()` downloads the full 288-band climatology stack (~1 GB) on
 first use and caches it locally. Subsequent calls read from the cache and
 extract only the requested bands in memory.
@@ -101,7 +110,7 @@ r_stack <- hi_download()
 ```
 
 ```{r plot, eval=FALSE}
-hi_plot(r, title = "Heat Index — January, 15h local")
+hi_plot(r, title = "Heat Index, January, 15h local")
 ```
 
 > **Note on hours:** all hours are specified in local time (UTC-3). The

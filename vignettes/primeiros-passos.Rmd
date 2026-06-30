@@ -85,6 +85,15 @@ A coluna `noaa_class` usa os limiares oficiais da escala NOAA:
 
 ## Download e visualização do raster
 
+> **Download no primeiro uso:** a primeira chamada a `hi_download()` ou a
+> `hi_municipality(source = "raster")` baixa o stack climatológico completo
+> (~1,6 GB) do Zenodo. Dependendo da velocidade da sua conexão, isso pode
+> levar de alguns minutos a cerca de 30 minutos. Isso acontece apenas uma
+> vez; todas as chamadas seguintes leem do cache local e retornam
+> instantaneamente. Se você só precisa de estatísticas municipais, use o
+> padrão `hi_municipality()` com `source = "table"`, que baixa um arquivo
+> de 29 MB e nunca toca no raster.
+
 `hi_download()` baixa o stack climatológico de 288 bandas (~1 GB) na primeira
 chamada e armazena em cache local. Chamadas subsequentes leem do cache e
 extraem apenas as bandas solicitadas em memória.
@@ -101,7 +110,7 @@ r_stack <- hi_download()
 ```
 
 ```{r plot, eval=FALSE}
-hi_plot(r, title = "Índice de Calor — Janeiro, 15h local")
+hi_plot(r, title = "Índice de Calor, Janeiro, 15h local")
 ```
 
 > **Nota sobre horas:** todas as horas são especificadas em hora local
