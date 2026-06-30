@@ -127,7 +127,8 @@ footer a:hover { color: var(--sand); }
   <a href="#" class="nav-brand">heatindexbr</a>
   <div class="nav-links">
     <a href="articles/getting-started.html" data-en="Tutorial" data-pt="Tutorial">Tutorial</a>
-    <a href="articles/methodology.html" data-en="Methodology" data-pt="Metodologia">Methodology</a>
+    <a href="articles/methodology.html" data-en="Methodology" data-pt="Methodology (EN)">Methodology</a>
+    <a href="articles/metodologia.html" data-en="Metodologia (PT)" data-pt="Metodologia">Metodologia (PT)</a>
     <a href="reference/index.html" data-en="Reference" data-pt="Referência">Reference</a>
     <a href="#changelog" data-en="Changelog" data-pt="Changelog">Changelog</a>
     <a href="https://github.com/antcneto/heatindexbr" target="_blank">GitHub</a>
@@ -194,16 +195,26 @@ footer a:hover { color: var(--sand); }
     <p class="section-lead" data-en="Each of the 288 rasters represents the 2000-2025 mean Heat Index for one month and one UTC hour, giving a much more robust picture of typical thermal conditions than any single year could. The interpolation method varies by combination: KDE with altitude dominates at night, while ERA5-based covariates dominate during daytime hours, when synoptic forcing is stronger." data-pt="Cada um dos 288 rasters representa o IC médio de 2000-2025 para um mês e uma hora UTC, oferecendo um retrato muito mais robusto das condições térmicas típicas do que qualquer ano isolado. O método de interpolação varia por combinação: KDE com altitude domina à noite, enquanto covariáveis baseadas em ERA5 dominam durante o dia, quando a forçante sinótica é mais forte.">Each of the 288 rasters represents the 2000-2025 mean Heat Index for one month and one UTC hour, giving a much more robust picture of typical thermal conditions than any single year could. The interpolation method varies by combination: KDE with altitude dominates at night, while ERA5-based covariates dominate during daytime hours, when synoptic forcing is stronger.</p>
 
     <div class="map-tabs">
-      <button class="map-tab active" onclick="showMap(this,'methods')" data-en="Winning method by month × hour" data-pt="Método vencedor por mês × hora">Winning method by month × hour</button>
+      <button class="map-tab active" onclick="showMap(this,'icmap')" data-en="Heat Index map (v0.1.0 preview)" data-pt="Mapa do Índice de Calor (preview v0.1.0)">Heat Index map (v0.1.0 preview)</button>
+      <button class="map-tab" onclick="showMap(this,'methods')" data-en="Winning method by month × hour" data-pt="Método vencedor por mês × hora">Winning method by month × hour</button>
       <button class="map-tab" onclick="showMap(this,'merra2')" data-en="Consistency with MERRA-2" data-pt="Consistência com MERRA-2">Consistency with MERRA-2</button>
+      <button class="map-tab" onclick="showMap(this,'pipeline')" data-en="Methodology pipeline" data-pt="Pipeline metodológico">Methodology pipeline</button>
     </div>
-    <div class="map-panel active" id="map-methods">
+    <div class="map-panel active" id="map-icmap">
+      <img src="figures/figura_IC_15h.png" alt="Heat Index map at 15h, Brazilian Semiarid, 2025">
+      <p class="map-caption" data-en="Annual mean Heat Index at 15h, 2025 (v0.1.0 synoptic product). An equivalent map for the 2000-2025 climatology is planned for a future release." data-pt="IC médio anual às 15h, 2025 (produto sinótico v0.1.0). Um mapa equivalente para a climatologia 2000-2025 está planejado para uma versão futura.">Annual mean Heat Index at 15h, 2025 (v0.1.0 synoptic product). An equivalent map for the 2000-2025 climatology is planned for a future release.</p>
+    </div>
+    <div class="map-panel" id="map-methods">
       <img src="figures/heatmap_metodos_288h.png" alt="Winning interpolation method by month and local hour, Brazilian Semiarid 2000-2025">
       <p class="map-caption" data-en="Criterion: R² ≥ 0.70 + lowest RMSE. KDE with altitude dominates at night (blue); ERA5-based covariates dominate during the day (orange/red)." data-pt="Critério: R² ≥ 0,70 + menor RMSE. KDE com altitude domina à noite (azul); covariáveis com ERA5 dominam durante o dia (laranja/vermelho).">Criterion: R² ≥ 0.70 + lowest RMSE. KDE with altitude dominates at night (blue); ERA5-based covariates dominate during the day (orange/red).</p>
     </div>
     <div class="map-panel" id="map-merra2">
       <img src="figures/consistencia_merra2.png" alt="Consistency between predicted Heat Index and MERRA-2 reanalysis, upscaled to 55 km">
       <p class="map-caption" data-en="Predicted IC (1 km, upscaled to 55 km) vs MERRA-2 reanalysis (~55 km), independent of the interpolation model. R² = 0.813, Bias = -0.43°C." data-pt="IC predito (1 km, upscaled para 55 km) vs reanálise MERRA-2 (~55 km), independente do modelo de interpolação. R² = 0,813, Bias = -0,43°C.">Predicted IC (1 km, upscaled to 55 km) vs MERRA-2 reanalysis (~55 km), independent of the interpolation model. R² = 0.813, Bias = -0.43°C.</p>
+    </div>
+    <div class="map-panel" id="map-pipeline">
+      <img src="figures/fluxograma_metodologia.png" alt="Methodology pipeline flowchart: from station data to final products">
+      <p class="map-caption" data-en="Three parallel data sources converge into LOOCV validation, branch into two independent consistency checks, and produce three final products distributed via Zenodo." data-pt="Três fontes de dados em paralelo convergem para a validação LOOCV, se bifurcam em duas verificações de consistência independentes, e geram três produtos finais distribuídos via Zenodo.">Three parallel data sources converge into LOOCV validation, branch into two independent consistency checks, and produce three final products distributed via Zenodo.</p>
     </div>
   </div>
 </section>
@@ -269,6 +280,7 @@ r <span class="kw">&lt;-</span> <span class="fn">hi_download</span>(month = <spa
 <span class="cm"># Legacy 2025 synoptic product (v0.1.0)</span>
 <span class="fn">hi_download</span>(product = <span class="str">"synoptic_2025"</span>, hour_local = <span class="str">15</span>)</div>
     <p class="note" data-en="Hours are specified in local time (UTC-3) and converted automatically. Municipality names follow IBGE convention: uppercase without accents. Use hi_search() to find the correct name." data-pt="As horas são especificadas em hora local (UTC-3) e convertidas automaticamente. Nomes de municípios seguem o padrão IBGE: maiúsculas sem acentos. Use hi_search() para encontrar o nome correto.">Hours are specified in local time (UTC-3) and converted automatically. Municipality names follow IBGE convention: uppercase without accents. Use hi_search() to find the correct name.</p>
+    <p class="note" style="border-left-color: var(--heat); background: rgba(201,75,44,0.08)" data-en="First-use download: hi_download() and hi_municipality(source = 'raster') download the full 1.6 GB climatology stack on first call, which can take from a few minutes up to about 30 minutes depending on your connection. This happens only once; later calls read from the local cache instantly. If you only need municipal statistics, the default hi_municipality() reads a 29 MB table instead and never touches the raster." data-pt="Download no primeiro uso: hi_download() e hi_municipality(source = 'raster') baixam o stack climatológico completo de 1,6 GB na primeira chamada, o que pode levar de alguns minutos a até 30 minutos dependendo da sua conexão. Isso acontece apenas uma vez; chamadas posteriores leem do cache local instantaneamente. Se você só precisa de estatísticas municipais, o padrão hi_municipality() lê uma tabela de 29 MB e nunca toca no raster.">First-use download: hi_download() and hi_municipality(source = 'raster') download the full 1.6 GB climatology stack on first call, which can take from a few minutes up to about 30 minutes depending on your connection. This happens only once; later calls read from the local cache instantly. If you only need municipal statistics, the default hi_municipality() reads a 29 MB table instead and never touches the raster.</p>
   </div>
 </section>
 
