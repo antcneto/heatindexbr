@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">heatindexbr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,66 +69,68 @@
 <p><code>heatindexbr</code> provides spatially interpolated Heat Index
 (Rothfusz 1990) rasters at ~1 km resolution for the 1,477 municipalities
 of Brazil’s official Semiarid region (CONDEL/SUDENE Resolution
-176/2024). This vignette walks through the core workflow: search →
-download → extract → plot.</p>
+176/2024). The main product is a climatology for 2000-2025 covering all
+12 months and 24 local hours. This vignette walks through the core
+workflow: search, download, extract, and plot.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"antcneto/heatindexbr"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"antcneto/heatindexbr"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/antcneto/heatindexbr" class="external-link">heatindexbr</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="what-data-is-available">What data is available?<a class="anchor" aria-label="anchor" href="#what-data-is-available"></a>
 </h2>
-<p>Use <code><a href="../reference/hi_available.html">hi_available()</a></code> to see the years, resolutions, and
-synoptic hours currently distributed:</p>
+<p>Use <code><a href="../reference/hi_available.html">hi_available()</a></code> to see the products, temporal
+coverage, and available months and hours:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hi_available.html">hi_available</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Repository: <span style="color: #0000BB; font-style: italic;">&lt;https://doi.org/10.5281/zenodo.20942619&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use `hi_download()` to access available products.</span></span>
-<span><span class="co">#&gt;   year resolution                             hours         status</span></span>
-<span><span class="co">#&gt; 1 2025     annual                00h, 09h, 15h, 21h      available</span></span>
-<span><span class="co">#&gt; 2 2025    monthly      00h, 09h, 15h, 21h (Jan-Dec) in preparation</span></span>
-<span><span class="co">#&gt; 3 2025      daily 00h, 09h, 15h, 21h (all 365 days) in preparation</span></span>
-<span><span class="co">#&gt; 4 2025     hourly                         all hours in preparation</span></span></code></pre></div>
+<span><span class="co">#&gt;         product    period months  hours_local resolution n_files         format</span></span>
+<span><span class="co">#&gt; 1   climatology 2000-2025   1-12         0-23      ~1 km     288 raster / table</span></span>
+<span><span class="co">#&gt; 2 synoptic_2025      2025   &lt;NA&gt; 0, 9, 15, 21      ~1 km       4         raster</span></span>
+<span><span class="co">#&gt;      status</span></span>
+<span><span class="co">#&gt; 1 available</span></span>
+<span><span class="co">#&gt; 2 available</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="searching-for-municipalities">Searching for municipalities<a class="anchor" aria-label="anchor" href="#searching-for-municipalities"></a>
 </h2>
-<p>Municipality names in <code>heatindexbr</code> follow the IBGE
-convention: <strong>uppercase without accents</strong>. Use
-<code><a href="../reference/hi_search.html">hi_search()</a></code> to find the correct name:</p>
+<p>Municipality names follow the IBGE convention: <strong>uppercase
+without accents</strong>. Use <code><a href="../reference/hi_search.html">hi_search()</a></code> to find the
+correct name before calling other functions:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Case-insensitive partial match</span></span>
-<span><span class="fu"><a href="../reference/hi_search.html">hi_search</a></span><span class="op">(</span><span class="st">"Mossoro"</span>, state <span class="op">=</span> <span class="st">"RN"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/hi_search.html">hi_search</a></span><span class="op">(</span><span class="st">"Mossoro"</span>, state <span class="op">=</span> <span class="st">"RN"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     code_muni name_muni abbrev_state</span></span>
 <span><span class="co">#&gt; 500   2408003   MOSSORO           RN</span></span>
 <span><span class="fu"><a href="../reference/hi_search.html">hi_search</a></span><span class="op">(</span><span class="st">"Campina Grande"</span>, state <span class="op">=</span> <span class="st">"PB"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     code_muni      name_muni abbrev_state</span></span>
 <span><span class="co">#&gt; 904   2504009 CAMPINA GRANDE           PB</span></span></code></pre></div>
 <blockquote>
-<p><strong>Important:</strong> Always use the <code>name_muni</code>
-value returned by <code><a href="../reference/hi_search.html">hi_search()</a></code> when calling
-<code><a href="../reference/hi_municipality.html">hi_municipality()</a></code>. For example, <code>"MOSSORO"</code>, not
-<code>"Mossoró"</code>.</p>
+<p><strong>Note:</strong> always use the <code>name_muni</code> value
+returned by <code><a href="../reference/hi_search.html">hi_search()</a></code> in subsequent calls. For example,
+use <code>"MOSSORO"</code>, not <code>"Mossoró"</code>. This limitation
+follows the IBGE naming standard.</p>
 </blockquote>
 </div>
 <div class="section level2">
 <h2 id="extracting-heat-index-for-a-municipality">Extracting Heat Index for a municipality<a class="anchor" aria-label="anchor" href="#extracting-heat-index-for-a-municipality"></a>
 </h2>
-<p><code><a href="../reference/hi_municipality.html">hi_municipality()</a></code> downloads the raster (cached on first
-use), crops it to the municipality boundary, and returns summary
-statistics with NOAA classification:</p>
+<p><code><a href="../reference/hi_municipality.html">hi_municipality()</a></code> downloads the municipal table on first
+use (~29 MB, cached locally) and returns summary statistics with NOAA
+classification. No raster download is required for this operation.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_municipality.html">hi_municipality</a></span><span class="op">(</span><span class="st">"MOSSORO"</span>, state <span class="op">=</span> <span class="st">"RN"</span>, hour <span class="op">=</span> <span class="st">"15h"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_municipality.html">hi_municipality</a></span><span class="op">(</span><span class="st">"MOSSORO"</span>, state <span class="op">=</span> <span class="st">"RN"</span>,</span>
+<span>                          month <span class="op">=</span> <span class="fl">1</span>, hour_local <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
 <span><span class="va">result</span></span>
-<span><span class="co">#&gt;   code_muni name_muni abbrev_state     mean hour year resolution</span></span>
-<span><span class="co">#&gt; 1   2408003   MOSSORO           RN 34.22471  15h 2025     annual</span></span>
-<span><span class="co">#&gt;        noaa_class</span></span>
-<span><span class="co">#&gt; 1 Extreme caution</span></span></code></pre></div>
+<span><span class="co">#&gt;        code_muni name_muni abbrev_state month hour_local hour_utc  ic_mean</span></span>
+<span><span class="co">#&gt; 139411   2408003   Mossoró           RN     1         15       18 35.20274</span></span>
+<span><span class="co">#&gt;            ic_sd      noaa_class</span></span>
+<span><span class="co">#&gt; 139411 0.3763849 Extreme caution</span></span></code></pre></div>
+<p>To retrieve all months and hours for a municipality:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/hi_municipality.html">hi_municipality</a></span><span class="op">(</span><span class="st">"MOSSORO"</span>, state <span class="op">=</span> <span class="st">"RN"</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>noaa_class</code> column uses the standard NOAA Heat Index
 thresholds:</p>
 <table class="table">
@@ -145,17 +147,17 @@ thresholds:</p>
 </tr>
 <tr class="even">
 <td>Caution</td>
-<td>27–32°C</td>
+<td>27-32°C</td>
 <td>Fatigue with prolonged exposure</td>
 </tr>
 <tr class="odd">
 <td>Extreme caution</td>
-<td>32–41°C</td>
+<td>32-41°C</td>
 <td>Heat cramps or exhaustion possible</td>
 </tr>
 <tr class="even">
 <td>Danger</td>
-<td>41–54°C</td>
+<td>41-54°C</td>
 <td>Heat exhaustion likely</td>
 </tr>
 <tr class="odd">
@@ -165,74 +167,64 @@ thresholds:</p>
 </tr>
 </tbody>
 </table>
-<p>You can retrieve all four synoptic hours at once by leaving
-<code>hour = NULL</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/hi_municipality.html">hi_municipality</a></span><span class="op">(</span><span class="st">"MOSSORO"</span>, state <span class="op">=</span> <span class="st">"RN"</span>, hour <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="downloading-and-plotting-the-full-raster">Downloading and plotting the full raster<a class="anchor" aria-label="anchor" href="#downloading-and-plotting-the-full-raster"></a>
+<h2 id="downloading-and-plotting-the-raster">Downloading and plotting the raster<a class="anchor" aria-label="anchor" href="#downloading-and-plotting-the-raster"></a>
 </h2>
-<p><code><a href="../reference/hi_download.html">hi_download()</a></code> returns a <code>SpatRaster</code> (terra
-package). The raster is downloaded once and cached in your user data
-directory:</p>
+<p><code><a href="../reference/hi_download.html">hi_download()</a></code> downloads the full 288-band climatology
+stack (~1 GB) on first use and caches it locally. Subsequent calls read
+from the cache and extract only the requested bands in memory.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_download.html">hi_download</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2025</span>, hour <span class="op">=</span> <span class="st">"15h"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Using cached:</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">/Users/antcneto/Library/Caches/org.R-project.R/R/heatindexbr/IC_2025_annual_all.tif</span></span></span>
-<span><span class="va">r</span></span>
-<span><span class="co">#&gt; class       : SpatRaster </span></span>
-<span><span class="co">#&gt; size        : 1983, 1299, 1  (nrow, ncol, nlyr)</span></span>
-<span><span class="co">#&gt; resolution  : 999.7408, 999.9794  (x, y)</span></span>
-<span><span class="co">#&gt; extent      : 5799573, 7098237, 7714924, 9697883  (xmin, xmax, ymin, ymax)</span></span>
-<span><span class="co">#&gt; coord. ref. : SIRGAS 2000 / Brazil Polyconic (EPSG:5880) </span></span>
-<span><span class="co">#&gt; source      : IC_2025_annual_all.tif </span></span>
-<span><span class="co">#&gt; name        :   IC_15h </span></span>
-<span><span class="co">#&gt; min value   : 20.40742 </span></span>
-<span><span class="co">#&gt; max value   : 36.13178</span></span></code></pre></div>
-<p>Pass the raster directly to <code><a href="../reference/hi_plot.html">hi_plot()</a></code> for a ready-to-use
-map:</p>
+<code class="sourceCode R"><span><span class="co"># Single band: January at 15h local time</span></span>
+<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_download.html">hi_download</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fl">1</span>, hour_local <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># All hours for July (24-band raster)</span></span>
+<span><span class="va">r_july</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_download.html">hi_download</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Full 288-band stack</span></span>
+<span><span class="va">r_stack</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_download.html">hi_download</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/hi_plot.html">hi_plot</a></span><span class="op">(</span><span class="va">r</span>,</span>
-<span>        title <span class="op">=</span> <span class="st">"Annual mean Heat Index — 15h (2025)"</span>,</span>
-<span>        hour  <span class="op">=</span> <span class="st">"15h"</span>,</span>
-<span>        year  <span class="op">=</span> <span class="fl">2025</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">&lt;SpatRaster&gt;</span> resampled to <span style="color: #00BB00;">501000</span> cells.</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/plot-1.png" class="r-plt" alt="" width="672"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/hi_plot.html">hi_plot</a></span><span class="op">(</span><span class="va">r</span>, title <span class="op">=</span> <span class="st">"Heat Index — January, 15h local"</span><span class="op">)</span></span></code></pre></div>
+<blockquote>
+<p><strong>Note on hours:</strong> all hours are specified in local time
+(UTC-3). The conversion to UTC is handled internally. For example,
+<code>hour_local = 15</code> retrieves the band stored at 18h UTC.</p>
+</blockquote>
 </div>
 <div class="section level2">
 <h2 id="extracting-for-a-custom-polygon">Extracting for a custom polygon<a class="anchor" aria-label="anchor" href="#extracting-for-a-custom-polygon"></a>
 </h2>
-<p>If you have your own <code>sf</code> object (e.g. a watershed, a
-state boundary, or a study area), use <code><a href="../reference/hi_shape.html">hi_shape()</a></code>:</p>
+<p>Use <code><a href="../reference/hi_shape.html">hi_shape()</a></code> with any <code>sf</code> polygon
+object:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Example: using your own polygon</span></span>
 <span><span class="va">my_area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"my_area.gpkg"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_shape.html">hi_shape</a></span><span class="op">(</span><span class="va">my_area</span>, hour <span class="op">=</span> <span class="st">"15h"</span><span class="op">)</span></span>
-<span><span class="va">result</span><span class="op">$</span><span class="va">stats</span>   <span class="co"># data.frame with mean, min, max, noaa_class</span></span>
-<span><span class="va">result</span><span class="op">$</span><span class="va">raster</span>  <span class="co"># clipped SpatRaster</span></span></code></pre></div>
+<span><span class="va">result</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_shape.html">hi_shape</a></span><span class="op">(</span><span class="va">my_area</span>, month <span class="op">=</span> <span class="fl">1</span>, hour_local <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
+<span><span class="va">result</span><span class="op">$</span><span class="va">stats</span></span>
+<span><span class="va">result</span><span class="op">$</span><span class="va">raster</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="technical-note-on-the-raster">Technical note on the raster<a class="anchor" aria-label="anchor" href="#technical-note-on-the-raster"></a>
+<h2 id="working-with-the-2025-synoptic-product">Working with the 2025 synoptic product<a class="anchor" aria-label="anchor" href="#working-with-the-2025-synoptic-product"></a>
 </h2>
-<p>The underlying raster (<code>IC_2025_annual_all.tif</code>) is stored
-in <strong>EPSG:5880</strong> (SIRGAS 2000 / Brazil Polyconic) — the
-appropriate projected CRS for Brazil. Do not use the WGS84 version,
-which has a clipping artifact on the eastern boundary. See
-<code><a href="../articles/methodology.html">vignette("methodology")</a></code> for full details on the
-interpolation method.</p>
+<p>The original 2025 product (four synoptic hours, annual means) remains
+available via the <code>product</code> argument:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r_2025</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_download.html">hi_download</a></span><span class="op">(</span>product <span class="op">=</span> <span class="st">"synoptic_2025"</span>, hour_local <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/hi_municipality.html">hi_municipality</a></span><span class="op">(</span><span class="st">"MOSSORO"</span>, state <span class="op">=</span> <span class="st">"RN"</span>,</span>
+<span>                product <span class="op">=</span> <span class="st">"synoptic_2025"</span>, hour_local <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p>If you use <code>heatindexbr</code> in your research, please
-cite:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"heatindexbr"</span><span class="op">)</span></span></code></pre></div>
-<p>Or cite the Zenodo dataset directly:</p>
+<p>Climatology dataset (2000-2025):</p>
+<blockquote>
+<p>Campos Neto, A. (2026). <em>Heat Index climatology for the Brazilian
+Semiarid (2000-2025): 1 km rasters, municipal table, and population
+exposure data</em>. Zenodo. <a href="https://doi.org/10.5281/zenodo.21049066" class="external-link uri">https://doi.org/10.5281/zenodo.21049066</a></p>
+</blockquote>
+<p>Synoptic 2025 dataset:</p>
 <blockquote>
 <p>Campos Neto, A. (2025). <em>heatindexbr: Heat Index rasters for
 Brazil’s Semiarid region</em> (v0.1.0). Zenodo. <a href="https://doi.org/10.5281/zenodo.20942619" class="external-link uri">https://doi.org/10.5281/zenodo.20942619</a></p>
