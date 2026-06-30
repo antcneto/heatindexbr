@@ -88,7 +88,7 @@ The heatmap below shows which method wins for each of the 288 combinations,
 organized by month (columns) and local hour (rows, UTC-3).
 
 ```{r, echo=FALSE, out.width="100%"}
-knitr::include_graphics("../figures/heatmap_metodos_288h.png")
+knitr::include_graphics("heatmap_metodos_288h.png")
 ```
 
 A clear physical pattern emerges. At night (00h to 06h local time), **KDE:
@@ -134,7 +134,7 @@ reanalysis product, which is entirely independent of the interpolation model
 and the station data.
 
 ```{r, echo=FALSE, out.width="100%"}
-knitr::include_graphics("../figures/consistencia_merra2.png")
+knitr::include_graphics("consistencia_merra2.png")
 ```
 
 The comparison shows R² = 0.813 and Bias = -0.43°C. Because both products are
