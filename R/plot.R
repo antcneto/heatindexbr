@@ -20,7 +20,7 @@
 #' \dontrun{
 #' r <- hi_download(month = 1, hour_local = 15)
 #' hi_plot(r, title = "Heat Index, January 15h")
-#' hi_plot(r, title = "Ceara", subtitle = "Heat Index at 15h local time, January climatology 2000-2025")
+#' hi_plot(r, title = "Ceara", subtitle = "January climatology 2000-2025, 15h local")
 #' }
 #'
 #' @export

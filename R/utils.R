@@ -10,3 +10,8 @@
   )
 }
 
+
+#' @keywords internal
+.parse_hour <- function(h) {
+  if (is.character(h)) as.integer(gsub("[^0-9]", "", h)) else as.integer(h)
+}
