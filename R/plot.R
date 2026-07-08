@@ -61,7 +61,7 @@ hi_plot <- function(x,
     ggplot2::labs(
       title    = title,
       subtitle = subtitle,
-      caption  = "Source: INMET 2025 | ERA5-Land (ECMWF)\nheatindexbr package | Campos Neto (2026)"
+      caption  = "Source: INMET 2025, ERA5-Land (ECMWF). heatindexbr package. Campos Neto (2026)"
     ) +
     ggplot2::theme_minimal(base_size = 11) +
     ggplot2::theme(
