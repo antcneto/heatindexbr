@@ -4,15 +4,18 @@
 \alias{hi_plot}
 \title{Plot a Heat Index raster}
 \usage{
-hi_plot(x, title = "Heat Index", hour = "15h", palette = "continuous", ...)
+hi_plot(x, title = "Heat Index", subtitle = NULL, palette = "continuous", ...)
 }
 \arguments{
-\item{x}{A \code{SpatRaster} returned by \code{\link{hi_municipality}}
-(with \code{return_raster = TRUE}) or \code{\link{hi_shape}}.}
+\item{x}{A \code{SpatRaster} returned by \code{\link{hi_download}},
+\code{\link{hi_municipality}} (with \code{return_raster = TRUE}),
+or \code{\link{hi_shape}}.}
 
 \item{title}{Character. Map title. Defaults to \code{"Heat Index"}.}
 
-\item{hour}{Character. Hour label for subtitle (e.g. \code{"15h"}).}
+\item{subtitle}{Character or \code{NULL}. Map subtitle. If \code{NULL}
+(default), no subtitle is shown. Pass any string to display a custom
+subtitle below the title.}
 
 \item{palette}{Character. Color palette. One of \code{"continuous"}
 (default, yellow-orange-red) or \code{"noaa"} (NOAA classes).}
@@ -24,12 +27,13 @@ A \code{ggplot} object.
 }
 \description{
 Generates a standardized map of the Heat Index for a municipality or
-custom area, using the NOAA classification palette.
+custom area, using a continuous or NOAA classification palette.
 }
 \examples{
 \dontrun{
-res <- hi_municipality("Cabrobo", state="PE", return_raster=TRUE)
-hi_plot(res$raster, title="Cabrobo - PE")
+r <- hi_download(month = 1, hour_local = 15)
+hi_plot(r, title = "Heat Index, January 15h")
+hi_plot(r, title = "Ceara", subtitle = "January climatology 2000-2025, 15h local")
 }
 
 }
