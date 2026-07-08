@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>heatindexbr — Heat Index for Brazil's Semiarid</title>
+<title>heatindexbr | Heat Index for Brazil's Semiarid</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -134,8 +134,8 @@ footer a:hover { color: var(--sand); }
     <a href="https://github.com/antcneto/heatindexbr" target="_blank">GitHub</a>
     <span class="nav-badge">v0.2.0</span>
     <div style="display:flex;gap:4px;margin-left:8px">
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" id="btn-pt" onclick="setLang('pt')">PT</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn active" id="btn-pt" onclick="setLang('pt')">PT</button>
     </div>
   </div>
 </nav>
@@ -263,6 +263,7 @@ footer a:hover { color: var(--sand); }
       <div class="fn-card"><div class="fn-name">hi_search()</div><div class="fn-desc" data-en="Search for municipalities by name or state." data-pt="Busca municípios por nome ou UF.">Search for municipalities by name or state.</div></div>
       <div class="fn-card"><div class="fn-name">hi_plot()</div><div class="fn-desc" data-en="Plot a raster or municipality result as a ggplot map." data-pt="Plota raster ou resultado municipal como mapa ggplot.">Plot a raster or municipality result as a ggplot map.</div></div>
       <div class="fn-card"><div class="fn-name">hi_available()</div><div class="fn-desc" data-en="List available products, months, and hours." data-pt="Lista produtos, meses e horas disponíveis.">List available products, months, and hours.</div></div>
+      <div class="fn-card"><div class="fn-name">hi_exposure()</div><div class="fn-desc" data-en="Compute population exposure by NOAA class for any month and local hour." data-pt="Calcula exposição populacional por classe NOAA para qualquer mês e hora local.">Calcula exposição populacional por classe NOAA para qualquer mês e hora local.</div></div>
     </div>
     <div class="code-block">
 <span class="cm"># Install from GitHub</span>
@@ -324,6 +325,7 @@ function tick() {
   cur = (cur + 1) % 4;
 }
 tick(); setInterval(tick, 1800);
+setLang('pt');
 
 function showMap(btn, id) {
   document.querySelectorAll('.map-panel').forEach(p => p.classList.remove('active'));
@@ -332,7 +334,7 @@ function showMap(btn, id) {
   btn.classList.add('active');
 }
 
-let lang = 'en';
+let lang = 'pt';
 function setLang(l) {
   lang = l;
   document.getElementById('btn-en').classList.toggle('active', l === 'en');
