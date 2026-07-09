@@ -144,7 +144,7 @@ footer a:hover { color: var(--sand); }
     <div class="hero-layout">
       <div>
         <p class="hero-eyebrow">R package</p>
-        <h1 class="hero-title" data-en="Heat index climatology<br>for Brazil's Semiarid" data-pt="Climatologia do Índice de Calor<br>no Semiárido Brasileiro">Heat index climatology<br>for Brazil's Semiarid</h1>
+        <h1 class="hero-title" data-en="Heat index climatology<br>for Brazil's Semiarid" data-pt="Climatologia do Índice de Calor<br>no Semiárido Brasileiro">Climatologia do Índice de Calor<br>no Semiárido Brasileiro</h1>
         <p class="hero-subtitle" data-en="1,477 municipalities · 288 month×hour combinations · 2000-2025 · ~1 km resolution" data-pt="1.477 municípios · 288 combinações mês×hora · 2000-2025 · ~1 km de resolução">1.477 municípios · 288 combinações mês×hora · 2000-2025 · ~1 km de resolução</p>
         <p class="hero-desc" data-en="Spatially interpolated Heat Index (Rothfusz 1990) climatology for the official Brazilian Semiarid region (CONDEL/SUDENE Res. 176/2024). Covers 12 months × 24 hours (2000-2025) using kriging with external drift, with covariate selection validated per combination via leave-one-out cross-validation. Mean R² = 0.778, RMSE = 1.12°C across 288 combinations." data-pt="Climatologia do Índice de Calor (Rothfusz 1990) interpolada espacialmente para o Semiárido Brasileiro oficial (Res. CONDEL/SUDENE 176/2024). Cobre 12 meses × 24 horas (2000-2025) usando krigagem com deriva externa, com seleção de covariáveis validada por combinação via validação cruzada leave-one-out. R² médio = 0,778, RMSE = 1,12°C nas 288 combinações.">Climatologia do Índice de Calor (Rothfusz 1990) interpolada espacialmente para o Semiárido Brasileiro oficial (Res. CONDEL/SUDENE 176/2024). Cobre 12 meses × 24 horas (2000-2025) usando krigagem com deriva externa, com seleção de covariáveis validada por combinação via validação cruzada leave-one-out. R² médio = 0,778, RMSE = 1,12°C nas 288 combinações.</p>
         <div class="hero-badges">
@@ -340,7 +340,7 @@ function setLang(l) {
   document.getElementById('btn-pt').classList.toggle('active', l === 'pt');
   document.querySelectorAll('[data-en]').forEach(el => {
     const val = el.getAttribute('data-' + l);
-    if (val) el.innerHTML = val;
+    if (val !== null) el.innerHTML = val;
   });
 }
 </script>
