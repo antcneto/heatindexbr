@@ -61,6 +61,7 @@ reference:
     contents:
       - hi_municipality
       - hi_shape
+      - hi_exposure
   - title: "Search & explore"
     desc: "Find municipalities and visualize results."
     contents:
