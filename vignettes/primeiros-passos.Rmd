@@ -129,6 +129,31 @@ resultado$stats
 resultado$raster
 ```
 
+## Exposição populacional por classe NOAA
+
+`hi_exposure()` calcula a população exposta a cada classe NOAA do Índice de
+Calor para um dado mês e hora local. Lê a tabela municipal pré-computada com
+dados populacionais dos Censos IBGE de 2000, 2010 e 2022 (~35 MB, em cache
+após o primeiro uso).
+
+```{r exposure, eval=FALSE}
+# Exposição total do Semiárido em janeiro às 15h local
+hi_exposure(month = 1, hour_local = 15, by = "semiarid")
+
+# Por estado
+hi_exposure(month = 1, hour_local = 15, by = "state")
+
+# Por município (padrão)
+hi_exposure(month = 7, hour_local = 12, by = "municipality")
+
+# Usando pesos populacionais do censo de 2000
+hi_exposure(month = 1, hour_local = 15, census_year = 2000, by = "semiarid")
+```
+
+Convenção de ano de censo: use `census_year = 2000` para análises de
+2000-2009, `census_year = 2010` para 2010-2021, e `census_year = 2022`
+(padrão) para 2022 em diante.
+
 ## Produto sinótico de 2025
 
 O produto original de 2025 (quatro horários sinóticos, médias anuais)

@@ -129,6 +129,31 @@ result$stats
 result$raster
 ```
 
+## Population exposure by NOAA class
+
+`hi_exposure()` computes the population exposed to each NOAA Heat Index class
+for a given month and local hour. It reads the pre-computed municipal table
+with 2000, 2010, and 2022 IBGE Census population data (~35 MB, cached on
+first use).
+
+```{r exposure, eval=FALSE}
+# Total Semiarid exposure in January at 15h local time
+hi_exposure(month = 1, hour_local = 15, by = "semiarid")
+
+# By state
+hi_exposure(month = 1, hour_local = 15, by = "state")
+
+# By municipality (default)
+hi_exposure(month = 7, hour_local = 12, by = "municipality")
+
+# Using 2000 census weights
+hi_exposure(month = 1, hour_local = 15, census_year = 2000, by = "semiarid")
+```
+
+The census year convention: use `census_year = 2000` for analyses covering
+2000-2009, `census_year = 2010` for 2010-2021, and `census_year = 2022`
+(default) for 2022 onward.
+
 ## Working with the 2025 synoptic product
 
 The original 2025 product (four synoptic hours, annual means) remains

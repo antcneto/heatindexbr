@@ -217,11 +217,35 @@ object:</p>
 <span><span class="va">result</span><span class="op">$</span><span class="va">raster</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="population-exposure-by-noaa-class">Population exposure by NOAA class<a class="anchor" aria-label="anchor" href="#population-exposure-by-noaa-class"></a>
+</h2>
+<p><code><a href="../reference/hi_exposure.html">hi_exposure()</a></code> computes the population exposed to each
+NOAA Heat Index class for a given month and local hour. It reads the
+pre-computed municipal table with 2000, 2010, and 2022 IBGE Census
+population data (~35 MB, cached on first use).</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Total Semiarid exposure in January at 15h local time</span></span>
+<span><span class="fu"><a href="../reference/hi_exposure.html">hi_exposure</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fl">1</span>, hour_local <span class="op">=</span> <span class="fl">15</span>, by <span class="op">=</span> <span class="st">"semiarid"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># By state</span></span>
+<span><span class="fu"><a href="../reference/hi_exposure.html">hi_exposure</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fl">1</span>, hour_local <span class="op">=</span> <span class="fl">15</span>, by <span class="op">=</span> <span class="st">"state"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># By municipality (default)</span></span>
+<span><span class="fu"><a href="../reference/hi_exposure.html">hi_exposure</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fl">7</span>, hour_local <span class="op">=</span> <span class="fl">12</span>, by <span class="op">=</span> <span class="st">"municipality"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Using 2000 census weights</span></span>
+<span><span class="fu"><a href="../reference/hi_exposure.html">hi_exposure</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fl">1</span>, hour_local <span class="op">=</span> <span class="fl">15</span>, census_year <span class="op">=</span> <span class="fl">2000</span>, by <span class="op">=</span> <span class="st">"semiarid"</span><span class="op">)</span></span></code></pre></div>
+<p>The census year convention: use <code>census_year = 2000</code> for
+analyses covering 2000-2009, <code>census_year = 2010</code> for
+2010-2021, and <code>census_year = 2022</code> (default) for 2022
+onward.</p>
+</div>
+<div class="section level2">
 <h2 id="working-with-the-2025-synoptic-product">Working with the 2025 synoptic product<a class="anchor" aria-label="anchor" href="#working-with-the-2025-synoptic-product"></a>
 </h2>
 <p>The original 2025 product (four synoptic hours, annual means) remains
 available via the <code>product</code> argument:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r_2025</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hi_download.html">hi_download</a></span><span class="op">(</span>product <span class="op">=</span> <span class="st">"synoptic_2025"</span>, hour_local <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/hi_municipality.html">hi_municipality</a></span><span class="op">(</span><span class="st">"MOSSORO"</span>, state <span class="op">=</span> <span class="st">"RN"</span>,</span>
 <span>                product <span class="op">=</span> <span class="st">"synoptic_2025"</span>, hour_local <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
@@ -229,7 +253,7 @@ available via the <code>product</code> argument:</p>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"heatindexbr"</span><span class="op">)</span></span></code></pre></div>
 <p>Climatology dataset (2000-2025):</p>
 <blockquote>
