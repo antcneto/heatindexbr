@@ -1,9 +1,10 @@
 Package: heatindexbr
 Title: Heat Index Mapping for the Brazilian Semiarid Region
 Version: 0.2.0
+Date: 2026-07-09
 Authors@R:
     person("Antônio", "Campos Neto",
-           email = "antonio.camposneto9@gmail.com",
+           email = "antoniocamposneto9@gmail.com",
            role = c("aut", "cre"),
            comment = c(ORCID = "https://orcid.org/0009-0007-3844-3869"))
 Description: Provides spatially interpolated Heat Index (Rothfusz 1990)
