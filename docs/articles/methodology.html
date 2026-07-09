@@ -16,7 +16,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">heatindexbr</a>
 
@@ -29,21 +29,22 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting-started.html">Getting started with heatindexbr</a></li>
-    <li><a class="dropdown-item" href="../articles/methodology.html">Methodology: why trust the raster?</a></li>
-    <li><a class="dropdown-item" href="../articles/primeiros-passos.html">Primeiros passos com o heatindexbr</a></li>
+<li><a class="dropdown-item" href="../articles/getting-started.html">Getting started (EN)</a></li>
+    <li><a class="dropdown-item" href="../articles/primeiros-passos.html">Primeiros passos (PT)</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/methodology.html">Methodology (EN)</a></li>
+    <li><a class="dropdown-item" href="../articles/metodologia.html">Metodologia (PT)</a></li>
   </ul>
 </li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
-</form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/antcneto/heatindexbr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/antcneto/heatindexbr"><span class="fa fa-github"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://zenodo.org/records/21049066">DOI</a></li>
       </ul>
 </div>
 
@@ -72,6 +73,19 @@ goal is to give users enough information to assess the data’s fitness
 for their specific use case. The original 2025 synoptic product (v0.1.0)
 remains documented at the end of this article for reference.</p>
 <hr>
+<div class="section level2">
+<h2 id="pipeline-overview">Pipeline overview<a class="anchor" aria-label="anchor" href="#pipeline-overview"></a>
+</h2>
+<p><img src="fluxograma_metodologia.png" class="r-plt" alt="" width="100%"></p>
+<p>Three independent data sources (INMET stations, ERA5-Land, and static
+covariates) are processed in parallel and converge into the LOOCV
+validation step. From there, the validated product branches into two
+independent consistency checks before being packaged into three final
+products: the raster stack, the municipal table, and the population
+exposure dataset, all distributed via Zenodo and the
+<code>heatindexbr</code> package.</p>
+<hr>
+</div>
 <div class="section level2">
 <h2 id="the-heat-index">The Heat Index<a class="anchor" aria-label="anchor" href="#the-heat-index"></a>
 </h2>
@@ -162,22 +176,22 @@ lowest RMSE among methods meeting that threshold. Four KDE variants
 compete across the 288 combinations:</p>
 <ul>
 <li>
-<strong>KDE: Altitude</strong> — altitude alone as external
+<strong>KDE: Altitude</strong>: altitude alone as external
 drift.</li>
 <li>
-<strong>KDE: Alt + UR ERA5</strong> — altitude plus relative
-humidity and ERA5-Land T2m.</li>
-<li>
-<strong>KDE: Alt + T ERA5</strong> — altitude plus air temperature
+<strong>KDE: Alt + UR ERA5</strong>: altitude plus relative humidity
 and ERA5-Land T2m.</li>
 <li>
-<strong>KDE: Alt + T + UR ERA5</strong> — the full covariate
+<strong>KDE: Alt + T ERA5</strong>: altitude plus air temperature
+and ERA5-Land T2m.</li>
+<li>
+<strong>KDE: Alt + T + UR ERA5</strong>: the full covariate
 set.</li>
 </ul>
 <p>The heatmap below shows which method wins for each of the 288
 combinations, organized by month (columns) and local hour (rows,
 UTC-3).</p>
-<p><img src="heatmap_metodos_288h.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="../figures/heatmap_metodos_288h.png" class="r-plt" alt="" width="100%"></p>
 <p>A clear physical pattern emerges. At night (00h to 06h local time),
 <strong>KDE: Altitude</strong> alone wins almost everywhere: synoptic
 atmospheric forcing is weak overnight, and local relief becomes the
@@ -241,7 +255,7 @@ INMET station network used to build it, predicted Heat Index values were
 upscaled from 1 km to approximately 55 km and compared against NASA’s
 MERRA-2 reanalysis product, which is entirely independent of the
 interpolation model and the station data.</p>
-<p><img src="consistencia_merra2.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="../figures/consistencia_merra2.png" class="r-plt" alt="" width="100%"></p>
 <p>The comparison shows R² = 0.813 and Bias = -0.43°C. Because both
 products are models rather than direct ground truth, RMSE and MAE are
 not reported here; metrics that assume one side is the “true” value are
@@ -372,11 +386,11 @@ Desenvolvimento do Nordeste, Recife, 2024. Disponível em: <a href="https://www.
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Antônio Campos Neto.</p>
+  <p>Developed by Antônio Campos Neto. Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>heatindexbr</p>
 </div>
 
     </footer>
