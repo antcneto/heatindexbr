@@ -38,8 +38,8 @@ nav {
 .breadcrumb a { color: var(--heat); text-decoration: none; }
 .page-title { font-family: var(--serif); font-size: clamp(26px, 4vw, 40px); color: var(--text); margin-bottom: 0.5rem; }
 .page-subtitle { font-size: 14px; color: var(--muted); }
-.layout { display: grid; grid-template-columns: 180px 1fr; gap: 2rem; max-width: 1060px; margin: 0 auto; padding: 2.5rem 2rem 4rem; align-items: start; }
-.toc { position: sticky; top: 68px; height: fit-content; max-height: calc(100vh - 80px); overflow-y: auto; }
+.layout { display: grid; grid-template-columns: 200px 1fr; gap: 3rem; max-width: 1060px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+.toc { position: sticky; top: 68px; height: fit-content; }
 .toc-title { font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
 .toc a { display: block; font-size: 12.5px; color: var(--muted); text-decoration: none; padding: 4px 0; border-left: 2px solid var(--border); padding-left: 10px; transition: all 0.15s; }
 .toc a:hover, .toc a.active { color: var(--heat); border-left-color: var(--heat); }
@@ -73,10 +73,10 @@ footer a { color: rgba(245,240,232,0.7); text-decoration: none; }
 <nav>
   <a href="index.html" class="nav-brand">heatindexbr</a>
   <div class="nav-links">
-    <a href="tutorial.html" class="active" data-en="Tutorial" data-pt="Tutorial">TutorialTutorial
-    <a href="methodology.html" data-en="Methodology" data-pt="Metodologia">MetodologiaMetodologia
-    <a href="funcoes.html" data-en="Functions" data-pt="Funções">FunçõesFunções
-    <a href="index.html#changelog" data-en="Changelog" data-pt="Changelog">ChangelogChangelog
+    <a href="tutorial.html" class="active" data-en="Tutorial" data-pt="Tutorial">Tutorial</a>
+    <a href="methodology.html" data-en="Methodology" data-pt="Metodologia">Metodologia</a>
+    <a href="funcoes.html" data-en="Functions" data-pt="Funções">Funções</a>
+    <a href="index.html#changelog" data-en="Changelog" data-pt="Changelog">Changelog</a>
     <a href="https://github.com/antcneto/heatindexbr" target="_blank">GitHub</a>
     <span class="nav-badge">v0.2.0</span>
     <div style="display:flex;gap:4px;margin-left:8px">
@@ -88,29 +88,29 @@ footer a { color: rgba(245,240,232,0.7); text-decoration: none; }
 
 <div class="page-header">
   <div class="page-header-inner">
-    <p class="breadcrumb"><a href="index.html">heatindexbr</a> / <span data-en="Tutorial" data-pt="Tutorial">TutorialTutorial</p>
-    <h1 class="page-title" data-en="Getting started with heatindexbr" data-pt="Primeiros passos com o heatindexbr">Primeiros passos com o heatindexbrPrimeiros passos com o heatindexbr
-    <p class="page-subtitle" data-en="Search, download, extract, and visualize Heat Index data for the Brazilian Semiarid." data-pt="Busque, baixe, extraia e visualize dados de Índice de Calor para o Semiárido Brasileiro.">Busque, baixe, extraia e visualize dados de Índice de Calor para o Semiárido Brasileiro.Busque, baixe, extraia e visualize dados de Índice de Calor para o Semiárido Brasileiro.
+    <p class="breadcrumb"><a href="index.html">heatindexbr</a> / <span data-en="Tutorial" data-pt="Tutorial">Tutorial</span></p>
+    <h1 class="page-title" data-en="Getting started with heatindexbr" data-pt="Primeiros passos com o heatindexbr">Primeiros passos com o heatindexbr</h1>
+    <p class="page-subtitle" data-en="Search, download, extract, and visualize Heat Index data for the Brazilian Semiarid." data-pt="Busque, baixe, extraia e visualize dados de Índice de Calor para o Semiárido Brasileiro.">Busque, baixe, extraia e visualize dados de Índice de Calor para o Semiárido Brasileiro.</p>
   </div>
 </div>
 
 <div class="layout">
   <nav class="toc">
-    <p class="toc-title" data-en="On this page" data-pt="Nesta página">Nesta páginaNesta página
-    <a href="#install" data-en="Installation" data-pt="Instalação">InstalaçãoInstalação
-    <a href="#available" data-en="Available data" data-pt="Dados disponíveis">Dados disponíveisDados disponíveis
-    <a href="#search" data-en="Search municipalities" data-pt="Buscar municípios">Buscar municípiosBuscar municípios
-    <a href="#municipality" data-en="Extract by municipality" data-pt="Extrair por município">Extrair por municípioExtrair por município
-    <a href="#download" data-en="Download raster" data-pt="Baixar raster">Baixar rasterBaixar raster
-    <a href="#shape" data-en="Custom polygon" data-pt="Polígono personalizado">Polígono personalizadoPolígono personalizado
-    <a href="#exposure" data-en="Population exposure" data-pt="Exposição populacional">Exposição populacionalExposição populacional
-    <a href="#synoptic" data-en="Synoptic 2025 (v0.1.0)" data-pt="Sinótico 2025 (v0.1.0)">Sinótico 2025 (v0.1.0)Sinótico 2025 (v0.1.0)
-    <a href="#citation" data-en="Citation" data-pt="Como citar">Como citarComo citar
+    <p class="toc-title" data-en="On this page" data-pt="Nesta página">Nesta página</p>
+    <a href="#install" data-en="Installation" data-pt="Instalação">Instalação</a>
+    <a href="#available" data-en="Available data" data-pt="Dados disponíveis">Dados disponíveis</a>
+    <a href="#search" data-en="Search municipalities" data-pt="Buscar municípios">Buscar municípios</a>
+    <a href="#municipality" data-en="Extract by municipality" data-pt="Extrair por município">Extrair por município</a>
+    <a href="#download" data-en="Download raster" data-pt="Baixar raster">Baixar raster</a>
+    <a href="#shape" data-en="Custom polygon" data-pt="Polígono personalizado">Polígono personalizado</a>
+    <a href="#exposure" data-en="Population exposure" data-pt="Exposição populacional">Exposição populacional</a>
+    <a href="#synoptic" data-en="Synoptic 2025 (v0.1.0)" data-pt="Sinótico 2025 (v0.1.0)">Sinótico 2025 (v0.1.0)</a>
+    <a href="#citation" data-en="Citation" data-pt="Como citar">Como citar</a>
   </nav>
 
   <div class="body-wrap">
 
-    <h2 id="install" data-en="Installation" data-pt="Instalação">InstalaçãoInstalação
+    <h2 id="install" data-en="Installation" data-pt="Instalação">Instalação</h2>
     <div class="code-block">
 <span class="cm"># Instale pelo GitHub</span>
 <span class="cm"># install.packages("remotes")</span>
@@ -118,25 +118,25 @@ footer a { color: rgba(245,240,232,0.7); text-decoration: none; }
 
 <span class="kw">library</span>(<span class="str">heatindexbr</span>)</div>
 
-    <h2 id="available" data-en="Available data" data-pt="Dados disponíveis">Dados disponíveisDados disponíveis
+    <h2 id="available" data-en="Available data" data-pt="Dados disponíveis">Dados disponíveis</h2>
     <p data-en="Use hi_available() to see the products, temporal coverage, and available months and hours:" data-pt="Use hi_available() para ver os produtos, cobertura temporal e horas disponíveis:">Use <code>hi_available()</code> para ver os produtos, cobertura temporal e horas disponíveis:</p>
     <div class="code-block"><span class="fn">hi_available</span>()</div>
     <table>
-      <thead><tr><th data-en="Product" data-pt="Produto">ProdutoProduto<th data-en="Period" data-pt="Período">PeríodoPeríodo<th data-en="Months" data-pt="Meses">MesesMeses<th data-en="Hours (local)" data-pt="Horas (local)">Horas (local)Horas (local)</tr></thead>
+      <thead><tr><th data-en="Product" data-pt="Produto">Produto</th><th data-en="Period" data-pt="Período">Período</th><th data-en="Months" data-pt="Meses">Meses</th><th data-en="Hours (local)" data-pt="Horas (local)">Horas (local)</th></tr></thead>
       <tbody>
         <tr><td><code>climatology</code></td><td>2000-2025</td><td>1-12</td><td>0-23</td></tr>
-        <tr><td><code>synoptic_2025</code></td><td>2025</td><td data-en="Annual mean" data-pt="Média anual">Média anualMédia anual<td>0, 9, 15, 21</td></tr>
+        <tr><td><code>synoptic_2025</code></td><td>2025</td><td data-en="Annual mean" data-pt="Média anual">Média anual</td><td>0, 9, 15, 21</td></tr>
       </tbody>
     </table>
 
-    <h2 id="search" data-en="Searching for municipalities" data-pt="Busca de municípios">Busca de municípiosBusca de municípios
+    <h2 id="search" data-en="Searching for municipalities" data-pt="Busca de municípios">Busca de municípios</h2>
     <p data-en="Municipality names follow the IBGE convention: uppercase without accents. Use hi_search() to find the correct name:" data-pt="Os nomes de municípios seguem o padrão IBGE: maiúsculas sem acentos. Use hi_search() para encontrar o nome correto:">Os nomes de municípios seguem o padrão IBGE: maiúsculas sem acentos. Use <code>hi_search()</code> para encontrar o nome correto:</p>
     <div class="code-block">
 <span class="fn">hi_search</span>(<span class="str">"Mossoro"</span>, state = <span class="str">"RN"</span>)
 <span class="fn">hi_search</span>(<span class="str">"Campina Grande"</span>, state = <span class="str">"PB"</span>)</div>
     <div class="note-box" data-en="Always use the name_muni value returned by hi_search() in subsequent calls. For example, use MOSSORO, not Mossoró. This follows the IBGE naming standard." data-pt="Use sempre o valor da coluna name_muni retornado por hi_search() nas chamadas seguintes. Por exemplo, use MOSSORO, não Mossoró. Isso segue o padrão de nomenclatura do IBGE.">Use sempre o valor da coluna <code>name_muni</code> retornado por <code>hi_search()</code> nas chamadas seguintes. Por exemplo, use <code>MOSSORO</code>, não <code>Mossoró</code>. Isso segue o padrão de nomenclatura do IBGE.</div>
 
-    <h2 id="municipality" data-en="Extracting Heat Index for a municipality" data-pt="Extração do Índice de Calor por município">Extração do Índice de Calor por municípioExtração do Índice de Calor por município
+    <h2 id="municipality" data-en="Extracting Heat Index for a municipality" data-pt="Extração do Índice de Calor por município">Extração do Índice de Calor por município</h2>
     <p data-en="hi_municipality() downloads the municipal table on first use (~29 MB, cached locally) and returns summary statistics with NOAA classification. No raster download is required." data-pt="hi_municipality() baixa a tabela municipal na primeira chamada (~29 MB, armazenada em cache) e retorna estatísticas com classificação NOAA. Nenhum download de raster é necessário."><code>hi_municipality()</code> baixa a tabela municipal na primeira chamada (~29 MB, armazenada em cache) e retorna estatísticas com classificação NOAA. Nenhum download de raster é necessário.</p>
     <div class="code-block">
 <span class="cm"># Janeiro às 15h hora local</span>
@@ -145,19 +145,19 @@ footer a { color: rgba(245,240,232,0.7); text-decoration: none; }
 <span class="cm"># Todos os meses e horas</span>
 <span class="fn">hi_municipality</span>(<span class="str">"MOSSORO"</span>, state = <span class="str">"RN"</span>)</div>
 
-    <h3 data-en="NOAA classification thresholds" data-pt="Limiares da classificação NOAA">Limiares da classificação NOAALimiares da classificação NOAA
+    <h3 data-en="NOAA classification thresholds" data-pt="Limiares da classificação NOAA">Limiares da classificação NOAA</h3>
     <table>
-      <thead><tr><th data-en="Class" data-pt="Classe">ClasseClasse<th>IC</th><th data-en="Risk" data-pt="Risco">RiscoRisco</tr></thead>
+      <thead><tr><th data-en="Class" data-pt="Classe">Classe</th><th>IC</th><th data-en="Risk" data-pt="Risco">Risco</th></tr></thead>
       <tbody>
-        <tr><td data-en="No caution" data-pt="Sem cautela">Sem cautelaSem cautela<td data-en="below 27°C" data-pt="abaixo de 27°C">abaixo de 27°Cabaixo de 27°C<td data-en="Low" data-pt="Baixo">BaixoBaixo</tr>
-        <tr><td data-en="Caution" data-pt="Cautela">CautelaCautela<td>27-32°C</td><td data-en="Fatigue with prolonged exposure" data-pt="Fadiga com exposição prolongada">Fadiga com exposição prolongadaFadiga com exposição prolongada</tr>
-        <tr><td data-en="Extreme caution" data-pt="Cautela extrema">Cautela extremaCautela extrema<td>32-41°C</td><td data-en="Heat cramps or exhaustion possible" data-pt="Cãibras ou exaustão possíveis">Cãibras ou exaustão possíveisCãibras ou exaustão possíveis</tr>
-        <tr><td data-en="Danger" data-pt="Perigo">PerigoPerigo<td>41-54°C</td><td data-en="Heat exhaustion likely" data-pt="Exaustão por calor provável">Exaustão por calor provávelExaustão por calor provável</tr>
-        <tr><td data-en="Extreme danger" data-pt="Perigo extremo">Perigo extremoPerigo extremo<td data-en="above 54°C" data-pt="acima de 54°C">acima de 54°Cacima de 54°C<td data-en="Heat stroke imminent" data-pt="Insolação iminente">Insolação iminenteInsolação iminente</tr>
+        <tr><td data-en="No caution" data-pt="Sem cautela">Sem cautela</td><td data-en="below 27°C" data-pt="abaixo de 27°C">abaixo de 27°C</td><td data-en="Low" data-pt="Baixo">Baixo</td></tr>
+        <tr><td data-en="Caution" data-pt="Cautela">Cautela</td><td>27-32°C</td><td data-en="Fatigue with prolonged exposure" data-pt="Fadiga com exposição prolongada">Fadiga com exposição prolongada</td></tr>
+        <tr><td data-en="Extreme caution" data-pt="Cautela extrema">Cautela extrema</td><td>32-41°C</td><td data-en="Heat cramps or exhaustion possible" data-pt="Cãibras ou exaustão possíveis">Cãibras ou exaustão possíveis</td></tr>
+        <tr><td data-en="Danger" data-pt="Perigo">Perigo</td><td>41-54°C</td><td data-en="Heat exhaustion likely" data-pt="Exaustão por calor provável">Exaustão por calor provável</td></tr>
+        <tr><td data-en="Extreme danger" data-pt="Perigo extremo">Perigo extremo</td><td data-en="above 54°C" data-pt="acima de 54°C">acima de 54°C</td><td data-en="Heat stroke imminent" data-pt="Insolação iminente">Insolação iminente</td></tr>
       </tbody>
     </table>
 
-    <h2 id="download" data-en="Downloading and plotting the raster" data-pt="Download e visualização do raster">Download e visualização do rasterDownload e visualização do raster
+    <h2 id="download" data-en="Downloading and plotting the raster" data-pt="Download e visualização do raster">Download e visualização do raster</h2>
     <div class="note-box warn" data-en="First-use download: hi_download() downloads the full climatology stack (~1.6 GB) from Zenodo on the first call. Depending on your connection, this can take from a few minutes to about 30 minutes. This happens only once; all subsequent calls read from the local cache instantly. If you only need municipal statistics, use hi_municipality() with source = 'table' instead, which downloads a 29 MB file and never touches the raster." data-pt="Download no primeiro uso: hi_download() baixa o stack completo de médias climatológicas (~1,6 GB) do Zenodo na primeira chamada. Dependendo da sua conexão, isso pode levar de alguns minutos a até 30 minutos. Isso acontece apenas uma vez; todas as chamadas seguintes leem do cache local instantaneamente. Se você só precisa de estatísticas municipais, use hi_municipality() com source = 'table', que baixa um arquivo de 29 MB e nunca toca no raster.">Download no primeiro uso: <code>hi_download()</code> baixa o stack completo de médias climatológicas (~1,6 GB) do Zenodo na primeira chamada. Dependendo da sua conexão, isso pode levar de alguns minutos a até 30 minutos. Isso acontece apenas uma vez; todas as chamadas seguintes leem do cache local instantaneamente. Se você só precisa de estatísticas municipais, use <code>hi_municipality()</code> com <code>source = 'table'</code>, que baixa um arquivo de 29 MB e nunca toca no raster.</div>
     <div class="code-block">
 <span class="cm"># Banda única: janeiro às 15h local</span>
@@ -173,7 +173,7 @@ r_stack <span class="kw">&lt;-</span> <span class="fn">hi_download</span>()
 <span class="fn">hi_plot</span>(r, title = <span class="str">"Índice de Calor, Janeiro, 15h local"</span>)</div>
     <p data-en="Hours are specified in local time (UTC-3) and converted to UTC automatically. For example, hour_local = 15 retrieves the band stored at 18h UTC." data-pt="As horas são especificadas em hora local (UTC-3) e convertidas para UTC automaticamente. Por exemplo, hour_local = 15 recupera a banda armazenada às 18h UTC.">As horas são especificadas em hora local (UTC-3) e convertidas para UTC automaticamente. Por exemplo, <code>hour_local = 15</code> recupera a banda armazenada às 18h UTC.</p>
 
-    <h2 id="shape" data-en="Extracting for a custom polygon" data-pt="Extração para polígono personalizado">Extração para polígono personalizadoExtração para polígono personalizado
+    <h2 id="shape" data-en="Extracting for a custom polygon" data-pt="Extração para polígono personalizado">Extração para polígono personalizado</h2>
     <p data-en="Use hi_shape() with any sf object:" data-pt="Use hi_shape() com qualquer objeto sf:">Use <code>hi_shape()</code> com qualquer objeto <code>sf</code>:</p>
     <div class="code-block">
 <span class="kw">library</span>(<span class="str">sf</span>)
@@ -183,7 +183,7 @@ resultado <span class="kw">&lt;-</span> <span class="fn">hi_shape</span>(minha_a
 resultado$stats   <span class="cm"># data.frame com media, min, max, noaa_class</span>
 resultado$raster  <span class="cm"># SpatRaster recortado</span></div>
 
-    <h2 id="exposure" data-en="Population exposure by NOAA class" data-pt="Exposição populacional por classe NOAA">Exposição populacional por classe NOAAExposição populacional por classe NOAA
+    <h2 id="exposure" data-en="Population exposure by NOAA class" data-pt="Exposição populacional por classe NOAA">Exposição populacional por classe NOAA</h2>
     <p data-en="hi_exposure() computes the population exposed to each NOAA Heat Index class for a given month and local hour. It downloads the municipal table with 2000, 2010, and 2022 IBGE Census population data (~35 MB, cached on first use)." data-pt="hi_exposure() calcula a população exposta a cada classe NOAA do Índice de Calor para um dado mês e hora local. Baixa a tabela municipal com dados populacionais dos Censos IBGE de 2000, 2010 e 2022 (~35 MB, em cache após o primeiro uso)."><code>hi_exposure()</code> calcula a população exposta a cada classe NOAA do Índice de Calor para um dado mês e hora local. Baixa a tabela municipal com dados populacionais dos Censos IBGE de 2000, 2010 e 2022 (~35 MB, em cache após o primeiro uso).</p>
     <div class="code-block">
 <span class="cm"># Total do Semiárido em janeiro às 15h</span>
@@ -198,29 +198,29 @@ resultado$raster  <span class="cm"># SpatRaster recortado</span></div>
 <span class="cm"># Usando pesos do Censo 2000</span>
 <span class="fn">hi_exposure</span>(month = <span class="str">1</span>, hour_local = <span class="str">15</span>, census_year = <span class="str">2000</span>, by = <span class="str">"semiarid"</span>)</div>
 
-    <h3 data-en="Census year convention" data-pt="Convenção de ano de censo">Convenção de ano de censoConvenção de ano de censo
+    <h3 data-en="Census year convention" data-pt="Convenção de ano de censo">Convenção de ano de censo</h3>
     <table>
-      <thead><tr><th data-en="census_year" data-pt="census_year">census_yearcensus_year<th data-en="Recommended for" data-pt="Recomendado para">Recomendado paraRecomendado para</tr></thead>
+      <thead><tr><th data-en="census_year" data-pt="census_year">census_year</th><th data-en="Recommended for" data-pt="Recomendado para">Recomendado para</th></tr></thead>
       <tbody>
         <tr><td><code>2000</code></td><td>2000-2009</td></tr>
         <tr><td><code>2010</code></td><td>2010-2021</td></tr>
-        <tr><td><code>2022</code> <span style="font-size:11px;color:var(--muted)" data-en="(default)" data-pt="(padrão)">(padrão)(padrão)</td><td>2022+</td></tr>
+        <tr><td><code>2022</code> <span style="font-size:11px;color:var(--muted)" data-en="(default)" data-pt="(padrão)">(padrão)</span></td><td>2022+</td></tr>
       </tbody>
     </table>
 
-    <h2 id="synoptic" data-en="Working with the 2025 synoptic product (v0.1.0)" data-pt="Produto sinótico de 2025 (v0.1.0)">Produto sinótico de 2025 (v0.1.0)Produto sinótico de 2025 (v0.1.0)
+    <h2 id="synoptic" data-en="Working with the 2025 synoptic product (v0.1.0)" data-pt="Produto sinótico de 2025 (v0.1.0)">Produto sinótico de 2025 (v0.1.0)</h2>
     <p data-en="The original 2025 product remains available via the product argument for analyses specifically about the year 2025:" data-pt="O produto original de 2025 permanece disponível via argumento product para análises especificamente sobre o ano de 2025:">O produto original de 2025 permanece disponível via argumento <code>product</code> para análises especificamente sobre o ano de 2025:</p>
     <div class="code-block">
 r_2025 <span class="kw">&lt;-</span> <span class="fn">hi_download</span>(product = <span class="str">"synoptic_2025"</span>, hour_local = <span class="str">15</span>)
 <span class="fn">hi_municipality</span>(<span class="str">"MOSSORO"</span>, state = <span class="str">"RN"</span>,
                 product = <span class="str">"synoptic_2025"</span>, hour_local = <span class="str">15</span>)</div>
 
-    <h2 id="citation" data-en="Citation" data-pt="Como citar">Como citarComo citar
+    <h2 id="citation" data-en="Citation" data-pt="Como citar">Como citar</h2>
     <p data-en="If you use heatindexbr in your research, please cite:" data-pt="Se você usar o heatindexbr em sua pesquisa, por favor cite:">Se você usar o <code>heatindexbr</code> em sua pesquisa, por favor cite:</p>
     <div class="code-block"><span class="fn">citation</span>(<span class="str">"heatindexbr"</span>)</div>
-    <p data-en="Climatological means dataset (2000-2025):" data-pt="Conjunto de médias climatológicas (2000-2025):">Conjunto de médias climatológicas (2000-2025):Conjunto de médias climatológicas (2000-2025):
-    <p style="font-size:13.5px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--border)">Campos Neto, A. (2026). <em data-en="Heat Index climatological means for the Brazilian Semiarid (2000-2025): 1 km rasters, municipal table, and population exposure data" data-pt="Médias climatológicas do Índice de Calor para o Semiárido Brasileiro (2000-2025): rasters 1 km, tabela municipal e dados de exposição populacional">Médias climatológicas do Índice de Calor para o Semiárido Brasileiro (2000-2025): rasters 1 km, tabela municipal e dados de exposição populacionalMédias climatológicas do Índice de Calor para o Semiárido Brasileiro (2000-2025): rasters 1 km, tabela municipal e dados de exposição populacional. Zenodo. https://doi.org/10.5281/zenodo.21049066</p>
-    <p data-en="Synoptic 2025 dataset:" data-pt="Conjunto sinótico 2025:">Conjunto sinótico 2025:Conjunto sinótico 2025:
+    <p data-en="Climatological means dataset (2000-2025):" data-pt="Conjunto de médias climatológicas (2000-2025):">Conjunto de médias climatológicas (2000-2025):</p>
+    <p style="font-size:13.5px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--border)">Campos Neto, A. (2026). <em data-en="Heat Index climatological means for the Brazilian Semiarid (2000-2025): 1 km rasters, municipal table, and population exposure data" data-pt="Médias climatológicas do Índice de Calor para o Semiárido Brasileiro (2000-2025): rasters 1 km, tabela municipal e dados de exposição populacional">Médias climatológicas do Índice de Calor para o Semiárido Brasileiro (2000-2025): rasters 1 km, tabela municipal e dados de exposição populacional</em>. Zenodo. https://doi.org/10.5281/zenodo.21049066</p>
+    <p data-en="Synoptic 2025 dataset:" data-pt="Conjunto sinótico 2025:">Conjunto sinótico 2025:</p>
     <p style="font-size:13.5px;color:var(--muted);padding-left:1rem;border-left:2px solid var(--border)">Campos Neto, A. (2025). <em>heatindexbr: Heat Index rasters for Brazil's Semiarid region</em> (v0.1.0). Zenodo. https://doi.org/10.5281/zenodo.20942619</p>
 
   </div>
