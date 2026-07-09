@@ -82,7 +82,7 @@ footer a { color: rgba(245,240,232,0.7); text-decoration: none; }
     <span class="nav-badge">v0.2.0</span>
     <div style="display:flex;gap:4px;margin-left:8px">
       <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
-      <button class="lang-btn active" id="btn-pt" onclick="setLang('pt')">PT</button>
+      <button class="lang-btn" id="btn-pt" onclick="setLang('pt')">PT</button>
     </div>
   </div>
 </nav>
@@ -297,9 +297,10 @@ r <span class="kw">&lt;-</span> <span class="fn">hi_download</span>(month = <spa
 </footer>
 
 <script>
-let lang = 'pt';
+let lang = localStorage.getItem('heatindexbr_lang') || 'pt';
 function setLang(l) {
   lang = l;
+  localStorage.setItem('heatindexbr_lang', l);
   document.getElementById('btn-en').classList.toggle('active', l === 'en');
   document.getElementById('btn-pt').classList.toggle('active', l === 'pt');
   document.documentElement.lang = l === 'pt' ? 'pt' : 'en';
@@ -308,6 +309,7 @@ function setLang(l) {
     if (val !== null) el.innerHTML = val;
   });
 }
+document.addEventListener("DOMContentLoaded", function() { setLang(lang); });
 </script>
 </body>
 </html>
